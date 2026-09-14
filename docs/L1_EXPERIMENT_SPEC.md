@@ -94,8 +94,9 @@ Implement in this order, merging only after each gate is green:
 2. add the training-only title vocabulary/tokenizer artifact with fingerprints,
    unknown-token handling, truncation, and leakage tests; **complete**
 3. add impression-local sampled examples and padded title/history batches;
+   **complete**
 4. implement masked additive pooling, then the title encoder, user encoder, and
-   dot-product scorer as independently tested modules;
+   dot-product scorer as independently tested modules; **complete**
 5. run the synthetic and 2,048-example smoke gates before any full training;
 6. run the fixed MIND-small baselines, followed by the two declared ablations and
    three-seed comparison.

@@ -48,6 +48,27 @@ The project may also pursue the official MIND leaderboard as a distinct `mind_of
 The frozen NRMS-style baseline question, model boundary, compute envelope, and
 acceptance gates are in [`docs/L1_EXPERIMENT_SPEC.md`](docs/L1_EXPERIMENT_SPEC.md).
 
+### Implemented L1 ranking path
+
+```mermaid
+flowchart LR
+    T[Training-news titles] --> V[Fingerprint vocabulary]
+    V --> N[Masked title self-attention]
+    N --> NP[Additive title pooling]
+    NP --> NE[News embeddings]
+    H[Prior clicked news] --> NE
+    NE --> U[Masked history self-attention]
+    U --> UP[Additive history pooling]
+    UP --> UE[User embedding]
+    UE --> D[Candidate dot products]
+    NE --> D
+    D --> L[Impression-local softmax]
+    D --> O[Official AUC / MRR / nDCG]
+```
+
+The implementation uses explicit PyTorch modules and boolean masks; it does not
+wrap an external recommendation framework.
+
 Validate a generated official-format prediction file before packaging it:
 
 ```bash
@@ -82,6 +103,16 @@ recforge-r1 --config configs/experiments/r1_mind_smoke.json
 Use `--seed 2028` (or another declared seed) to repeat an otherwise identical configuration; the resolved seed and full command are stored in the run manifest.
 
 This configuration trains on 2,048 queries and evaluates 1,000 development impressions. Its logged-impression metrics validate the end-to-end path; they are not headline corpus-retrieval results.
+
+After building the training-only title vocabulary, run the bounded L1 path with:
+
+```bash
+recforge-l1 --config configs/experiments/l1_mind_smoke.json
+```
+
+This path trains on 1,024 impression-local examples per epoch and evaluates 200
+dev impressions. It writes an ignored checkpoint, immutable run manifest, metrics,
+and candidate-aligned dev prediction file.
 
 ### Development smoke result
 
@@ -153,4 +184,6 @@ MIND-small is conditionally selected for the first external benchmark because it
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).
 The run-bundle format is documented in [`docs/RUNS.md`](docs/RUNS.md).
+Paper-level result visualization contracts and visual-QA gates are documented in
+[`docs/FIGURE_STANDARDS.md`](docs/FIGURE_STANDARDS.md).
 The full-corpus eligibility approximation is documented in [`docs/decisions/0002-temporal-candidate-policy.md`](docs/decisions/0002-temporal-candidate-policy.md).

@@ -10,4 +10,7 @@ RecomForge is a research-grade recommendation project, not a tutorial or product
 - Record seeds, data fingerprints, Git revision, environment, hardware, duration, and metrics for every research run.
 - Add controlled ablations; change one research variable at a time.
 - Run formatting, linting, typing, unit tests, and the CPU smoke command before merging.
+- Treat every figure as a paper artifact: freeze its scientific claim, protocol,
+  sample-selection rule, uncertainty method, caption, output formats, and visual
+  QA before publication; follow `docs/FIGURE_STANDARDS.md`.
 - Do not add ANN search, serving, distributed training, or LLM components before the R0–R1 acceptance criteria are met.

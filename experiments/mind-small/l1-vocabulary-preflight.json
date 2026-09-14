@@ -7,5 +7,12 @@
   },
   "semantic_vocabulary_sha256": "d952d9db707ac4b6460ad2b9289c4608b79ec384be62df0773ff0b3e5296bec1",
   "train_news_sha256": "cd49d7da275e9c405f627d75a0de9d4ec6ad43ff8a8db5d23a447591676e09d6",
-  "vocabulary_size": 19032
+  "vocabulary_size": 19032,
+  "full_data_batch_preflight": {
+    "candidate_shape_at_batch_128": [128, 5, 30],
+    "history_shape_at_batch_128": [128, 50, 30],
+    "news_item_count": 65238,
+    "training_example_count": 236344,
+    "unknown_title_token_rate": 0.024860149649482046
+  }
 }

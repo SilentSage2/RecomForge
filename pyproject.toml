@@ -28,6 +28,7 @@ recforge-mind-features = "recforge.data.features:main"
 recforge-mind-protocol-audit = "recforge.data.protocol_audit:main"
 recforge-mind-submission = "recforge.data.submission:main"
 recforge-mind-vocab = "recforge.data.text:main"
+recforge-l1 = "recforge.l1_experiment:main"
 recforge-r1 = "recforge.experiment:main"
 recforge-smoke = "recforge.cli:main"
 
