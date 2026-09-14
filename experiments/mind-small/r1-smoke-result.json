@@ -1,8 +1,8 @@
 {
-  "checkpoint_sha256": "8d09518d806fc001b3a11de8aeee8cd07cfe143c1173a38913ba541a2970f00f",
+  "checkpoint_sha256": "463390859115db4189a5bb1fe90e48af9eff8c1805082349180d3118e6bd7426",
   "config": "configs/experiments/r1_mind_smoke.json",
   "device": "cpu",
-  "duration_seconds": 12.650026,
+  "duration_seconds": 17.735038,
   "epoch_losses": [
     5.53241291642189,
     4.647574812173843
@@ -14,7 +14,7 @@
     "ndcg@5": 0.24229901453439137,
     "query_count": 1000
   },
-  "git_commit": "69a3baaf7486fbbce43bfb2913b11088067c2d22",
+  "git_commit": "0cd51add3e2ffcc54b13eb06538845acb2310007",
   "result_status": "development_smoke_not_headline",
   "seed": 2027,
   "temporal_corpus_evaluation": {
@@ -24,6 +24,20 @@
     "query_count": 1000,
     "recall@100": 0.0025,
     "recall@20": 0.0
+  },
+  "temporal_corpus_popularity_baselines": {
+    "global": {
+      "coverage@100": 0.0015635059321254484,
+      "mrr@20": 0.0001111111111111111,
+      "recall@100": 0.007083333333333333,
+      "recall@20": 0.0003333333333333333
+    },
+    "time_decayed": {
+      "coverage@100": 0.0015481774425948067,
+      "mrr@20": 0.00043333333333333337,
+      "recall@100": 0.010226190476190477,
+      "recall@20": 0.0013333333333333333
+    }
   },
   "trained_pairs": 4096
 }

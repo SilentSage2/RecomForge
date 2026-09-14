@@ -63,6 +63,14 @@ The loss decreased from 5.5324 to 4.6476. This single-seed subset run is an inte
 
 The same checkpoint reaches Recall@20 = 0.0000 and Recall@100 = 0.0025 against the reconstructed full temporal corpus, with 20.9% catalog coverage across the 1,000 top-100 lists. This deliberately small run is a negative result: the pipeline works, but 2,048 training queries are inadequate for corpus retrieval.
 
+| Temporal-corpus method | Recall@20 | Recall@100 | MRR@20 | Coverage@100 |
+|---|---:|---:|---:|---:|
+| Global popularity | 0.00033 | 0.00708 | 0.00011 | 0.156% |
+| Time-decayed popularity | **0.00133** | **0.01023** | **0.00043** | 0.155% |
+| Two-tower smoke | 0.00000 | 0.00250 | 0.00000 | **20.900%** |
+
+The popularity baselines win relevance on this bounded run, while the two-tower spreads recommendations across far more of the catalog. Full-data training is required before interpreting that relevance–coverage tradeoff.
+
 ## Planned dataset
 
 MIND-small is conditionally selected for the first external benchmark because it contains timestamps, ordered histories, logged impressions, and item text metadata. The dataset is research-only and gated; it will not be committed or automatically downloaded in CI.
