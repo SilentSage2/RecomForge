@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import re
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -110,15 +111,16 @@ def aggregate_history_features(
     table: ItemFeatureTable,
     *,
     max_history_items: int,
+    row_by_item_id: Mapping[str, int] | None = None,
 ) -> NDArray[np.float32]:
     """Mean-pool the most recent known pre-query items and L2-normalize the result."""
     if max_history_items <= 0:
         raise ValueError("max_history_items must be positive")
-    row_by_item_id = table.row_by_item_id()
+    resolved_rows = row_by_item_id if row_by_item_id is not None else table.row_by_item_id()
     rows = [
-        row_by_item_id[item_id]
+        resolved_rows[item_id]
         for item_id in history_item_ids[-max_history_items:]
-        if item_id in row_by_item_id
+        if item_id in resolved_rows
     ]
     if not rows:
         return np.zeros(table.dimension, dtype=np.float32)

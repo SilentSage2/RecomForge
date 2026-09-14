@@ -90,6 +90,7 @@ def iter_feature_batches(
                     example.history_item_ids,
                     table,
                     max_history_items=max_history_items,
+                    row_by_item_id=row_by_item_id,
                 )
             )
             item_rows.append(item_row)
