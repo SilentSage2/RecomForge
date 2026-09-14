@@ -106,6 +106,7 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Add exact time-eligible corpus retrieval with history filtering and popularity slices.
 - [x] Evaluate global and time-decayed popularity under the identical corpus protocol.
 - [x] Run one full-data temporal-corpus development experiment on MIND-small.
+- [x] Implement leakage-safe shared uniform negatives for the controlled ablation.
 - [ ] Repeat final comparisons across seeds and report uncertainty.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 

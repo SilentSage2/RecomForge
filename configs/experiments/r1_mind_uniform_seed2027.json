@@ -1,0 +1,21 @@
+{
+  "batch_size": 256,
+  "device": "cpu",
+  "embedding_dim": 64,
+  "epochs": 3,
+  "eval_behaviors": "data/raw/MINDsmall_dev/behaviors.tsv",
+  "feature_artifact": "data/processed/mind-small-content-v1",
+  "hidden_dim": 128,
+  "learning_rate": 0.001,
+  "max_eval_queries": null,
+  "max_train_queries": null,
+  "negative_strategy": "uniform_shared",
+  "output_root": "runs",
+  "popularity_half_life_hours": 72.0,
+  "run_temporal_corpus_evaluation": true,
+  "seed": 2027,
+  "symmetric_loss": false,
+  "temperature": 0.07,
+  "train_behaviors": "data/raw/MINDsmall_train/behaviors.tsv",
+  "weight_decay": 0.0001
+}

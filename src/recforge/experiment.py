@@ -23,7 +23,11 @@ from recforge.data.features import (
 )
 from recforge.data.mind import iter_mind_behaviors, sha256_file
 from recforge.data.protocol import TemporalCatalogIndex
-from recforge.data.training import iter_feature_batches, load_training_examples
+from recforge.data.training import (
+    iter_feature_batches,
+    load_training_examples,
+    sample_uniform_negative_pool,
+)
 from recforge.evaluation import (
     evaluate_popularity_temporal_corpus,
     evaluate_temporal_corpus,
@@ -31,7 +35,11 @@ from recforge.evaluation import (
     time_decayed_target_popularity,
 )
 from recforge.metrics import binary_auc, ndcg_at_k, reciprocal_rank_at_k
-from recforge.models.two_tower import TwoTowerRetriever, in_batch_softmax_loss
+from recforge.models.two_tower import (
+    TwoTowerRetriever,
+    in_batch_softmax_loss,
+    uniform_shared_softmax_loss,
+)
 from recforge.tracking import JsonValue, record_run
 
 
@@ -55,6 +63,7 @@ class R1ExperimentConfig:
     max_eval_queries: int | None = None
     run_temporal_corpus_evaluation: bool = False
     popularity_half_life_hours: float = 72.0
+    negative_strategy: str = "in_batch"
 
     def __post_init__(self) -> None:
         if self.epochs <= 0 or self.batch_size <= 1:
@@ -71,6 +80,8 @@ class R1ExperimentConfig:
             raise ValueError("max_eval_queries must be positive")
         if self.popularity_half_life_hours <= 0:
             raise ValueError("popularity_half_life_hours must be positive")
+        if self.negative_strategy not in {"in_batch", "uniform_shared"}:
+            raise ValueError("negative_strategy must be in_batch or uniform_shared")
 
 
 def _resolve_device(requested: str) -> torch.device:
@@ -96,11 +107,15 @@ def train_model(
     behavior_path: Path,
     max_history_items: int,
     device: torch.device,
+    catalog: TemporalCatalogIndex | None = None,
 ) -> tuple[TwoTowerRetriever, list[float], int]:
     _seed_everything(config.seed)
     examples = load_training_examples(behavior_path)
     if config.max_train_queries is not None:
         examples = examples[: config.max_train_queries]
+    example_by_query_id = {example.query_id: example for example in examples}
+    if config.negative_strategy == "uniform_shared" and catalog is None:
+        raise ValueError("uniform_shared training requires a temporal catalog")
     model = TwoTowerRetriever(
         table.dimension,
         table.dimension,
@@ -130,13 +145,31 @@ def train_model(
             item_ids = torch.from_numpy(batch.positive_item_rows).to(device)
             optimizer.zero_grad(set_to_none=True)
             user_embeddings, item_embeddings = model(users, items)
-            loss = in_batch_softmax_loss(
-                user_embeddings,
-                item_embeddings,
-                temperature=config.temperature,
-                symmetric=config.symmetric_loss,
-                positive_item_ids=item_ids,
-            )
+            if config.negative_strategy == "in_batch":
+                loss = in_batch_softmax_loss(
+                    user_embeddings,
+                    item_embeddings,
+                    temperature=config.temperature,
+                    symmetric=config.symmetric_loss,
+                    positive_item_ids=item_ids,
+                )
+            else:
+                assert catalog is not None
+                pool = sample_uniform_negative_pool(
+                    tuple(example_by_query_id[query_id] for query_id in batch.query_ids),
+                    table,
+                    catalog,
+                    seed=config.seed,
+                    epoch=epoch,
+                )
+                negative_embeddings = model.encode_items(torch.from_numpy(pool.features).to(device))
+                loss = uniform_shared_softmax_loss(
+                    user_embeddings,
+                    item_embeddings,
+                    negative_embeddings,
+                    torch.from_numpy(pool.valid_mask).to(device),
+                    temperature=config.temperature,
+                )
             loss.backward()  # type: ignore[no-untyped-call]
             optimizer.step()
             batch_pairs = len(batch.query_ids)
@@ -235,12 +268,18 @@ def run_experiment(config: R1ExperimentConfig, repository_root: Path) -> Path:
     train_path = repository_root / config.train_behaviors
     eval_path = repository_root / config.eval_behaviors
     table, feature_config = load_feature_artifact(feature_directory)
+    catalog = (
+        TemporalCatalogIndex.from_behavior_files([train_path, eval_path])
+        if config.run_temporal_corpus_evaluation or config.negative_strategy == "uniform_shared"
+        else None
+    )
     model, epoch_losses, trained_pairs = train_model(
         config,
         table,
         behavior_path=train_path,
         max_history_items=feature_config.max_history_items,
         device=device,
+        catalog=catalog,
     )
     evaluation = evaluate_logged_impressions(
         model,
@@ -253,7 +292,7 @@ def run_experiment(config: R1ExperimentConfig, repository_root: Path) -> Path:
     corpus_evaluation: dict[str, float | int] | None = None
     popularity_baselines: dict[str, dict[str, float | int]] | None = None
     if config.run_temporal_corpus_evaluation:
-        catalog = TemporalCatalogIndex.from_behavior_files([train_path, eval_path])
+        assert catalog is not None
         train_popularity = positive_target_popularity(train_path)
         corpus_evaluation = evaluate_temporal_corpus(
             model,

@@ -3,7 +3,11 @@ from io import BytesIO
 import pytest
 import torch
 
-from recforge.models.two_tower import TwoTowerRetriever, in_batch_softmax_loss
+from recforge.models.two_tower import (
+    TwoTowerRetriever,
+    in_batch_softmax_loss,
+    uniform_shared_softmax_loss,
+)
 
 
 def test_two_tower_outputs_normalized_embeddings_and_gradients() -> None:
@@ -83,3 +87,16 @@ def test_in_batch_loss_validates_positive_item_ids() -> None:
     embeddings = torch.eye(2)
     with pytest.raises(ValueError, match="positive_item_ids"):
         in_batch_softmax_loss(embeddings, embeddings, positive_item_ids=torch.tensor([[1, 2]]))
+
+
+def test_uniform_shared_loss_uses_validity_mask() -> None:
+    users = torch.eye(2)
+    positives = torch.eye(2)
+    negatives = torch.flip(torch.eye(2), dims=(0,))
+    full = uniform_shared_softmax_loss(
+        users, positives, negatives, torch.ones((2, 2), dtype=torch.bool)
+    )
+    diagonal_only = uniform_shared_softmax_loss(
+        users, positives, negatives, torch.eye(2, dtype=torch.bool)
+    )
+    assert diagonal_only < full

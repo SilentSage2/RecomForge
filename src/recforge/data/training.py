@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import random
+from bisect import bisect_right
 from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
@@ -12,7 +13,11 @@ import numpy as np
 from numpy.typing import NDArray
 
 from recforge.data.features import ItemFeatureTable, aggregate_history_features
-from recforge.data.protocol import MindRetrievalExample, iter_positive_retrieval_examples
+from recforge.data.protocol import (
+    MindRetrievalExample,
+    TemporalCatalogIndex,
+    iter_positive_retrieval_examples,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -32,6 +37,12 @@ class FeatureBatch:
             raise ValueError("positive_item_rows must have shape [batch]")
         if len(self.query_ids) != batch_size:
             raise ValueError("query IDs and feature rows must have equal length")
+
+
+@dataclass(frozen=True, slots=True)
+class UniformNegativePool:
+    features: NDArray[np.float32]
+    valid_mask: NDArray[np.bool_]
 
 
 def load_training_examples(
@@ -102,3 +113,55 @@ def iter_feature_batches(
             positive_item_rows=rows,
             query_ids=tuple(query_ids),
         )
+
+
+def sample_uniform_negative_pool(
+    examples: tuple[MindRetrievalExample, ...],
+    table: ItemFeatureTable,
+    catalog: TemporalCatalogIndex,
+    *,
+    seed: int,
+    epoch: int,
+) -> UniformNegativePool:
+    """Sample one legal negative per query, then share and mask the resulting pool."""
+    if not examples:
+        raise ValueError("examples must not be empty")
+    row_by_item = table.row_by_item_id()
+    position_by_item = {item_id: position for position, item_id in enumerate(catalog.item_ids)}
+    sampled_ids: list[str] = []
+    for example in examples:
+        eligible_size = bisect_right(catalog.observed_at, example.local_timestamp)
+        excluded = set(example.history_item_ids).union(example.positive_item_ids)
+        rng = random.Random(f"{seed}:{epoch}:{example.query_id}")
+        sampled: str | None = None
+        for _ in range(100):
+            candidate = catalog.item_ids[rng.randrange(eligible_size)]
+            if candidate not in excluded and candidate in row_by_item:
+                sampled = candidate
+                break
+        if sampled is None:
+            sampled = next(
+                (
+                    item_id
+                    for item_id in catalog.item_ids[:eligible_size]
+                    if item_id not in excluded and item_id in row_by_item
+                ),
+                None,
+            )
+        if sampled is None:
+            raise ValueError(f"query {example.query_id} has no legal uniform negative")
+        sampled_ids.append(sampled)
+
+    valid_mask = np.ones((len(examples), len(sampled_ids)), dtype=np.bool_)
+    for row, example in enumerate(examples):
+        eligible_size = bisect_right(catalog.observed_at, example.local_timestamp)
+        excluded = set(example.history_item_ids).union(example.positive_item_ids)
+        for column, item_id in enumerate(sampled_ids):
+            valid_mask[row, column] = (
+                position_by_item[item_id] < eligible_size and item_id not in excluded
+            )
+    rows = np.asarray([row_by_item[item_id] for item_id in sampled_ids], dtype=np.int64)
+    return UniformNegativePool(
+        features=np.asarray(table.features[rows], dtype=np.float32),
+        valid_mask=valid_mask,
+    )

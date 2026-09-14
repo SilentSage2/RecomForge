@@ -86,3 +86,35 @@ def in_batch_softmax_loss(
         return user_to_item
     item_to_user: Tensor = F.cross_entropy(logits.transpose(0, 1), labels)
     return (user_to_item + item_to_user) / 2
+
+
+def uniform_shared_softmax_loss(
+    user_embeddings: Tensor,
+    positive_item_embeddings: Tensor,
+    negative_item_embeddings: Tensor,
+    valid_negative_mask: Tensor,
+    *,
+    temperature: float = 0.07,
+) -> Tensor:
+    """Contrast each positive with a shared pool of uniformly sampled negatives."""
+    if user_embeddings.shape != positive_item_embeddings.shape:
+        raise ValueError("user and positive item embeddings must have equal shapes")
+    if negative_item_embeddings.ndim != 2:
+        raise ValueError("negative item embeddings must be rank-two")
+    if negative_item_embeddings.shape[1] != user_embeddings.shape[1]:
+        raise ValueError("all embeddings must have the same dimension")
+    expected_mask = (user_embeddings.shape[0], negative_item_embeddings.shape[0])
+    if valid_negative_mask.shape != expected_mask or valid_negative_mask.dtype != torch.bool:
+        raise ValueError("valid_negative_mask has an invalid shape or dtype")
+    if temperature <= 0:
+        raise ValueError("temperature must be positive")
+    if not bool(valid_negative_mask.any(dim=1).all()):
+        raise ValueError("every user requires at least one valid negative")
+
+    positive_logits = (user_embeddings * positive_item_embeddings).sum(dim=1, keepdim=True)
+    negative_logits = user_embeddings @ negative_item_embeddings.transpose(0, 1)
+    negative_logits = negative_logits.masked_fill(~valid_negative_mask, float("-inf"))
+    logits = torch.cat((positive_logits, negative_logits), dim=1) / temperature
+    labels = torch.zeros(logits.shape[0], dtype=torch.long, device=logits.device)
+    loss: Tensor = F.cross_entropy(logits, labels)
+    return loss

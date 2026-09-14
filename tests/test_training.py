@@ -4,8 +4,8 @@ import numpy as np
 import pytest
 
 from recforge.data.features import ItemFeatureTable
-from recforge.data.protocol import MindRetrievalExample
-from recforge.data.training import iter_feature_batches
+from recforge.data.protocol import MindRetrievalExample, TemporalCatalogIndex
+from recforge.data.training import iter_feature_batches, sample_uniform_negative_pool
 
 
 def _example(query_id: str, positives: set[str]) -> MindRetrievalExample:
@@ -74,3 +74,17 @@ def test_batch_requires_target_features() -> None:
                 epoch=0,
             )
         )
+
+
+def test_uniform_pool_is_deterministic_and_has_a_valid_negative_per_user() -> None:
+    examples = (_example("q1", {"i1"}), _example("q2", {"i2"}))
+    timestamp = examples[0].local_timestamp
+    catalog = TemporalCatalogIndex(
+        observed_at=(timestamp, timestamp, timestamp, timestamp),
+        item_ids=("i0", "i1", "i2", "i3"),
+    )
+    first = sample_uniform_negative_pool(examples, _table(), catalog, seed=4, epoch=0)
+    second = sample_uniform_negative_pool(examples, _table(), catalog, seed=4, epoch=0)
+    assert np.array_equal(first.features, second.features)
+    assert np.array_equal(first.valid_mask, second.valid_mask)
+    assert first.valid_mask.any(axis=1).all()
