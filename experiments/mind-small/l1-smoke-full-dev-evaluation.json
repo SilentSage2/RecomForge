@@ -1,0 +1,18 @@
+{
+  "checkpoint_sha256": "34fe61c025fd9c5c1c94318a81dd344804d287bd821180000ef820b77c79fa96",
+  "checkpoint_training_commit": "440157788a20a27a3226eab1409e37dbd4b2bf08",
+  "eval_batch_size": 64,
+  "evaluation_commit": "fade5cc",
+  "evaluation_seconds": 9.143088500000886,
+  "metrics": {
+    "auc": 0.521168707869359,
+    "auc_query_count": 73152,
+    "mrr": 0.22894430867806267,
+    "ndcg@5": 0.23642797469398535,
+    "ndcg@10": 0.2996954174708651,
+    "query_count": 73152
+  },
+  "prediction_count": 73152,
+  "process_wall_seconds": 51.90,
+  "protocol": "mind_official_impression"
+}

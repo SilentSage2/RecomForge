@@ -46,6 +46,8 @@ class L1ExperimentConfig:
     embedding_dim: int = 128
     attention_heads: int = 8
     attention_hidden_dim: int = 128
+    title_encoder_mode: str = "attention"
+    history_encoder_mode: str = "attention"
     negative_count: int = 4
     max_history_items: int = 50
     max_train_examples: int | None = None
@@ -64,6 +66,10 @@ class L1ExperimentConfig:
             raise ValueError("embedding_dim must be divisible by attention_heads")
         if self.attention_hidden_dim <= 0 or self.negative_count <= 0:
             raise ValueError("attention_hidden_dim and negative_count must be positive")
+        if self.title_encoder_mode not in {"attention", "mean"}:
+            raise ValueError("title_encoder_mode must be attention or mean")
+        if self.history_encoder_mode not in {"attention", "mean"}:
+            raise ValueError("history_encoder_mode must be attention or mean")
         if self.max_history_items <= 0:
             raise ValueError("max_history_items must be positive")
         if self.max_train_examples is not None and self.max_train_examples <= 0:
@@ -116,6 +122,8 @@ def train_nrms(
         config.embedding_dim,
         config.attention_heads,
         config.attention_hidden_dim,
+        config.title_encoder_mode,
+        config.history_encoder_mode,
     ).to(device)
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay

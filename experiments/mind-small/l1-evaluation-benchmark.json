@@ -1,0 +1,19 @@
+{
+  "cached_seconds": 1.5306052079977235,
+  "checkpoint_sha256": "34fe61c025fd9c5c1c94318a81dd344804d287bd821180000ef820b77c79fa96",
+  "commit": "fade5cc",
+  "device": "cpu",
+  "eval_batch_size": 64,
+  "eval_impressions": 2000,
+  "metrics": {
+    "auc": 0.5124900054036823,
+    "auc_query_count": 2000,
+    "mrr": 0.22917309133499503,
+    "ndcg@5": 0.2328001629491855,
+    "ndcg@10": 0.3011293333235728,
+    "query_count": 2000
+  },
+  "metrics_equal": true,
+  "reference_seconds": 12.198717582999961,
+  "speedup": 7.969865461883431
+}

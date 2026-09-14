@@ -125,6 +125,21 @@ bounded run proves the L1 data/model/evaluation/artifact path, but it is not
 evidence that NRMS beats the existing baseline. The immutable compact result is
 [`experiments/mind-small/l1-smoke-result.json`](experiments/mind-small/l1-smoke-result.json).
 
+The cached evaluator encodes each title once and batches user histories. On the
+same frozen checkpoint and first 2,000 dev impressions, it exactly matches the
+reference metrics while reducing evaluation time from 12.20 s to 1.53 s (7.97×)
+on the recorded CPU environment. The AUC on this larger subset is only 0.5125,
+which reinforces that the 200-impression smoke metric is not model-quality
+evidence. See the immutable
+[`evaluation benchmark`](experiments/mind-small/l1-evaluation-benchmark.json).
+
+On all 73,152 MIND-small dev impressions, the cached evaluation itself completes
+in 9.14 s (51.90 s including fresh-process imports and title-table construction)
+and reports AUC 0.5212. This is useful systems evidence and a clear negative model-
+quality result: the bounded checkpoint is nowhere near a competitive baseline.
+The compact record is
+[`l1-smoke-full-dev-evaluation.json`](experiments/mind-small/l1-smoke-full-dev-evaluation.json).
+
 ### Development smoke result
 
 | Train queries × epochs | Dev impressions | AUC | MRR | NDCG@5 | NDCG@10 | CPU time |
@@ -157,6 +172,9 @@ The popularity baselines win relevance on this bounded run, while the two-tower 
   they are not a universal replacement for clicked or hard negatives.
 - MIND-small dev results are development evidence only. They are not official
   leaderboard results and do not establish online user benefit.
+- The L1 smoke AUC changes from 0.5313 on the first 200 impressions to 0.5125 on
+  the first 2,000. Small prefix subsets are integration fixtures, not a basis for
+  model selection or headline claims.
 - The released logs support offline counterfactual analysis only within their
   logged candidates; no causal or production-performance claim is made.
 

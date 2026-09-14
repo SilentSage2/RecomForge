@@ -67,3 +67,37 @@ def test_nrms_backward_and_parameter_budget() -> None:
 def test_sampled_softmax_validates_targets() -> None:
     with pytest.raises(ValueError, match="target_indices"):
         sampled_softmax_loss(torch.ones(2, 3), torch.zeros((2, 1), dtype=torch.long))
+
+
+def test_mean_pooling_baseline_is_padding_invariant_and_smaller() -> None:
+    torch.manual_seed(13)
+    mean_model = NRMSRanker(
+        8,
+        embedding_dim=8,
+        attention_heads=2,
+        attention_hidden_dim=4,
+        title_encoder_mode="mean",
+        history_encoder_mode="mean",
+    ).eval()
+    attention_model = NRMSRanker(8, embedding_dim=8, attention_heads=2, attention_hidden_dim=4)
+    inputs = _inputs()
+    with torch.no_grad():
+        expected = mean_model(*inputs)
+        changed_history = inputs[0].clone()
+        changed_history[~inputs[1]] = 7
+        changed_candidates = inputs[3].clone()
+        changed_candidates[~inputs[4]] = 7
+        actual = mean_model(changed_history, inputs[1], inputs[2], changed_candidates, inputs[4])
+
+    assert torch.allclose(actual, expected)
+    assert sum(parameter.numel() for parameter in mean_model.parameters()) < sum(
+        parameter.numel() for parameter in attention_model.parameters()
+    )
+
+
+@pytest.mark.parametrize("mode", ["invalid", "transformer"])
+def test_nrms_rejects_unknown_encoder_modes(mode: str) -> None:
+    with pytest.raises(ValueError, match="encoder_mode"):
+        NRMSRanker(8, 8, 2, 4, title_encoder_mode=mode)
+    with pytest.raises(ValueError, match="encoder_mode"):
+        NRMSRanker(8, 8, 2, 4, history_encoder_mode=mode)

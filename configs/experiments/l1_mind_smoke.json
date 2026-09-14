@@ -7,6 +7,7 @@
   "eval_batch_size": 64,
   "epochs": 2,
   "eval_behaviors": "data/raw/MINDsmall_dev/behaviors.tsv",
+  "history_encoder_mode": "attention",
   "learning_rate": 0.001,
   "max_eval_impressions": 200,
   "max_history_items": 50,
@@ -19,6 +20,7 @@
   "output_root": "runs",
   "seed": 2027,
   "train_behaviors": "data/raw/MINDsmall_train/behaviors.tsv",
+  "title_encoder_mode": "attention",
   "vocabulary_artifact": "data/processed/mind-small-title-vocab-v1",
   "weight_decay": 0.0001
 }

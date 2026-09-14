@@ -44,9 +44,10 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
 4. **Scale:** no complete MIND-small L1 training run or MIND-large hidden-test
    submission exists.
 5. **Uncertainty:** L1 has no three-seed result or paired per-impression bootstrap.
-6. **Efficiency:** full-dev evaluation currently needs a cached/batched news path;
-   per-impression repeated title encoding is not acceptable evidence of a serious
-   ranking system.
+6. **Efficiency beyond the validated path:** cached/batched evaluation is now
+   7.97× faster on a locked 2,000-impression comparison with identical metrics;
+   its evaluation stage completes all 73,152 dev impressions in 9.14 seconds.
+   Peak memory remains unmeasured.
 7. **Research contribution:** NRMS reproduction alone is baseline engineering, not
    novelty. A flagship contribution still needs a defensible result about negative
    objectives, recency/sequence modeling, pretrained representation efficiency,
@@ -56,7 +57,8 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
 
 Do not describe RecomForge as flagship-complete or leaderboard-competitive until:
 
-- a cached and batched full-dev evaluator is validated against the reference path;
+- the cached evaluator's peak memory is recorded alongside its existing full-dev
+  wall time;
 - popularity, mean-pooling, hash-tower, and NRMS-style baselines share candidates,
   splits, and metrics;
 - the fixed NRMS-style model completes MIND-small and beats a meaningful baseline,
@@ -71,4 +73,3 @@ Do not describe RecomForge as flagship-complete or leaderboard-competitive until
 The smallest acceptable pivot, if NRMS does not learn under the frozen budget, is
 to make the negative-source relevance–coverage tradeoff the primary contribution,
 strengthen its encoders and objective baselines, and narrow all leaderboard claims.
-

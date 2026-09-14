@@ -23,6 +23,12 @@ def _safe_attention_mask(mask: Tensor) -> Tensor:
     return safe
 
 
+def _masked_mean(features: Tensor, mask: Tensor) -> Tensor:
+    _validate_sequence(features, mask)
+    weights = mask.to(features.dtype).unsqueeze(-1)
+    return torch.sum(features * weights, dim=1) / weights.sum(dim=1).clamp_min(1.0)
+
+
 class MaskedAdditiveAttention(nn.Module):
     def __init__(self, input_dim: int, hidden_dim: int) -> None:
         super().__init__()
@@ -47,18 +53,26 @@ class TitleEncoder(nn.Module):
         embedding_dim: int = 128,
         attention_heads: int = 8,
         attention_hidden_dim: int = 128,
+        encoder_mode: str = "attention",
     ) -> None:
         super().__init__()
         if vocabulary_size < 2:
             raise ValueError("vocabulary_size must include padding and unknown tokens")
         if embedding_dim <= 0 or embedding_dim % attention_heads != 0:
             raise ValueError("embedding_dim must be positive and divisible by attention_heads")
+        if encoder_mode not in {"attention", "mean"}:
+            raise ValueError("title encoder_mode must be attention or mean")
+        self.encoder_mode = encoder_mode
         self.embedding = nn.Embedding(vocabulary_size, embedding_dim, padding_idx=0)
-        self.self_attention = nn.MultiheadAttention(
-            embedding_dim, attention_heads, batch_first=True
-        )
-        self.normalization = nn.LayerNorm(embedding_dim)
-        self.pooling = MaskedAdditiveAttention(embedding_dim, attention_hidden_dim)
+        self.self_attention: nn.MultiheadAttention | None = None
+        self.normalization: nn.LayerNorm | None = None
+        self.pooling: MaskedAdditiveAttention | None = None
+        if encoder_mode == "attention":
+            self.self_attention = nn.MultiheadAttention(
+                embedding_dim, attention_heads, batch_first=True
+            )
+            self.normalization = nn.LayerNorm(embedding_dim)
+            self.pooling = MaskedAdditiveAttention(embedding_dim, attention_hidden_dim)
 
     def forward(self, token_ids: Tensor, token_mask: Tensor) -> Tensor:
         if token_ids.ndim != 2 or token_ids.dtype != torch.long:
@@ -66,6 +80,11 @@ class TitleEncoder(nn.Module):
         if token_mask.shape != token_ids.shape or token_mask.dtype != torch.bool:
             raise ValueError("title token mask must be boolean and match token IDs")
         embedded = self.embedding(token_ids)
+        if self.encoder_mode == "mean":
+            return _masked_mean(embedded, token_mask)
+        assert self.self_attention is not None
+        assert self.normalization is not None
+        assert self.pooling is not None
         safe_mask = _safe_attention_mask(token_mask)
         contextual, _ = self.self_attention(
             embedded,
@@ -85,18 +104,31 @@ class UserEncoder(nn.Module):
         embedding_dim: int = 128,
         attention_heads: int = 8,
         attention_hidden_dim: int = 128,
+        encoder_mode: str = "attention",
     ) -> None:
         super().__init__()
         if embedding_dim <= 0 or embedding_dim % attention_heads != 0:
             raise ValueError("embedding_dim must be positive and divisible by attention_heads")
-        self.self_attention = nn.MultiheadAttention(
-            embedding_dim, attention_heads, batch_first=True
-        )
-        self.normalization = nn.LayerNorm(embedding_dim)
-        self.pooling = MaskedAdditiveAttention(embedding_dim, attention_hidden_dim)
+        if encoder_mode not in {"attention", "mean"}:
+            raise ValueError("user encoder_mode must be attention or mean")
+        self.encoder_mode = encoder_mode
+        self.self_attention: nn.MultiheadAttention | None = None
+        self.normalization: nn.LayerNorm | None = None
+        self.pooling: MaskedAdditiveAttention | None = None
+        if encoder_mode == "attention":
+            self.self_attention = nn.MultiheadAttention(
+                embedding_dim, attention_heads, batch_first=True
+            )
+            self.normalization = nn.LayerNorm(embedding_dim)
+            self.pooling = MaskedAdditiveAttention(embedding_dim, attention_hidden_dim)
 
     def forward(self, clicked_news: Tensor, history_mask: Tensor) -> Tensor:
         _validate_sequence(clicked_news, history_mask)
+        if self.encoder_mode == "mean":
+            return _masked_mean(clicked_news, history_mask)
+        assert self.self_attention is not None
+        assert self.normalization is not None
+        assert self.pooling is not None
         safe_mask = _safe_attention_mask(history_mask)
         contextual, _ = self.self_attention(
             clicked_news,
@@ -117,6 +149,8 @@ class NRMSRanker(nn.Module):
         embedding_dim: int = 128,
         attention_heads: int = 8,
         attention_hidden_dim: int = 128,
+        title_encoder_mode: str = "attention",
+        history_encoder_mode: str = "attention",
     ) -> None:
         super().__init__()
         self.title_encoder = TitleEncoder(
@@ -124,11 +158,13 @@ class NRMSRanker(nn.Module):
             embedding_dim,
             attention_heads,
             attention_hidden_dim,
+            title_encoder_mode,
         )
         self.user_encoder = UserEncoder(
             embedding_dim,
             attention_heads,
             attention_hidden_dim,
+            history_encoder_mode,
         )
 
     def forward(
