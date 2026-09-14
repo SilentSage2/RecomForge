@@ -81,6 +81,7 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Build deterministic, fingerprinted MIND content features and history aggregation.
 - [x] Add deterministic training batches and duplicate-positive masking.
 - [x] Add one config-driven train/evaluate command with checkpoint fingerprinting.
+- [x] Add exact time-eligible corpus retrieval with history filtering and popularity slices.
 - [ ] Run the full temporal-corpus retrieval experiment on MIND-small.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 

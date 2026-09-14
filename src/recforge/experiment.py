@@ -22,7 +22,9 @@ from recforge.data.features import (
     load_feature_artifact,
 )
 from recforge.data.mind import iter_mind_behaviors, sha256_file
+from recforge.data.protocol import TemporalCatalogIndex
 from recforge.data.training import iter_feature_batches, load_training_examples
+from recforge.evaluation import evaluate_temporal_corpus, positive_target_popularity
 from recforge.metrics import binary_auc, ndcg_at_k, reciprocal_rank_at_k
 from recforge.models.two_tower import TwoTowerRetriever, in_batch_softmax_loss
 from recforge.tracking import JsonValue, record_run
@@ -46,6 +48,7 @@ class R1ExperimentConfig:
     device: str = "auto"
     max_train_queries: int | None = None
     max_eval_queries: int | None = None
+    run_temporal_corpus_evaluation: bool = False
 
     def __post_init__(self) -> None:
         if self.epochs <= 0 or self.batch_size <= 1:
@@ -239,6 +242,19 @@ def run_experiment(config: R1ExperimentConfig, repository_root: Path) -> Path:
         device=device,
         max_queries=config.max_eval_queries,
     )
+    corpus_evaluation: dict[str, float | int] | None = None
+    if config.run_temporal_corpus_evaluation:
+        catalog = TemporalCatalogIndex.from_behavior_files([train_path, eval_path])
+        corpus_evaluation = evaluate_temporal_corpus(
+            model,
+            table,
+            catalog=catalog,
+            behavior_path=eval_path,
+            training_popularity=positive_target_popularity(train_path),
+            max_history_items=feature_config.max_history_items,
+            device=device,
+            max_queries=config.max_eval_queries,
+        )
     with tempfile.NamedTemporaryFile(suffix=".pt", delete=False) as handle:
         checkpoint_path = Path(handle.name)
     try:
@@ -251,6 +267,7 @@ def run_experiment(config: R1ExperimentConfig, repository_root: Path) -> Path:
             "trained_pairs": trained_pairs,
             "epoch_losses": cast(list[JsonValue], epoch_losses),
             "evaluation": cast(dict[str, JsonValue], evaluation),
+            "temporal_corpus_evaluation": cast(dict[str, JsonValue] | None, corpus_evaluation),
             "checkpoint_sha256": checkpoint_sha256,
         }
         serialized_config = cast(dict[str, JsonValue], asdict(config))
