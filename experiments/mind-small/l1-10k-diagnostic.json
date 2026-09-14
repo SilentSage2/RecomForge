@@ -1,0 +1,48 @@
+{
+  "comparison_status": "diagnostic_nonheadline",
+  "data_selection": "first 10000 generated training examples per epoch",
+  "dev_impressions": 73152,
+  "epochs": 2,
+  "evidence_limit": "Single seed and nonrepresentative training prefix; use only to select and debug full-data experiments.",
+  "implementation_commit": "0d75cc35c0705b21679ab56ec23c27931b539df9",
+  "negative_count": 4,
+  "seed": 2027,
+  "variants": {
+    "attention_attention": {
+      "auc": 0.5334821253653104,
+      "duration_seconds": 82.069489,
+      "epoch_losses": [1.7129819416046144, 1.5968471963882447],
+      "mrr": 0.23526440042581317,
+      "ndcg@5": 0.2424848881762904,
+      "ndcg@10": 0.3072267760362697,
+      "parameters": 619776
+    },
+    "attention_mean": {
+      "auc": 0.5425445538239128,
+      "duration_seconds": 77.383114,
+      "epoch_losses": [1.609375210571289, 1.5561588802337647],
+      "mrr": 0.23721912272623485,
+      "ndcg@5": 0.24514882942976757,
+      "ndcg@10": 0.3121796432327342,
+      "parameters": 614400
+    },
+    "mean_attention": {
+      "auc": 0.5253034448384301,
+      "duration_seconds": 55.657217,
+      "epoch_losses": [1.6994624479293823, 1.61082668800354],
+      "mrr": 0.23188187411460684,
+      "ndcg@5": 0.23986822085701562,
+      "ndcg@10": 0.3029724454337248,
+      "parameters": 614400
+    },
+    "mean_mean": {
+      "auc": 0.5329774558844786,
+      "duration_seconds": 51.688859,
+      "epoch_losses": [1.6185188306808471, 1.5973031764984131],
+      "mrr": 0.23847710074885647,
+      "ndcg@5": 0.24985997613833255,
+      "ndcg@10": 0.31134024183750525,
+      "parameters": 609024
+    }
+  }
+}

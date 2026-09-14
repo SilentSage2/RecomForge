@@ -53,6 +53,13 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
    objectives, recency/sequence modeling, pretrained representation efficiency,
    or relevance–coverage-aware reranking.
 
+The 10k-example diagnostic found that title attention plus history mean pooling
+had the best AUC (0.5425), while full title/history attention reached 0.5335 and
+the double-mean baseline reached 0.5330. Because this is one seed on a training
+prefix, it is model-selection evidence only. It suggests that history attention
+is not justified at low data and defines the two variants that merit full-data
+comparison; it does not establish an attention contribution.
+
 ## Release gates
 
 Do not describe RecomForge as flagship-complete or leaderboard-competitive until:

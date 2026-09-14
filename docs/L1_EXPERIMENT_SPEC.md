@@ -101,3 +101,8 @@ Implement in this order, merging only after each gate is green:
    **complete**
 6. run the fixed MIND-small baselines, followed by the two declared ablations and
    three-seed comparison.
+
+The `l1_diagnostic_*.json` configurations use the first 10,000 generated training
+examples only to catch optimization or implementation failures before expensive
+runs. Because this prefix is not a representative sample, diagnostic metrics must
+not appear as headline evidence or satisfy the final ablation gate.

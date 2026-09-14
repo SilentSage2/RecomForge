@@ -11,10 +11,15 @@
   "git_commit": "678abe71eeea800b5d7ecb69ba88b39ea6da944a",
   "logged_impression": {
     "auc": 0.5949258251342803,
-    "mrr": 0.3213929396658407,
-    "ndcg@10": 0.36290319612246774,
-    "ndcg@5": 0.30081607062408855,
+    "auc_query_count": 73152,
+    "mrr": 0.28054180145295826,
+    "ndcg@10": 0.36290269733445313,
+    "ndcg@5": 0.3008154715461298,
     "query_count": 73152
+  },
+  "logged_impression_evaluation_revision": {
+    "commit": "0d75cc35c0705b21679ab56ec23c27931b539df9",
+    "reason": "Recomputed from the frozen checkpoint using official multi-positive MRR and stable candidate tie ordering."
   },
   "result_status": "full_data_single_seed_development",
   "seed": 2027,
