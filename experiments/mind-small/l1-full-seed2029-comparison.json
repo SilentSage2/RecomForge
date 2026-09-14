@@ -1,0 +1,28 @@
+{
+  "comparison_status": "full_data_seed_with_paired_impression_bootstrap",
+  "protocol": "mind_official_impression_rank_output",
+  "seed": 2029,
+  "train_examples_per_variant": 709032,
+  "dev_impressions": 73152,
+  "variants": {
+    "mean_mean": {
+      "checkpoint_sha256": "c38b0f10c9ee51b8d05f859b164f6066719c0229243802da9e332dceb6ea862f",
+      "duration_seconds": 276.828081,
+      "epoch_losses": [1.5238518928160412, 1.4188018589349363, 1.3711321747497098],
+      "metrics": {"auc": 0.600054170097503, "mrr": 0.27418141211373265, "ndcg@5": 0.2991463797940672, "ndcg@10": 0.3624975601035388},
+      "parameters": 1218048,
+      "tied_score_impression_count": 2289
+    },
+    "title_attention_history_mean": {
+      "checkpoint_sha256": "e3d75be706d00f62f7b1bd1e40a1bfcf79009a9372035dbedae39ebec281d0bc",
+      "duration_seconds": 1144.215779,
+      "epoch_losses": [1.4516728583845495, 1.3590655421184161, 1.3202994699360002],
+      "metrics": {"auc": 0.6326808531466445, "mrr": 0.29677628087903846, "ndcg@5": 0.3260964314313733, "ndcg@10": 0.3857643545637651},
+      "parameters": 1239040,
+      "tied_score_impression_count": 2284
+    }
+  },
+  "paired_bootstrap": "experiments/mind-small/l1-full-paired-bootstrap-seed2029.json",
+  "compute_ratio_attention_over_mean": 4.133308206547153,
+  "evidence_limit": "Use the three-seed aggregate for the final claim; this file preserves seed-level results."
+}

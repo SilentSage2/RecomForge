@@ -30,6 +30,7 @@ recforge-mind-submission = "recforge.data.submission:main"
 recforge-mind-vocab = "recforge.data.text:main"
 recforge-l1 = "recforge.l1_experiment:main"
 recforge-paired-bootstrap = "recforge.statistics:main"
+recforge-l1-aggregate = "recforge.reporting:main"
 recforge-r1 = "recforge.experiment:main"
 recforge-smoke = "recforge.cli:main"
 

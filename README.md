@@ -2,7 +2,7 @@
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
-> **Status: R0–R1 complete; L1 official-ranking smoke complete; flagship evidence incomplete.** Three full-data seeds and the controlled negative-sampling ablation are reported below. See the candid [`substantive quality audit`](docs/QUALITY_AUDIT.md) for the remaining scientific gates.
+> **Status: R0–R1 complete; L1 three-seed title-encoder comparison complete; flagship evidence incomplete.** Full-data seed uncertainty and the controlled negative-sampling ablation are reported below. See the candid [`substantive quality audit`](docs/QUALITY_AUDIT.md) for the remaining scientific gates.
 
 ## Full-data development result
 
@@ -19,25 +19,29 @@ Uniform negatives produce the strongest relevance metrics but collapse toward he
 
 ## Full-data official-ranking result
 
-The first full-data L1 gate fixes seed 2027, 64-dimensional representations,
-three epochs, 709,032 sampled training examples, and all 73,152 dev impressions.
-Official metrics are computed from the unique ranks written to the submission
-format, including the declared stable tie policy.
+The full-data L1 comparison uses seeds 2027–2029, 64-dimensional representations,
+three epochs, 709,032 sampled training examples per seed, and all 73,152 dev
+impressions. Official metrics are computed from the unique ranks written to the
+submission format, including the declared stable tie policy. Values are mean ±
+sample standard deviation across training seeds; the hash tower is a single-seed
+reference and is not included in the paired claim.
 
 | Model | AUC | MRR | nDCG@5 | nDCG@10 | Parameters | CPU time |
 |---|---:|---:|---:|---:|---:|---:|
-| Hash two-tower, in-batch | 0.5949 | 0.2805 | 0.3008 | 0.3629 | 74,048 | 50.83 s |
-| Title mean + history mean | 0.6015 | 0.2716 | 0.2958 | 0.3594 | 1,218,048 | 154.99 s |
-| **Title attention + history mean** | **0.6274** | **0.2884** | **0.3174** | **0.3796** | 1,239,040 | 2,982.72 s |
+| Hash two-tower, in-batch† | 0.5949 | 0.2805 | 0.3008 | 0.3629 | 74,048 | 50.83 s |
+| Title mean + history mean | 0.5972 ± 0.0063 | 0.2689 ± 0.0071 | 0.2916 ± 0.0104 | 0.3565 ± 0.0078 | 1,218,048 | 200.1 ± 66.8 s |
+| **Title attention + history mean** | **0.6283 ± 0.0040** | **0.2893 ± 0.0070** | **0.3179 ± 0.0079** | **0.3797 ± 0.0060** | 1,239,040 | 1,349.1 ± 342.6 s |
 
-Title attention improves AUC over mean pooling by 0.02592; a 5,000-resample
-paired impression bootstrap gives a 95% interval of [0.02422, 0.02769]. Its MRR,
-nDCG@5, and nDCG@10 intervals also exclude zero. The gain clears the predeclared
-0.02 AUC gate and exceeds the hash baseline by 0.03252, but costs 19.24× the mean-
-pooling wall time. This is a full-data single-seed result, not yet a variance-aware
-final claim. See the compact
-[`comparison`](experiments/mind-small/l1-full-seed2027-comparison.json) and
-[`paired bootstrap`](experiments/mind-small/l1-full-paired-bootstrap-seed2027.json).
+Title attention improves AUC over mean pooling by 0.03115 ± 0.00468 across seeds;
+every seed clears the predeclared +0.02 gate. The per-seed 5,000-resample paired
+bootstrap intervals are [0.02422, 0.02769], [0.03319, 0.03669], and [0.03089,
+0.03430]. MRR and both nDCG effects are positive in every seed. The gain costs
+6.74× the mean-pooling end-to-end CPU time when comparing the two three-seed
+means, so this is a quality–compute tradeoff rather than a free improvement. See
+the versioned [`three-seed aggregate`](experiments/mind-small/l1-full-three-seed-aggregate.json)
+and seed-level comparison/bootstrap artifacts in `experiments/mind-small/`.
+
+† Single seed; shown only as an earlier implementation reference.
 
 ## Research question
 
@@ -197,9 +201,10 @@ The popularity baselines win relevance on this bounded run, while the two-tower 
 - The L1 smoke AUC changes from 0.5313 on the first 200 impressions to 0.5125 on
   the first 2,000. Small prefix subsets are integration fixtures, not a basis for
   model selection or headline claims.
-- The full-data title-attention gain has paired impression uncertainty but only
-  one training seed. It requires seed replication before becoming a headline
-  model claim, and its 19.24× CPU cost is a material limitation.
+- The full-data title-attention gain replicates across three training seeds, but
+  its 6.74× mean CPU cost is material and peak memory remains unmeasured.
+- A logged-candidate popularity baseline and the registered full-data history-
+  attention ablation remain missing, so L1 is not yet complete.
 - The released logs support offline counterfactual analysis only within their
   logged candidates; no causal or production-performance claim is made.
 
@@ -234,7 +239,8 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Add a deterministic training-only title vocabulary artifact and leakage tests.
 - [x] Add and smoke-test the masked NRMS-style official-ranking path.
 - [ ] Confirm access to MIND-large and reproduce all official metrics on its dev split.
-- [ ] Freeze and implement the L1 NRMS-style experiment.
+- [x] Freeze and implement the L1 NRMS-style experiment and three-seed title-encoder comparison.
+- [ ] Add the logged-candidate popularity baseline and full-data history-attention ablation.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).

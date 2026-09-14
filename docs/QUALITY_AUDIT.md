@@ -31,22 +31,29 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
 - The L1 path implements title and history self-attention, masked additive pooling,
   impression-local negatives, official metrics, and deterministic prediction
   ordering directly in PyTorch. It is not an API wrapper or mock.
+- The full-data title-attention effect is replicated over three fixed seeds, with
+  training-seed sample standard deviations and 5,000-resample paired impression
+  bootstraps kept as distinct uncertainty estimates.
+- Epoch-boundary checkpoints now atomically preserve optimizer, RNG, progress,
+  configuration, and split hashes; interrupted/resumed training has an exact-
+  parameter equivalence test.
 - Negative and unfavorable results are visible in the README.
 
 ## Evidence gaps
 
-1. **Official-ranking strength:** title attention reaches AUC 0.6274 on full
-   MIND-small dev and beats the registered mean baseline, but remains below the
+1. **Official-ranking strength:** title attention reaches AUC 0.6283 ± 0.0040 on
+   full MIND-small dev and beats the registered mean baseline, but remains below the
    0.68 competitive target.
 2. **Fair baselines:** mean pooling and the R1 hash tower now use the official
    rank-output metrics; a logged-candidate popularity baseline remains missing.
-3. **Ablation evidence:** title attention versus mean pooling has a full-data
-   seed-2027 comparison and paired bootstrap. Full-data history-attention removal
-   and training-seed replication remain incomplete.
-4. **Scale:** no complete MIND-small L1 training run or MIND-large hidden-test
+3. **Ablation evidence:** title attention versus mean pooling has a full-data,
+   three-seed paired comparison. The registered full-data history-attention
+   ablation remains incomplete.
+4. **Scale:** complete MIND-small L1 runs exist, but no MIND-large hidden-test
    submission exists.
-5. **Uncertainty:** L1 now has a 5,000-resample paired impression bootstrap, but no
-   three-seed training result.
+5. **Uncertainty:** training-seed variance and paired impression uncertainty are
+   now reported separately; three seeds are still a modest estimate of training
+   variance.
 6. **Efficiency beyond the validated path:** cached/batched evaluation is now
    7.97× faster on a locked 2,000-impression comparison with identical metrics;
    its evaluation stage completes all 73,152 dev impressions in 9.14 seconds.
@@ -63,11 +70,13 @@ prefix, it is model-selection evidence only. It suggests that history attention
 is not justified at low data and defines the two variants that merit full-data
 comparison; it does not establish an attention contribution.
 
-The full-data seed-2027 gate subsequently found an AUC gain of 0.02592 for title
-attention over double mean pooling, with paired-impression 95% bootstrap interval
-[0.02422, 0.02769]. The effect is real for this trained pair but costs 19.24× the
-CPU wall time. Training-seed replication is required before treating it as a
-stable model effect.
+The full-data comparison subsequently found an AUC gain of 0.03115 ± 0.00468
+across seeds for title attention over double mean pooling. Every seed clears the
+predeclared +0.02 gate, and its paired-impression 95% bootstrap interval excludes
+zero. The attention model reaches AUC 0.62834 ± 0.00396 versus 0.59719 ± 0.00628,
+but costs 6.74× the mean end-to-end CPU time. This supports a stable title-
+representation effect under the frozen MIND-small protocol, not a leaderboard or
+online-benefit claim.
 
 ## Release gates
 
@@ -77,9 +86,8 @@ Do not describe RecomForge as flagship-complete or leaderboard-competitive until
   wall time;
 - popularity, mean-pooling, hash-tower, and NRMS-style baselines share candidates,
   splits, and metrics;
-- the fixed NRMS-style model completes MIND-small and beats a meaningful baseline,
-  or the failure is diagnosed and reported as a bounded negative result;
-- the two registered attention ablations and three final seeds are complete;
+- the logged-candidate popularity baseline and full-data history-attention ablation
+  are complete under the identical protocol;
 - effect sizes, uncertainty, wall time, parameter count, and peak memory are shown;
 - a contribution beyond reproduction is isolated by a controlled experiment;
 - any result figure satisfies `FIGURE_STANDARDS.md` and is regenerated from locked

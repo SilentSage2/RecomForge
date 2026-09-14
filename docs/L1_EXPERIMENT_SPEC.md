@@ -121,3 +121,17 @@ a systems-equivalent optimization. A locked 10k diagnostic reduced wall time by
 gradients. The three-seed title-attention comparison uses
 `l1_mind_full_title_attention_deduplicated.json` for every seed; seed 2027 must be
 rerun through that same code path rather than mixing implementations.
+
+## Three-seed gate result
+
+Seeds 2027–2029 completed through the deduplicated title-attention path. Title
+attention reaches AUC 0.62834 ± 0.00396 versus 0.59719 ± 0.00628 for double mean
+pooling. The paired AUC effect is +0.03115 ± 0.00468 across training seeds and is
+positive in every seed; each seed's 5,000-resample paired impression interval also
+excludes zero. The model therefore clears the registered +0.02 AUC gate, with the
+material limitation that its mean end-to-end CPU time is 6.74× higher. The locked
+aggregate is `experiments/mind-small/l1-full-three-seed-aggregate.json`.
+
+This completes the title-encoder comparison, not all L1 acceptance criteria. The
+logged-candidate popularity baseline and full-data history-attention ablation are
+still required.

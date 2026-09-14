@@ -1,0 +1,51 @@
+{
+  "confidence": 0.95,
+  "input_sha256": {
+    "baseline_prediction": "7ffdf70f06dd988ba9ecaf49d65f8c722e552077cead7e8f61f504405461038a",
+    "behaviors": "b6c460e33b1a8693252ded6e626da7d3ccf78920eea2ec11889020bb7d8443ef",
+    "candidate_prediction": "5f133a087d1dd2699ff4a8c929d8fc1979b9ad06bfb28a1cf2854ea4d5bb1192"
+  },
+  "method": "paired_nonparametric_impression_bootstrap",
+  "metrics": {
+    "auc": {
+      "baseline_mean": 0.6000541700974887,
+      "bootstrap_probability_improvement": 1.0,
+      "bootstrap_standard_error": 0.000870435455775174,
+      "candidate_mean": 0.6326808531466309,
+      "confidence_lower": 0.030885324363550595,
+      "confidence_upper": 0.034301097022656775,
+      "mean_difference": 0.032626683049142145
+    },
+    "mrr": {
+      "baseline_mean": 0.2741814121137224,
+      "bootstrap_probability_improvement": 1.0,
+      "bootstrap_standard_error": 0.0007906572917958822,
+      "candidate_mean": 0.2967762808790367,
+      "confidence_lower": 0.021011609327822485,
+      "confidence_upper": 0.024145219890034462,
+      "mean_difference": 0.022594868765314243
+    },
+    "ndcg@10": {
+      "baseline_mean": 0.36249756010365,
+      "bootstrap_probability_improvement": 1.0,
+      "bootstrap_standard_error": 0.0007762116802522964,
+      "candidate_mean": 0.38576435456388253,
+      "confidence_lower": 0.02174848209874029,
+      "confidence_upper": 0.024782031790019313,
+      "mean_difference": 0.023266794460232533
+    },
+    "ndcg@5": {
+      "baseline_mean": 0.2991463797941088,
+      "bootstrap_probability_improvement": 1.0,
+      "bootstrap_standard_error": 0.000886061294322149,
+      "candidate_mean": 0.32609643143142647,
+      "confidence_lower": 0.025212592640826932,
+      "confidence_upper": 0.02864283009703991,
+      "mean_difference": 0.02695005163731765
+    }
+  },
+  "resamples": 5000,
+  "sample_count": 73152,
+  "schema_version": 1,
+  "seed": 2029
+}
