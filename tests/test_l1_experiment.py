@@ -52,7 +52,7 @@ def test_tiny_l1_train_and_official_evaluation(tmp_path: Path) -> None:
         max_history_items=2,
         device="cpu",
     )
-    model, losses, trained = train_nrms(
+    model, losses, trained, epoch_seconds = train_nrms(
         config,
         table,
         behavior_path=behaviors,
@@ -70,6 +70,8 @@ def test_tiny_l1_train_and_official_evaluation(tmp_path: Path) -> None:
 
     assert trained == 6
     assert len(losses) == 2
+    assert len(epoch_seconds) == 2
+    assert all(duration > 0 for duration in epoch_seconds)
     assert metrics["query_count"] == 3
     assert 0.0 <= metrics["auc"] <= 1.0
     assert len(predictions) == 3
