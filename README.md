@@ -61,6 +61,8 @@ This configuration trains on 2,048 queries and evaluates 1,000 development impre
 
 The loss decreased from 5.5324 to 4.6476. This single-seed subset run is an integration check, not evidence that the model beats a baseline.
 
+The same checkpoint reaches Recall@20 = 0.0000 and Recall@100 = 0.0025 against the reconstructed full temporal corpus, with 20.9% catalog coverage across the 1,000 top-100 lists. This deliberately small run is a negative result: the pipeline works, but 2,048 training queries are inadequate for corpus retrieval.
+
 ## Planned dataset
 
 MIND-small is conditionally selected for the first external benchmark because it contains timestamps, ordered histories, logged impressions, and item text metadata. The dataset is research-only and gated; it will not be committed or automatically downloaded in CI.

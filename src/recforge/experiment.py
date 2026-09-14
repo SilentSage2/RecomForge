@@ -262,7 +262,7 @@ def run_experiment(config: R1ExperimentConfig, repository_root: Path) -> Path:
         checkpoint_sha256 = sha256_file(checkpoint_path)
         finished_at = datetime.now(UTC)
         metrics: dict[str, JsonValue] = {
-            "protocol": "logged_impression",
+            "protocols": ["logged_impression", "temporal_corpus_v1"],
             "device": str(device),
             "trained_pairs": trained_pairs,
             "epoch_losses": cast(list[JsonValue], epoch_losses),

@@ -1,8 +1,8 @@
 {
-  "checkpoint_sha256": "37f265ef64c36e3c67f7b0cac01eddbaf9ae0b7b5c699f5f98e975c468099bdd",
+  "checkpoint_sha256": "8d09518d806fc001b3a11de8aeee8cd07cfe143c1173a38913ba541a2970f00f",
   "config": "configs/experiments/r1_mind_smoke.json",
   "device": "cpu",
-  "duration_seconds": 3.837777,
+  "duration_seconds": 12.650026,
   "epoch_losses": [
     5.53241291642189,
     4.647574812173843
@@ -14,8 +14,16 @@
     "ndcg@5": 0.24229901453439137,
     "query_count": 1000
   },
-  "git_commit": "3b8d7e1f9cce292fd7f5cc82f7dafd8cd0b64e73",
+  "git_commit": "69a3baaf7486fbbce43bfb2913b11088067c2d22",
   "result_status": "development_smoke_not_headline",
   "seed": 2027,
+  "temporal_corpus_evaluation": {
+    "coverage@100": 0.2090039547502989,
+    "exact_search_ms_per_query": 0.11068216899002437,
+    "mrr@20": 0.0,
+    "query_count": 1000,
+    "recall@100": 0.0025,
+    "recall@20": 0.0
+  },
   "trained_pairs": 4096
 }
