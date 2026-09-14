@@ -7,6 +7,6 @@ __pycache__/
 build/
 dist/
 *.egg-info/
-data/
-artifacts/
-runs/
+/data/
+/artifacts/
+/runs/

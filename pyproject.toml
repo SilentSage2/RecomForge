@@ -20,6 +20,7 @@ dev = [
 ]
 
 [project.scripts]
+recforge-mind-audit = "recforge.data.mind:main"
 recforge-smoke = "recforge.cli:main"
 
 [tool.hatch.build.targets.wheel]

@@ -55,8 +55,9 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Add typed schemas and deterministic synthetic fixtures.
 - [x] Add hand-verifiable metrics and temporal leakage validation.
 - [x] Add global and time-decayed popularity baselines.
-- [ ] Complete MIND-small authenticated download and integrity preflight.
-- [ ] Add a versioned MIND adapter and split report.
+- [x] Complete MIND-small authenticated download and integrity preflight.
+- [x] Add a strict streaming MIND adapter and split-audit command.
+- [ ] Review and check in the compact MIND split report.
 - [ ] Add immutable run manifests.
 - [ ] Implement and evaluate the two-tower retriever.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
