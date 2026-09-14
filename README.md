@@ -2,7 +2,7 @@
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
-> **Status: R0–R1 complete; L1 official-ranking data foundation in progress.** Three full-data seeds and the controlled negative-sampling ablation are reported below.
+> **Status: R0–R1 complete; L1 official-ranking smoke complete.** Three full-data seeds and the controlled negative-sampling ablation are reported below.
 
 ## Full-data development result
 
@@ -114,6 +114,17 @@ This path trains on 1,024 impression-local examples per epoch and evaluates 200
 dev impressions. It writes an ignored checkpoint, immutable run manifest, metrics,
 and candidate-aligned dev prediction file.
 
+### L1 smoke result
+
+| Train examples | Dev impressions | Parameters | AUC | MRR | nDCG@5 | nDCG@10 | CPU time |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1,024 × 2 | 200 | 619,776 | 0.5313 | 0.2459 | 0.2550 | 0.3312 | 50.24 s |
+
+Training loss decreased from 1.8005 to 1.6590. This clean-commit, single-seed,
+bounded run proves the L1 data/model/evaluation/artifact path, but it is not
+evidence that NRMS beats the existing baseline. The immutable compact result is
+[`experiments/mind-small/l1-smoke-result.json`](experiments/mind-small/l1-smoke-result.json).
+
 ### Development smoke result
 
 | Train queries × epochs | Dev impressions | AUC | MRR | NDCG@5 | NDCG@10 | CPU time |
@@ -178,6 +189,7 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Add an official MIND prediction writer and strict structural validator.
 - [x] Match the official multi-positive MRR definition with a hand-checked test.
 - [x] Add a deterministic training-only title vocabulary artifact and leakage tests.
+- [x] Add and smoke-test the masked NRMS-style official-ranking path.
 - [ ] Confirm access to MIND-large and reproduce all official metrics on its dev split.
 - [ ] Freeze and implement the L1 NRMS-style experiment.
 

@@ -4,9 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import random
-import tempfile
 import time
 from dataclasses import asdict, dataclass, replace
 from datetime import UTC, datetime
@@ -16,6 +14,7 @@ from typing import Any, cast
 import numpy as np
 import torch
 
+from recforge.checkpoints import serialize_state_dict
 from recforge.data.features import (
     ItemFeatureTable,
     aggregate_history_features,
@@ -41,7 +40,7 @@ from recforge.models.two_tower import (
     in_batch_softmax_loss,
     uniform_shared_softmax_loss,
 )
-from recforge.tracking import JsonValue, record_run
+from recforge.tracking import JsonValue, record_run, sha256_bytes
 
 
 @dataclass(frozen=True, slots=True)
@@ -321,11 +320,9 @@ def run_experiment(config: R1ExperimentConfig, repository_root: Path) -> Path:
                 max_queries=config.max_eval_queries,
             ),
         }
-    with tempfile.NamedTemporaryFile(suffix=".pt", delete=False) as handle:
-        checkpoint_path = Path(handle.name)
+    checkpoint_bytes = serialize_state_dict(model)
+    checkpoint_sha256 = sha256_bytes(checkpoint_bytes)
     try:
-        torch.save(model.state_dict(), checkpoint_path)
-        checkpoint_sha256 = sha256_file(checkpoint_path)
         finished_at = datetime.now(UTC)
         metrics: dict[str, JsonValue] = {
             "protocols": ["logged_impression", "temporal_corpus_v1"],
@@ -357,10 +354,10 @@ def run_experiment(config: R1ExperimentConfig, repository_root: Path) -> Path:
             finished_at=finished_at,
             duration_seconds=time.perf_counter() - start,
         )
-        os.replace(checkpoint_path, run_directory / "model.pt")
+        (run_directory / "model.pt").write_bytes(checkpoint_bytes)
         return run_directory
     finally:
-        checkpoint_path.unlink(missing_ok=True)
+        checkpoint_bytes = b""
 
 
 def _load_config(path: Path) -> R1ExperimentConfig:

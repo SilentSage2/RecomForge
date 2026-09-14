@@ -4,9 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import random
-import tempfile
 import time
 from dataclasses import asdict, dataclass, replace
 from datetime import UTC, datetime
@@ -16,6 +14,7 @@ from typing import Any, cast
 import numpy as np
 import torch
 
+from recforge.checkpoints import serialize_state_dict
 from recforge.data.mind import iter_mind_behaviors, sha256_file
 from recforge.data.ranking import (
     RankingBatch,
@@ -29,7 +28,7 @@ from recforge.data.submission import order_from_scores, write_prediction_file
 from recforge.data.text import load_vocabulary_artifact
 from recforge.metrics import binary_auc, mean_reciprocal_rank_at_k, ndcg_at_k
 from recforge.models.nrms import NRMSRanker, sampled_softmax_loss
-from recforge.tracking import JsonValue, record_run
+from recforge.tracking import JsonValue, record_run, sha256_bytes
 
 
 @dataclass(frozen=True, slots=True)
@@ -251,10 +250,8 @@ def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path
         device=device,
         max_impressions=config.max_eval_impressions,
     )
-    with tempfile.NamedTemporaryFile(suffix=".pt", delete=False) as handle:
-        checkpoint_path = Path(handle.name)
+    checkpoint_bytes = serialize_state_dict(model)
     try:
-        torch.save(model.state_dict(), checkpoint_path)
         metrics: dict[str, JsonValue] = {
             "protocol": "mind_official_impression",
             "device": str(device),
@@ -262,7 +259,7 @@ def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path
             "epoch_losses": cast(list[JsonValue], losses),
             "evaluation": cast(dict[str, JsonValue], evaluation),
             "model_parameters": sum(parameter.numel() for parameter in model.parameters()),
-            "checkpoint_sha256": sha256_file(checkpoint_path),
+            "checkpoint_sha256": sha256_bytes(checkpoint_bytes),
         }
         serialized_config = cast(dict[str, JsonValue], asdict(config))
         serialized_config["resolved_device"] = str(device)
@@ -287,11 +284,11 @@ def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path
             finished_at=finished_at,
             duration_seconds=time.perf_counter() - started,
         )
-        os.replace(checkpoint_path, run_directory / "model.pt")
+        (run_directory / "model.pt").write_bytes(checkpoint_bytes)
         write_prediction_file(run_directory / "dev-prediction.txt", predictions)
         return run_directory
     finally:
-        checkpoint_path.unlink(missing_ok=True)
+        checkpoint_bytes = b""
 
 
 def _load_config(path: Path) -> L1ExperimentConfig:
