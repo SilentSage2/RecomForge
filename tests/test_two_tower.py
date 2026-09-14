@@ -66,3 +66,20 @@ def test_in_batch_loss_rejects_nonpositive_temperature(temperature: float) -> No
 def test_in_batch_loss_requires_a_negative() -> None:
     with pytest.raises(ValueError, match="at least two"):
         in_batch_softmax_loss(torch.ones(1, 2), torch.ones(1, 2))
+
+
+def test_in_batch_loss_masks_duplicate_positive_items() -> None:
+    users = torch.eye(3)
+    items = torch.stack((torch.tensor([1.0, 0.0, 0.0]),) * 2 + (torch.tensor([0.0, 0.0, 1.0]),))
+    item_ids = torch.tensor([4, 4, 9])
+
+    unmasked = in_batch_softmax_loss(users, items, temperature=1.0)
+    masked = in_batch_softmax_loss(users, items, temperature=1.0, positive_item_ids=item_ids)
+
+    assert masked < unmasked
+
+
+def test_in_batch_loss_validates_positive_item_ids() -> None:
+    embeddings = torch.eye(2)
+    with pytest.raises(ValueError, match="positive_item_ids"):
+        in_batch_softmax_loss(embeddings, embeddings, positive_item_ids=torch.tensor([[1, 2]]))

@@ -59,6 +59,7 @@ def in_batch_softmax_loss(
     *,
     temperature: float = 0.07,
     symmetric: bool = False,
+    positive_item_ids: Tensor | None = None,
 ) -> Tensor:
     """Treat paired batch items as positives and all off-diagonal items as negatives."""
     if user_embeddings.ndim != 2 or positive_item_embeddings.ndim != 2:
@@ -69,9 +70,17 @@ def in_batch_softmax_loss(
         raise ValueError("in-batch negatives require at least two pairs")
     if temperature <= 0:
         raise ValueError("temperature must be positive")
+    if positive_item_ids is not None and (
+        positive_item_ids.ndim != 1 or positive_item_ids.shape[0] != user_embeddings.shape[0]
+    ):
+        raise ValueError("positive_item_ids must have shape [batch]")
 
     logits = user_embeddings @ positive_item_embeddings.transpose(0, 1) / temperature
     labels = torch.arange(logits.shape[0], device=logits.device)
+    if positive_item_ids is not None:
+        same_item = positive_item_ids[:, None] == positive_item_ids[None, :]
+        off_diagonal = ~torch.eye(logits.shape[0], dtype=torch.bool, device=logits.device)
+        logits = logits.masked_fill(same_item & off_diagonal, float("-inf"))
     user_to_item: Tensor = F.cross_entropy(logits, labels)
     if not symmetric:
         return user_to_item

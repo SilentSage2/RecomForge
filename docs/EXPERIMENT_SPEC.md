@@ -17,6 +17,7 @@ Under a strict temporal protocol, a compact two-tower retriever using recent use
 - User state contains only events strictly earlier than the query timestamp.
 - Candidate eligibility and item-availability policy are versioned before the first external run.
 - `temporal_corpus_v1` uses the first label-independent observation of an item in released candidates or histories as its availability upper bound; see ADR 0002.
+- Multi-click impressions select one positive deterministically per epoch. Duplicate target items within an in-batch-negative batch are masked rather than treated as negatives.
 
 ## Compute envelope
 
