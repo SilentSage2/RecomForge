@@ -2,7 +2,19 @@
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
-> **Status: R0 complete; R1 retrieval in progress.** The protocol, synthetic fixtures, metrics, leakage validation, popularity baselines, run manifests, MIND adapter, and temporal-corpus audit are complete. The repository does not yet claim learned-model results.
+> **Status: R0 complete; R1 retrieval in progress.** One full-data development seed is reported below. Multi-seed uncertainty and the controlled negative-sampling ablation are still required before a final learned-model claim.
+
+## Full-data development result
+
+One full-data seed (156,965 training queries, three epochs, 73,152 development queries) gives a mixed but informative result:
+
+| Method | Recall@20 | Recall@100 | MRR@20 | Coverage@100 | Tail Recall@100 |
+|---|---:|---:|---:|---:|---:|
+| Global popularity | 0.00067 | 0.00894 | 0.00012 | 0.159% | 0.00000 |
+| Time-decayed popularity | 0.00297 | **0.01439** | 0.00056 | 0.158% | 0.00000 |
+| Two-tower, seed 2027 | **0.00344** | 0.01174 | **0.00163** | **93.967%** | **0.00659** |
+
+The two-tower improves early retrieval, reciprocal rank, catalog coverage, and tail retrieval, but does not beat time-decayed popularity at Recall@100. This is a single-seed development result, not a final improvement claim; repeated seeds and the negative-sampling ablation remain required.
 
 ## Research question
 
@@ -93,7 +105,8 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Add one config-driven train/evaluate command with checkpoint fingerprinting.
 - [x] Add exact time-eligible corpus retrieval with history filtering and popularity slices.
 - [x] Evaluate global and time-decayed popularity under the identical corpus protocol.
-- [ ] Run the full temporal-corpus retrieval experiment on MIND-small.
+- [x] Run one full-data temporal-corpus development experiment on MIND-small.
+- [ ] Repeat final comparisons across seeds and report uncertainty.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.

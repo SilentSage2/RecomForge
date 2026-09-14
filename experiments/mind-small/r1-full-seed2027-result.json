@@ -1,0 +1,46 @@
+{
+  "checkpoint_sha256": "9fb7ce89cf9b0511b8437e4b1ac8e6e9f93bc8c592bb26f189c905744761c08a",
+  "config": "configs/experiments/r1_mind_full_seed2027.json",
+  "device": "cpu",
+  "duration_seconds": 50.827953,
+  "epoch_losses": [
+    5.313184114148503,
+    5.152932774200758,
+    5.075922662851153
+  ],
+  "git_commit": "678abe71eeea800b5d7ecb69ba88b39ea6da944a",
+  "logged_impression": {
+    "auc": 0.5949258251342803,
+    "mrr": 0.3213929396658407,
+    "ndcg@10": 0.36290319612246774,
+    "ndcg@5": 0.30081607062408855,
+    "query_count": 73152
+  },
+  "result_status": "full_data_single_seed_development",
+  "seed": 2027,
+  "temporal_corpus": {
+    "global_popularity": {
+      "coverage@100": 0.0015941629111867316,
+      "mrr@20": 0.00012295155357042338,
+      "recall@100": 0.008935066609345043,
+      "recall@20": 0.0006686365810176507,
+      "tail_target_recall@100": 0.0
+    },
+    "time_decayed_popularity": {
+      "coverage@100": 0.00157883442165609,
+      "mrr@20": 0.000555008748906389,
+      "recall@100": 0.014393716027148045,
+      "recall@20": 0.0029723828516069334,
+      "tail_target_recall@100": 0.0
+    },
+    "two_tower": {
+      "coverage@100": 0.9396670652073945,
+      "exact_search_ms_per_query": 0.09993413381677177,
+      "mrr@20": 0.0016282311893731467,
+      "recall@100": 0.01174349234520273,
+      "recall@20": 0.0034361987774061283,
+      "tail_target_recall@100": 0.006585860379759949
+    }
+  },
+  "trained_pairs": 470895
+}
