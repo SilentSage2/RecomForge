@@ -1,0 +1,18 @@
+{
+  "batch_size": 128,
+  "device": "cpu",
+  "embedding_dim": 32,
+  "epochs": 2,
+  "eval_behaviors": "data/raw/MINDsmall_dev/behaviors.tsv",
+  "feature_artifact": "data/processed/mind-small-content-v1",
+  "hidden_dim": 64,
+  "learning_rate": 0.001,
+  "max_eval_queries": 1000,
+  "max_train_queries": 2048,
+  "output_root": "runs",
+  "seed": 2027,
+  "symmetric_loss": false,
+  "temperature": 0.07,
+  "train_behaviors": "data/raw/MINDsmall_train/behaviors.tsv",
+  "weight_decay": 0.0001
+}

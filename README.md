@@ -45,6 +45,14 @@ recforge-smoke
 
 The smoke command uses generated data only and does not download MIND.
 
+After preparing the gated MIND data and content artifact, run the bounded learned-model smoke experiment with:
+
+```bash
+recforge-r1 --config configs/experiments/r1_mind_smoke.json
+```
+
+This configuration trains on 2,048 queries and evaluates 1,000 development impressions. Its logged-impression metrics validate the end-to-end path; they are not headline corpus-retrieval results.
+
 ## Planned dataset
 
 MIND-small is conditionally selected for the first external benchmark because it contains timestamps, ordered histories, logged impressions, and item text metadata. The dataset is research-only and gated; it will not be committed or automatically downloaded in CI.
@@ -64,7 +72,8 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Implement and unit-test the two-tower core and in-batch loss.
 - [x] Build deterministic, fingerprinted MIND content features and history aggregation.
 - [x] Add deterministic training batches and duplicate-positive masking.
-- [ ] Train and evaluate the retriever on MIND-small.
+- [x] Add one config-driven train/evaluate command with checkpoint fingerprinting.
+- [ ] Run the full temporal-corpus retrieval experiment on MIND-small.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
