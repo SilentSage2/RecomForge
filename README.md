@@ -46,6 +46,17 @@ Results from one protocol will never be presented as results from the other.
 
 The project may also pursue the official MIND leaderboard as a distinct `mind_official_impression` track. It requires MIND-large hidden-test predictions and optimizes AUC/MRR/nDCG, not full-corpus coverage. The staged plan and anti-overfitting rules are in [`docs/LEADERBOARD_PLAN.md`](docs/LEADERBOARD_PLAN.md).
 
+Validate a generated official-format prediction file before packaging it:
+
+```bash
+recforge-mind-submission \
+  --behaviors data/raw/mind-large/test/behaviors.tsv \
+  --prediction runs/<run-id>/prediction.txt
+```
+
+The validator requires exact impression order, row count, candidate count, integer
+ranks, and a complete rank permutation for every row.
+
 ## Quick start
 
 Requires Python 3.11 or newer.
@@ -74,9 +85,11 @@ This configuration trains on 2,048 queries and evaluates 1,000 development impre
 
 | Train queries × epochs | Dev impressions | AUC | MRR | NDCG@5 | NDCG@10 | CPU time |
 |---:|---:|---:|---:|---:|---:|---:|
-| 2,048 × 2 | 1,000 | 0.5263 | 0.2646 | 0.2423 | 0.3097 | 3.84 s |
+| 2,048 × 2 | 1,000 | 0.5263 | 0.2361 | 0.2423 | 0.3097 | 17.32 s |
 
-The loss decreased from 5.5324 to 4.6476. This single-seed subset run is an integration check, not evidence that the model beats a baseline.
+The loss decreased from 5.5324 to 4.6476. MRR uses the official MIND
+multi-positive definition. This single-seed subset run is an integration check,
+not evidence that the model beats a baseline; wall time varies with local CPU load.
 
 The same checkpoint reaches Recall@20 = 0.0000 and Recall@100 = 0.0025 against the reconstructed full temporal corpus, with 20.9% catalog coverage across the 1,000 top-100 lists. This deliberately small run is a negative result: the pipeline works, but 2,048 training queries are inadequate for corpus retrieval.
 
@@ -114,7 +127,10 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Implement leakage-safe shared uniform negatives for the controlled ablation.
 - [x] Compare uniform and in-batch negatives under a fixed model/data/optimizer budget.
 - [x] Repeat the negative-sampling comparison across three seeds and report uncertainty.
-- [ ] Compare uniform and in-batch negatives under a fixed budget.
+- [x] Add an official MIND prediction writer and strict structural validator.
+- [x] Match the official multi-positive MRR definition with a hand-checked test.
+- [ ] Confirm access to MIND-large and reproduce all official metrics on its dev split.
+- [ ] Freeze and implement the L1 NRMS-style experiment.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).

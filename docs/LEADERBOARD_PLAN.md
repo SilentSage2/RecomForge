@@ -7,7 +7,7 @@ RecomForge can target the official MIND News Recommendation Challenge without re
 - `temporal_corpus_v1`: time-eligible whole-catalog retrieval, coverage, tail recall, and latency;
 - `mind_official_impression`: ranking only the candidates logged in each official test impression, scored by AUC, MRR, nDCG@5, and nDCG@10.
 
-MIND-small contains training and validation splits only. A real leaderboard submission requires the licensed MIND-large training, validation, and hidden-label test artifacts plus the official prediction format and submission service. Dataset files, predictions, credentials, and checkpoints remain uncommitted.
+MIND-small contains training and validation splits only. A real leaderboard submission requires the licensed MIND-large training, validation, and hidden-label test artifacts plus the official prediction format and submission service. Authenticated browser access to the three MIND-large archives was confirmed on 2026-09-14 (train 530 MB, dev 103 MB, test 605 MB); reproducible local acquisition and file fingerprints are still pending. Dataset files, predictions, credentials, and checkpoints remain uncommitted.
 
 As checked on 2026-09-14, the [official leaderboard](https://msnews.github.io/) was still receiving 2026 entries. Its displayed leader had AUC 0.7326, while rank 100 displayed AUC 0.7033. These are dated reference points, not acceptance thresholds guaranteed to remain current.
 
@@ -31,7 +31,9 @@ Ranking position alone is not the portfolio claim. The strongest outcome is a cr
 
 ## Immediate prerequisites
 
-- confirm authenticated access to all three MIND-large archives and record their fingerprints;
-- add an official-format prediction writer and validator;
-- reproduce the official evaluator byte-for-byte on a tiny fixture and MIND-small dev;
+- [x] confirm authenticated browser access to all three MIND-large archives;
+- download the archives into the ignored data directory and record their fingerprints;
+- [x] add an official-format prediction writer and strict validator;
+- [x] match the official multi-positive MRR definition on a hand-computed fixture;
+- reproduce all official evaluator outputs on MIND-small dev;
 - freeze an L1 experiment spec and hardware budget before adding the NRMS-style model.

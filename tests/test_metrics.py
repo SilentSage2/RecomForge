@@ -5,6 +5,7 @@ import pytest
 from recforge.metrics import (
     binary_auc,
     catalog_coverage_at_k,
+    mean_reciprocal_rank_at_k,
     ndcg_at_k,
     recall_at_k,
     reciprocal_rank_at_k,
@@ -36,7 +37,21 @@ def test_pairwise_auc_gives_half_credit_to_ties() -> None:
     assert binary_auc([1, 0, 1, 0], [0.9, 0.1, 0.5, 0.5]) == pytest.approx(0.875)
 
 
-@pytest.mark.parametrize("metric", [recall_at_k, reciprocal_rank_at_k, ndcg_at_k])
+def test_mind_mrr_averages_reciprocal_ranks_of_all_relevant_items() -> None:
+    ranked = ["negative", "positive-a", "negative-2", "positive-b"]
+    assert reciprocal_rank_at_k(ranked, {"positive-a", "positive-b"}, 4) == 0.5
+    assert mean_reciprocal_rank_at_k(ranked, {"positive-a", "positive-b"}, 4) == pytest.approx(
+        (1 / 2 + 1 / 4) / 2
+    )
+
+
+def test_mind_mrr_keeps_missed_relevant_items_in_denominator() -> None:
+    assert mean_reciprocal_rank_at_k(["a", "b", "c"], {"a", "c"}, 1) == 0.5
+
+
+@pytest.mark.parametrize(
+    "metric", [recall_at_k, reciprocal_rank_at_k, mean_reciprocal_rank_at_k, ndcg_at_k]
+)
 def test_metrics_reject_empty_relevance(metric: object) -> None:
     with pytest.raises(ValueError, match="must not be empty"):
         metric(["a"], set(), 1)  # type: ignore[operator]

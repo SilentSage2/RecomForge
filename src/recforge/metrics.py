@@ -48,6 +48,26 @@ def reciprocal_rank_at_k(
     return 0.0
 
 
+def mean_reciprocal_rank_at_k(
+    ranked_item_ids: Sequence[str], relevant_item_ids: Collection[str], k: int
+) -> float:
+    """MIND-style mean reciprocal rank over every relevant item in the impression.
+
+    Unlike first-relevant reciprocal rank, the numerator sums reciprocal ranks for
+    every relevant item found in the top K. The denominator remains the total
+    number of relevant items, including relevant items outside K.
+    """
+    relevant = set(relevant_item_ids)
+    if not relevant:
+        raise ValueError("relevant_item_ids must not be empty")
+    reciprocal_sum = sum(
+        1.0 / rank
+        for rank, item_id in enumerate(_unique_prefix(ranked_item_ids, k), start=1)
+        if item_id in relevant
+    )
+    return reciprocal_sum / len(relevant)
+
+
 def ndcg_at_k(ranked_item_ids: Sequence[str], relevant_item_ids: Collection[str], k: int) -> float:
     """Binary normalized discounted cumulative gain at K."""
     relevant = set(relevant_item_ids)

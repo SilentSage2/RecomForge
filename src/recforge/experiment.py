@@ -34,7 +34,7 @@ from recforge.evaluation import (
     positive_target_popularity,
     time_decayed_target_popularity,
 )
-from recforge.metrics import binary_auc, ndcg_at_k, reciprocal_rank_at_k
+from recforge.metrics import binary_auc, mean_reciprocal_rank_at_k, ndcg_at_k
 from recforge.models.two_tower import (
     TwoTowerRetriever,
     in_batch_softmax_loss,
@@ -243,7 +243,7 @@ def evaluate_logged_impressions(
                 auc_total += binary_auc(behavior.labels, scores)
             else:
                 skipped_auc += 1
-            mrr_total += reciprocal_rank_at_k(ranked, positives, len(ranked))
+            mrr_total += mean_reciprocal_rank_at_k(ranked, positives, len(ranked))
             ndcg_5_total += ndcg_at_k(ranked, positives, 5)
             ndcg_10_total += ndcg_at_k(ranked, positives, 10)
             query_count += 1
