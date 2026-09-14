@@ -8,7 +8,7 @@ import os
 import random
 import tempfile
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
@@ -377,9 +377,13 @@ def _load_config(path: Path) -> R1ExperimentConfig:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train and evaluate the R1 two-tower model.")
     parser.add_argument("--config", type=Path, required=True)
+    parser.add_argument("--seed", type=int, help="Override the config seed for repeated runs.")
     parser.add_argument("--repository-root", type=Path, default=Path.cwd())
     args = parser.parse_args()
-    run_directory = run_experiment(_load_config(args.config), args.repository_root.resolve())
+    config = _load_config(args.config)
+    if args.seed is not None:
+        config = replace(config, seed=args.seed)
+    run_directory = run_experiment(config, args.repository_root.resolve())
     print(json.dumps({"run_directory": str(run_directory)}, indent=2))
 
 

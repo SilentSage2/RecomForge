@@ -64,6 +64,8 @@ After preparing the gated MIND data and content artifact, run the bounded learne
 recforge-r1 --config configs/experiments/r1_mind_smoke.json
 ```
 
+Use `--seed 2028` (or another declared seed) to repeat an otherwise identical configuration; the resolved seed and full command are stored in the run manifest.
+
 This configuration trains on 2,048 queries and evaluates 1,000 development impressions. Its logged-impression metrics validate the end-to-end path; they are not headline corpus-retrieval results.
 
 ### Development smoke result
