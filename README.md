@@ -1,4 +1,4 @@
-# RecForge
+# RecomForge
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
@@ -24,7 +24,7 @@ R0 establishes data contracts, temporal validation, hand-tested metrics, and glo
 
 ## Evaluation policy
 
-RecForge treats these as different experiments:
+RecomForge treats these as different experiments:
 
 - **Logged-impression ranking** orders only candidates that were displayed. It reports AUC, MRR, and NDCG.
 - **Corpus retrieval** retrieves a target from an explicitly time-eligible item corpus. It reports Recall@K, MRR@K, coverage, slice quality, and latency.
@@ -52,6 +52,14 @@ recforge-r1 --config configs/experiments/r1_mind_smoke.json
 ```
 
 This configuration trains on 2,048 queries and evaluates 1,000 development impressions. Its logged-impression metrics validate the end-to-end path; they are not headline corpus-retrieval results.
+
+### Development smoke result
+
+| Train queries × epochs | Dev impressions | AUC | MRR | NDCG@5 | NDCG@10 | CPU time |
+|---:|---:|---:|---:|---:|---:|---:|
+| 2,048 × 2 | 1,000 | 0.5263 | 0.2646 | 0.2423 | 0.3097 | 3.84 s |
+
+The loss decreased from 5.5324 to 4.6476. This single-seed subset run is an integration check, not evidence that the model beats a baseline.
 
 ## Planned dataset
 

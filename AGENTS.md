@@ -1,6 +1,6 @@
-# RecForge instructions
+# RecomForge instructions
 
-RecForge is a research-grade recommendation project, not a tutorial or product demo.
+RecomForge is a research-grade recommendation project, not a tutorial or product demo.
 
 - Keep every headline claim tied to a versioned experiment and leakage-safe protocol.
 - Implement and test evaluation, temporal splits, and baselines before neural models.

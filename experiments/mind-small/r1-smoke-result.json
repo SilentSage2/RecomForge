@@ -1,0 +1,21 @@
+{
+  "checkpoint_sha256": "37f265ef64c36e3c67f7b0cac01eddbaf9ae0b7b5c699f5f98e975c468099bdd",
+  "config": "configs/experiments/r1_mind_smoke.json",
+  "device": "cpu",
+  "duration_seconds": 3.837777,
+  "epoch_losses": [
+    5.53241291642189,
+    4.647574812173843
+  ],
+  "evaluation": {
+    "auc": 0.5262590081463234,
+    "mrr": 0.2646003812599697,
+    "ndcg@10": 0.3097260808984261,
+    "ndcg@5": 0.24229901453439137,
+    "query_count": 1000
+  },
+  "git_commit": "3b8d7e1f9cce292fd7f5cc82f7dafd8cd0b64e73",
+  "result_status": "development_smoke_not_headline",
+  "seed": 2027,
+  "trained_pairs": 4096
+}

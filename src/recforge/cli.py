@@ -73,7 +73,7 @@ def run_smoke() -> dict[str, JsonValue]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Run the deterministic RecForge R0 smoke experiment."
+        description="Run the deterministic RecomForge R0 smoke experiment."
     )
     parser.add_argument("--output-root", type=Path, default=Path("runs"))
     parser.add_argument("--seed", type=int, default=0)

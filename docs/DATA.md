@@ -2,9 +2,9 @@
 
 ## MIND-small
 
-The planned external R1 dataset is [MIND-small](https://msnews.github.io/). It is not part of RecForge and is governed by the Microsoft Research License Terms linked from the official dataset page.
+The planned external R1 dataset is [MIND-small](https://msnews.github.io/). It is not part of RecomForge and is governed by the Microsoft Research License Terms linked from the official dataset page.
 
-As of 2026-09-14, the official page routes MIND-small downloads to the gated Hugging Face dataset `yjw1029/MIND`. Anonymous requests return HTTP 401. Users must independently review and accept the applicable terms and authenticate with Hugging Face; RecForge will not bypass the gate or commit downloaded archives. The maintainer completed authenticated access and verified both archives on that date.
+As of 2026-09-14, the official page routes MIND-small downloads to the gated Hugging Face dataset `yjw1029/MIND`. Anonymous requests return HTTP 401. Users must independently review and accept the applicable terms and authenticate with Hugging Face; RecomForge will not bypass the gate or commit downloaded archives. The maintainer completed authenticated access and verified both archives on that date.
 
 Expected upstream artifacts after access is granted:
 
