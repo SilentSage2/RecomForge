@@ -11,10 +11,11 @@ One full-data seed (156,965 training queries, three epochs, 73,152 development q
 | Method | Recall@20 | Recall@100 | MRR@20 | Coverage@100 | Tail Recall@100 |
 |---|---:|---:|---:|---:|---:|
 | Global popularity | 0.00067 | 0.00894 | 0.00012 | 0.159% | 0.00000 |
-| Time-decayed popularity | 0.00297 | **0.01439** | 0.00056 | 0.158% | 0.00000 |
-| Two-tower, seed 2027 | **0.00344** | 0.01174 | **0.00163** | **93.967%** | **0.00659** |
+| Time-decayed popularity | 0.00297 | 0.01439 | 0.00056 | 0.158% | 0.00000 |
+| Two-tower, in-batch | 0.00344 | 0.01174 | 0.00163 | **93.967%** | **0.00659** |
+| Two-tower, uniform shared | **0.00596** | **0.05632** | **0.00210** | 1.145% | 0.00000 |
 
-The two-tower improves early retrieval, reciprocal rank, catalog coverage, and tail retrieval, but does not beat time-decayed popularity at Recall@100. This is a single-seed development result, not a final improvement claim; repeated seeds and the negative-sampling ablation remain required.
+Uniform negatives produce the strongest relevance metrics but collapse toward head items. In-batch clicked negatives are harder: they reduce Recall while producing radically broader catalog and nonzero tail coverage. This single-seed result falsifies the initial expectation that in-batch negatives would simply improve retrieval; repeated seeds are required before treating the relevance–coverage tradeoff as stable.
 
 ## Research question
 
@@ -107,6 +108,7 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Evaluate global and time-decayed popularity under the identical corpus protocol.
 - [x] Run one full-data temporal-corpus development experiment on MIND-small.
 - [x] Implement leakage-safe shared uniform negatives for the controlled ablation.
+- [x] Compare uniform and in-batch negatives under a fixed model/data/optimizer budget.
 - [ ] Repeat final comparisons across seeds and report uncertainty.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 

@@ -1,0 +1,34 @@
+{
+  "checkpoint_sha256": "00e11a8573c44c35fab36ab6a7e6e055456275e317abb47fa38e8d7c07141796",
+  "config": "configs/experiments/r1_mind_uniform_seed2027.json",
+  "device": "cpu",
+  "duration_seconds": 81.244345,
+  "epoch_losses": [
+    2.5630629264635876,
+    1.6896429058175868,
+    1.4498996617259146
+  ],
+  "git_commit": "6899d42964c690f83d48b9cbd72f2d8fa3223164",
+  "logged_impression": {
+    "auc": 0.5606619934169805,
+    "mrr": 0.282439012985969,
+    "ndcg@10": 0.3259761815276319,
+    "ndcg@5": 0.26505030700710874,
+    "query_count": 73152
+  },
+  "negative_strategy": "uniform_shared",
+  "result_status": "full_data_single_seed_development",
+  "seed": 2027,
+  "temporal_corpus": {
+    "coverage@100": 0.011450381679389313,
+    "exact_search_ms_per_query": 0.09733808362270013,
+    "head_target_recall@100": 0.2042264336394631,
+    "mid_target_recall@100": 0.0,
+    "mrr@20": 0.0021016439109807715,
+    "query_count": 73152,
+    "recall@100": 0.056318355753444516,
+    "recall@20": 0.005955111040412869,
+    "tail_target_recall@100": 0.0
+  },
+  "trained_pairs": 470895
+}
