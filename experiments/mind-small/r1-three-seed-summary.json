@@ -1,0 +1,64 @@
+{
+  "metrics_are_mean_and_sample_standard_deviation": true,
+  "protocol": "temporal_corpus_v1",
+  "result_status": "three_seed_development_comparison",
+  "seeds": [
+    2027,
+    2028,
+    2029
+  ],
+  "strategies": {
+    "in_batch": {
+      "coverage@100": {
+        "mean": 0.932590413,
+        "standard_deviation": 0.007759643
+      },
+      "duration_seconds": {
+        "mean": 50.614843,
+        "standard_deviation": 0.6492061
+      },
+      "mrr@20": {
+        "mean": 0.001594268,
+        "standard_deviation": 0.000072336
+      },
+      "recall@100": {
+        "mean": 0.011783862,
+        "standard_deviation": 0.0008552
+      },
+      "recall@20": {
+        "mean": 0.003329007,
+        "standard_deviation": 0.000164415
+      },
+      "tail_target_recall@100": {
+        "mean": 0.00675359,
+        "standard_deviation": 0.000303424
+      }
+    },
+    "uniform_shared": {
+      "coverage@100": {
+        "mean": 0.011108045,
+        "standard_deviation": 0.000466534
+      },
+      "duration_seconds": {
+        "mean": 79.651762333,
+        "standard_deviation": 1.573537948
+      },
+      "mrr@20": {
+        "mean": 0.002317859,
+        "standard_deviation": 0.000187273
+      },
+      "recall@100": {
+        "mean": 0.057904544,
+        "standard_deviation": 0.00474339
+      },
+      "recall@20": {
+        "mean": 0.006829412,
+        "standard_deviation": 0.000817603
+      },
+      "tail_target_recall@100": {
+        "mean": 0.0,
+        "standard_deviation": 0.0
+      }
+    }
+  }
+}

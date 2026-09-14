@@ -2,20 +2,20 @@
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
-> **Status: R0 complete; R1 retrieval in progress.** One full-data development seed is reported below. Multi-seed uncertainty and the controlled negative-sampling ablation are still required before a final learned-model claim.
+> **Status: R0 complete; R1 experimental evidence complete, release review pending.** Three full-data seeds and the controlled negative-sampling ablation are reported below.
 
 ## Full-data development result
 
-One full-data seed (156,965 training queries, three epochs, 73,152 development queries) gives a mixed but informative result:
+Three full-data seeds (156,965 training queries, three epochs, 73,152 development queries each) produce a stable relevance–coverage tradeoff. Values are mean ± sample standard deviation.
 
 | Method | Recall@20 | Recall@100 | MRR@20 | Coverage@100 | Tail Recall@100 |
 |---|---:|---:|---:|---:|---:|
 | Global popularity | 0.00067 | 0.00894 | 0.00012 | 0.159% | 0.00000 |
 | Time-decayed popularity | 0.00297 | 0.01439 | 0.00056 | 0.158% | 0.00000 |
-| Two-tower, in-batch | 0.00344 | 0.01174 | 0.00163 | **93.967%** | **0.00659** |
-| Two-tower, uniform shared | **0.00596** | **0.05632** | **0.00210** | 1.145% | 0.00000 |
+| Two-tower, in-batch | 0.00333 ± 0.00016 | 0.01178 ± 0.00086 | 0.00159 ± 0.00007 | **93.259% ± 0.776%** | **0.00675 ± 0.00030** |
+| Two-tower, uniform shared | **0.00683 ± 0.00082** | **0.05790 ± 0.00474** | **0.00232 ± 0.00019** | 1.111% ± 0.047% | 0.00000 ± 0.00000 |
 
-Uniform negatives produce the strongest relevance metrics but collapse toward head items. In-batch clicked negatives are harder: they reduce Recall while producing radically broader catalog and nonzero tail coverage. This single-seed result falsifies the initial expectation that in-batch negatives would simply improve retrieval; repeated seeds are required before treating the relevance–coverage tradeoff as stable.
+Uniform negatives produce the strongest relevance metrics but collapse toward head items. In-batch clicked negatives are harder: they reduce Recall while producing radically broader catalog and nonzero tail coverage. Uniform wins Recall@100 in every paired seed by 0.0432–0.0506, while all three uniform runs have zero tail recall. The evidence falsifies the initial expectation that in-batch negatives would simply improve retrieval; negative-source choice changes the objective's behavior rather than offering a universal upgrade.
 
 ## Research question
 
@@ -43,6 +43,8 @@ RecomForge treats these as different experiments:
 - **Corpus retrieval** retrieves a target from an explicitly time-eligible item corpus. It reports Recall@K, MRR@K, coverage, slice quality, and latency.
 
 Results from one protocol will never be presented as results from the other.
+
+The project may also pursue the official MIND leaderboard as a distinct `mind_official_impression` track. It requires MIND-large hidden-test predictions and optimizes AUC/MRR/nDCG, not full-corpus coverage. The staged plan and anti-overfitting rules are in [`docs/LEADERBOARD_PLAN.md`](docs/LEADERBOARD_PLAN.md).
 
 ## Quick start
 
@@ -111,7 +113,7 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Run one full-data temporal-corpus development experiment on MIND-small.
 - [x] Implement leakage-safe shared uniform negatives for the controlled ablation.
 - [x] Compare uniform and in-batch negatives under a fixed model/data/optimizer budget.
-- [ ] Repeat final comparisons across seeds and report uncertainty.
+- [x] Repeat the negative-sampling comparison across three seeds and report uncertainty.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
