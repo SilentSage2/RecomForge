@@ -24,6 +24,7 @@ dev = [
 
 [project.scripts]
 recforge-mind-audit = "recforge.data.mind:main"
+recforge-mind-features = "recforge.data.features:main"
 recforge-mind-protocol-audit = "recforge.data.protocol_audit:main"
 recforge-smoke = "recforge.cli:main"
 

@@ -31,6 +31,19 @@ recforge-mind-protocol-audit \
 
 The report is a compact derived artifact: it contains only aggregate counts and source-file fingerprints, never user histories or impression rows.
 
+Build the local R1 feature artifact with the accepted primary configuration:
+
+```bash
+recforge-mind-features \
+  --news data/raw/MINDsmall_train/news.tsv \
+  --news data/raw/MINDsmall_dev/news.tsv \
+  --dimension 512 \
+  --max-history-items 50 \
+  --output data/processed/mind-small-content-v1
+```
+
+The command refuses to overwrite an existing artifact. Feature semantics and leakage constraints are recorded in ADR 0004.
+
 ## Synthetic data
 
 `recforge.synthetic.build_synthetic_dataset` generates the only data used by unit tests and the smoke command. It is deliberately small and includes:

@@ -1,0 +1,21 @@
+{
+  "artifact_schema_version": 1,
+  "config": {
+    "dimension": 512,
+    "include_abstract": false,
+    "max_history_items": 50
+  },
+  "feature_sha256": "24d8c7adfad11cd3a83af29fca8f916175bc5b6be92ad517aedce20c79a46cca",
+  "item_count": 65238,
+  "item_ids_sha256": "a090b643c053cfd5e5cdc88aaed583f0e5331159cd54b1b49b828b11a3a20ff5",
+  "news_inputs": [
+    {
+      "path": "data/raw/MINDsmall_train/news.tsv",
+      "sha256": "cd49d7da275e9c405f627d75a0de9d4ec6ad43ff8a8db5d23a447591676e09d6"
+    },
+    {
+      "path": "data/raw/MINDsmall_dev/news.tsv",
+      "sha256": "e5d144667558c449d16084fe6bfa01940c2f5d5785ea9f9110292bc3b94eb822"
+    }
+  ]
+}

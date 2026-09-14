@@ -62,7 +62,8 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Version the temporal candidate-universe policy and query builder.
 - [x] Audit temporal corpus sizes and history filtering on MIND-small.
 - [x] Implement and unit-test the two-tower core and in-batch loss.
-- [ ] Build deterministic MIND feature preparation and train/evaluate the retriever.
+- [x] Build deterministic, fingerprinted MIND content features and history aggregation.
+- [ ] Train and evaluate the retriever on MIND-small.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
