@@ -1,8 +1,9 @@
 {
-  "commit": "4edfaaf09a9152799f7fb57a7d1e320eeb2c1866",
+  "checkpoint_sha256": "34fe61c025fd9c5c1c94318a81dd344804d287bd821180000ef820b77c79fa96",
+  "commit": "440157788a20a27a3226eab1409e37dbd4b2bf08",
   "config": "configs/experiments/l1_mind_smoke.json",
   "device": "cpu",
-  "duration_seconds": 50.244064,
+  "duration_seconds": 48.089613,
   "epoch_losses": [
     1.8005440458655357,
     1.658977996557951
@@ -14,7 +15,7 @@
     "ndcg@10": 0.331221149237475,
     "query_count": 200
   },
-  "metrics_sha256": "66b1cb62b21dc4229fb8b46bd89d8aac40116d2ab655b16a22a2e0bb52b05063",
+  "metrics_sha256": "b8f2c905e34af3af90c2d9a81607c3d1f0b8149629d08ca1b0f3b6eee551531c",
   "model_parameters": 619776,
   "protocol": "mind_official_impression",
   "seed": 2027,

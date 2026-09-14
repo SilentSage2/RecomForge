@@ -118,7 +118,7 @@ and candidate-aligned dev prediction file.
 
 | Train examples | Dev impressions | Parameters | AUC | MRR | nDCG@5 | nDCG@10 | CPU time |
 |---:|---:|---:|---:|---:|---:|---:|---:|
-| 1,024 × 2 | 200 | 619,776 | 0.5313 | 0.2459 | 0.2550 | 0.3312 | 50.24 s |
+| 1,024 × 2 | 200 | 619,776 | 0.5313 | 0.2459 | 0.2550 | 0.3312 | 48.09 s |
 
 Training loss decreased from 1.8005 to 1.6590. This clean-commit, single-seed,
 bounded run proves the L1 data/model/evaluation/artifact path, but it is not
