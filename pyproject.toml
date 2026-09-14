@@ -31,6 +31,7 @@ recforge-mind-vocab = "recforge.data.text:main"
 recforge-l1 = "recforge.l1_experiment:main"
 recforge-paired-bootstrap = "recforge.statistics:main"
 recforge-l1-aggregate = "recforge.reporting:main"
+recforge-logged-popularity = "recforge.logged_baselines:main"
 recforge-r1 = "recforge.experiment:main"
 recforge-smoke = "recforge.cli:main"
 
