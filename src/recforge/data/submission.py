@@ -22,6 +22,12 @@ def ranks_from_scores(scores: Sequence[float]) -> tuple[int, ...]:
     return tuple(ranks)
 
 
+def order_from_scores(scores: Sequence[float]) -> tuple[int, ...]:
+    """Return candidate indices from best to worst with stable tie breaking."""
+    ranks = ranks_from_scores(scores)
+    return tuple(sorted(range(len(ranks)), key=ranks.__getitem__))
+
+
 def format_prediction_line(impression_id: str, ranks: Sequence[int]) -> str:
     if not impression_id or any(character.isspace() for character in impression_id):
         raise ValueError("impression_id must be non-empty and contain no whitespace")

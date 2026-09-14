@@ -4,6 +4,7 @@ import pytest
 
 from recforge.data.submission import (
     format_prediction_line,
+    order_from_scores,
     ranks_from_scores,
     validate_prediction_file,
     write_prediction_file,
@@ -25,6 +26,7 @@ def _behaviors(path: Path) -> Path:
 
 def test_scores_become_candidate_aligned_stable_ranks() -> None:
     assert ranks_from_scores([0.2, 0.9, 0.2]) == (2, 1, 3)
+    assert order_from_scores([0.2, 0.9, 0.2]) == (1, 0, 2)
     assert format_prediction_line("7", (2, 1, 3)) == "7 [2,1,3]\n"
 
 

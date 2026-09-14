@@ -36,4 +36,4 @@ Ranking position alone is not the portfolio claim. The strongest outcome is a cr
 - [x] add an official-format prediction writer and strict validator;
 - [x] match the official multi-positive MRR definition on a hand-computed fixture;
 - reproduce all official evaluator outputs on MIND-small dev;
-- freeze an L1 experiment spec and hardware budget before adding the NRMS-style model.
+- [x] freeze an L1 experiment spec and hardware budget before adding the NRMS-style model; see [`L1_EXPERIMENT_SPEC.md`](L1_EXPERIMENT_SPEC.md).

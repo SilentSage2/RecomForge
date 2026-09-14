@@ -23,6 +23,7 @@ from recforge.data.features import (
 )
 from recforge.data.mind import iter_mind_behaviors, sha256_file
 from recforge.data.protocol import TemporalCatalogIndex
+from recforge.data.submission import order_from_scores
 from recforge.data.training import (
     iter_feature_batches,
     load_training_examples,
@@ -233,12 +234,7 @@ def evaluate_logged_impressions(
             )
             scores_tensor = user_embedding @ item_embeddings[candidate_rows].transpose(0, 1)
             scores = cast(list[float], scores_tensor.squeeze(0).cpu().tolist())
-            ranked = [
-                item_id
-                for _, item_id in sorted(
-                    zip(scores, behavior.candidate_item_ids, strict=True), reverse=True
-                )
-            ]
+            ranked = [behavior.candidate_item_ids[index] for index in order_from_scores(scores)]
             if 0 in behavior.labels and 1 in behavior.labels:
                 auc_total += binary_auc(behavior.labels, scores)
             else:
