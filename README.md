@@ -60,6 +60,7 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Review and check in the compact MIND split report.
 - [x] Add immutable metrics and run manifests.
 - [x] Version the temporal candidate-universe policy and query builder.
+- [x] Audit temporal corpus sizes and history filtering on MIND-small.
 - [ ] Implement and evaluate the two-tower retriever.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 

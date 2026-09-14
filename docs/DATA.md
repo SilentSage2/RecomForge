@@ -20,6 +20,17 @@ Verified archive fingerprints:
 
 Raw archives, extracted files, processed tables, text features, and checkpoints belong under ignored local artifact directories. The adapter intentionally keeps the documented MIND clock timezone-naive because the upstream documentation does not declare a timezone; code must not label it UTC without an explicit policy decision.
 
+Reproduce the checked-in temporal protocol audit after extracting both splits:
+
+```bash
+recforge-mind-protocol-audit \
+  --split train data/raw/MINDsmall_train/behaviors.tsv \
+  --split dev data/raw/MINDsmall_dev/behaviors.tsv \
+  --output experiments/mind-small/protocol-audit.json
+```
+
+The report is a compact derived artifact: it contains only aggregate counts and source-file fingerprints, never user histories or impression rows.
+
 ## Synthetic data
 
 `recforge.synthetic.build_synthetic_dataset` generates the only data used by unit tests and the smoke command. It is deliberately small and includes:

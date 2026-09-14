@@ -1,0 +1,39 @@
+{
+  "audit_schema_version": 1,
+  "catalog_item_count": 65238,
+  "first_observed_at": "2019-11-09T00:00:19",
+  "last_observed_at": "2019-11-15T23:52:14",
+  "protocol": "temporal_corpus_v1",
+  "splits": [
+    {
+      "behaviors_sha256": "a424547c8fa17c9ea4879c2110221c2b2f2709f4f7615ede0b0d8e4765158658",
+      "max_eligible_catalog_size": 51282,
+      "mean_candidates_after_history_filter": 38836.513369,
+      "mean_eligible_catalog_size": 38868.539216,
+      "mean_history_items_removed": 32.025847,
+      "median_eligible_catalog_size": 40795,
+      "min_eligible_catalog_size": 44,
+      "multi_positive_query_count": 43077,
+      "p95_eligible_catalog_size": 50141,
+      "positive_query_count": 156965,
+      "positive_target_count": 236344,
+      "repeated_positive_query_count": 1317,
+      "split": "train"
+    },
+    {
+      "behaviors_sha256": "b6c460e33b1a8693252ded6e626da7d3ccf78920eea2ec11889020bb7d8443ef",
+      "max_eligible_catalog_size": 65238,
+      "mean_candidates_after_history_filter": 59776.367509,
+      "mean_eligible_catalog_size": 59808.21279,
+      "mean_history_items_removed": 31.845281,
+      "median_eligible_catalog_size": 60465,
+      "min_eligible_catalog_size": 51282,
+      "multi_positive_query_count": 21085,
+      "p95_eligible_catalog_size": 64503,
+      "positive_query_count": 73152,
+      "positive_target_count": 111383,
+      "repeated_positive_query_count": 188,
+      "split": "dev"
+    }
+  ]
+}
