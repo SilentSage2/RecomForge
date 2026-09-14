@@ -151,6 +151,7 @@ class NRMSRanker(nn.Module):
         attention_hidden_dim: int = 128,
         title_encoder_mode: str = "attention",
         history_encoder_mode: str = "attention",
+        deduplicate_titles: bool = False,
     ) -> None:
         super().__init__()
         self.title_encoder = TitleEncoder(
@@ -166,6 +167,20 @@ class NRMSRanker(nn.Module):
             attention_hidden_dim,
             history_encoder_mode,
         )
+        self.deduplicate_titles = deduplicate_titles
+
+    def _encode_flat_titles(self, token_ids: Tensor, token_mask: Tensor) -> Tensor:
+        if not self.deduplicate_titles:
+            encoded: Tensor = self.title_encoder(token_ids, token_mask)
+            return encoded
+        width = token_ids.shape[1]
+        keys = torch.cat((token_ids, token_mask.to(token_ids.dtype)), dim=1)
+        unique_keys, inverse = torch.unique(keys, dim=0, return_inverse=True)
+        unique_embeddings = self.title_encoder(
+            unique_keys[:, :width], unique_keys[:, width:].to(torch.bool)
+        )
+        restored: Tensor = unique_embeddings[inverse]
+        return restored
 
     def forward(
         self,
@@ -188,15 +203,26 @@ class NRMSRanker(nn.Module):
         if history_item_mask.shape != (batch_size, history_length):
             raise ValueError("history item mask shape mismatch")
 
-        clicked = self.title_encoder(
-            history_token_ids.reshape(batch_size * history_length, title_length),
-            history_token_mask.reshape(batch_size * history_length, title_length),
-        ).reshape(batch_size, history_length, -1)
+        history_flat_ids = history_token_ids.reshape(batch_size * history_length, title_length)
+        history_flat_mask = history_token_mask.reshape(batch_size * history_length, title_length)
+        candidate_flat_ids = candidate_token_ids.reshape(batch_size * candidate_count, title_length)
+        candidate_flat_mask = candidate_token_mask.reshape(
+            batch_size * candidate_count, title_length
+        )
+        if self.deduplicate_titles:
+            combined_count = history_flat_ids.shape[0]
+            combined = self._encode_flat_titles(
+                torch.cat((history_flat_ids, candidate_flat_ids), dim=0),
+                torch.cat((history_flat_mask, candidate_flat_mask), dim=0),
+            )
+            clicked_flat = combined[:combined_count]
+            candidate_flat = combined[combined_count:]
+        else:
+            clicked_flat = self._encode_flat_titles(history_flat_ids, history_flat_mask)
+            candidate_flat = self._encode_flat_titles(candidate_flat_ids, candidate_flat_mask)
+        clicked = clicked_flat.reshape(batch_size, history_length, -1)
         user = self.user_encoder(clicked, history_item_mask)
-        candidates = self.title_encoder(
-            candidate_token_ids.reshape(batch_size * candidate_count, title_length),
-            candidate_token_mask.reshape(batch_size * candidate_count, title_length),
-        ).reshape(batch_size, candidate_count, -1)
+        candidates = candidate_flat.reshape(batch_size, candidate_count, -1)
         return torch.einsum("bd,bcd->bc", user, candidates)
 
 

@@ -101,3 +101,22 @@ def test_nrms_rejects_unknown_encoder_modes(mode: str) -> None:
         NRMSRanker(8, 8, 2, 4, title_encoder_mode=mode)
     with pytest.raises(ValueError, match="encoder_mode"):
         NRMSRanker(8, 8, 2, 4, history_encoder_mode=mode)
+
+
+def test_batch_title_deduplication_preserves_scores_and_gradients() -> None:
+    torch.manual_seed(17)
+    reference = NRMSRanker(8, 8, 2, 4)
+    deduplicated = NRMSRanker(8, 8, 2, 4, deduplicate_titles=True)
+    deduplicated.load_state_dict(reference.state_dict())
+    reference_scores = reference(*_inputs())
+    deduplicated_scores = deduplicated(*_inputs())
+    reference_loss = sampled_softmax_loss(reference_scores, torch.zeros(2, dtype=torch.long))
+    deduplicated_loss = sampled_softmax_loss(deduplicated_scores, torch.zeros(2, dtype=torch.long))
+    reference_loss.backward()  # type: ignore[no-untyped-call]
+    deduplicated_loss.backward()  # type: ignore[no-untyped-call]
+
+    assert torch.allclose(deduplicated_scores, reference_scores, atol=1e-6)
+    assert torch.allclose(deduplicated_loss, reference_loss, atol=1e-6)
+    for expected, actual in zip(reference.parameters(), deduplicated.parameters(), strict=True):
+        assert expected.grad is not None and actual.grad is not None
+        assert torch.allclose(actual.grad, expected.grad, atol=1e-5)

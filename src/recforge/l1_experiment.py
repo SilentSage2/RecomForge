@@ -48,6 +48,7 @@ class L1ExperimentConfig:
     attention_hidden_dim: int = 128
     title_encoder_mode: str = "attention"
     history_encoder_mode: str = "attention"
+    deduplicate_titles: bool = False
     negative_count: int = 4
     max_history_items: int = 50
     max_train_examples: int | None = None
@@ -124,6 +125,7 @@ def train_nrms(
         config.attention_hidden_dim,
         config.title_encoder_mode,
         config.history_encoder_mode,
+        config.deduplicate_titles,
     ).to(device)
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay
