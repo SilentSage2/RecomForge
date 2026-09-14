@@ -1,0 +1,28 @@
+{
+  "comparison_status": "full_data_single_seed_with_paired_impression_bootstrap",
+  "protocol": "mind_official_impression_rank_output",
+  "seed": 2027,
+  "train_examples_per_variant": 709032,
+  "dev_impressions": 73152,
+  "variants": {
+    "mean_mean": {
+      "checkpoint_sha256": "bc67f8f140b10131294f4226244ed3cefcb2721c413dfb4544547ababddfd799",
+      "duration_seconds": 154.988559,
+      "epoch_losses": [1.5286760293642088, 1.4230679571598308, 1.3739490182027794],
+      "metrics": {"auc": 0.6015237890272218, "mrr": 0.2715781511637251, "ndcg@5": 0.2957992260920448, "ndcg@10": 0.3593848944369853},
+      "parameters": 1218048,
+      "tied_score_impression_count": 2286
+    },
+    "title_attention_history_mean": {
+      "checkpoint_sha256": "b4688e4467d9ad6e98232dcfb42deef2b2eb9219ef93c06bfd453713f502b104",
+      "duration_seconds": 2982.719756,
+      "epoch_losses": [1.4526878056180617, 1.3588322833449267, 1.3218608120019348],
+      "metrics": {"auc": 0.6274410198784873, "mrr": 0.2884083722433814, "ndcg@5": 0.317379853226261, "ndcg@10": 0.37960267546396276},
+      "parameters": 1239040,
+      "tied_score_impression_count": 2289
+    }
+  },
+  "paired_bootstrap": "experiments/mind-small/l1-full-paired-bootstrap-seed2027.json",
+  "compute_ratio_attention_over_mean": 19.24477416449041,
+  "evidence_limit": "Full dev and paired impression uncertainty, but one training seed; three-seed uncertainty remains required."
+}

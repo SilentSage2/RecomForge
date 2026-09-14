@@ -24,7 +24,7 @@ from recforge.data.ranking import (
     iter_ranking_batches,
     load_ranking_examples,
 )
-from recforge.data.submission import order_from_scores, write_prediction_file
+from recforge.data.submission import order_from_scores, ranks_from_scores, write_prediction_file
 from recforge.data.text import load_vocabulary_artifact
 from recforge.metrics import binary_auc, mean_reciprocal_rank_at_k, ndcg_at_k
 from recforge.models.nrms import NRMSRanker, sampled_softmax_loss
@@ -177,7 +177,7 @@ def evaluate_nrms(
     max_impressions: int | None,
 ) -> tuple[dict[str, float | int], list[tuple[str, list[float]]]]:
     auc_total = mrr_total = ndcg_5_total = ndcg_10_total = 0.0
-    query_count = skipped_auc = 0
+    query_count = skipped_auc = tied_score_impressions = 0
     predictions: list[tuple[str, list[float]]] = []
     model.eval()
     with torch.no_grad():
@@ -209,9 +209,11 @@ def evaluate_nrms(
             )
             raw_scores = model(*_batch_tensors(batch, device)).squeeze(0).cpu().tolist()
             scores = cast(list[float], raw_scores)
+            ranks = ranks_from_scores(scores)
             ranked = [behavior.candidate_item_ids[index] for index in order_from_scores(scores)]
+            tied_score_impressions += len(set(scores)) != len(scores)
             if 0 in behavior.labels and 1 in behavior.labels:
-                auc_total += binary_auc(behavior.labels, scores)
+                auc_total += binary_auc(behavior.labels, [-float(rank) for rank in ranks])
             else:
                 skipped_auc += 1
             mrr_total += mean_reciprocal_rank_at_k(ranked, positives, len(ranked))
@@ -225,6 +227,7 @@ def evaluate_nrms(
         {
             "query_count": query_count,
             "auc_query_count": query_count - skipped_auc,
+            "tied_score_impression_count": tied_score_impressions,
             "auc": auc_total / (query_count - skipped_auc),
             "mrr": mrr_total / query_count,
             "ndcg@5": ndcg_5_total / query_count,
@@ -265,14 +268,15 @@ def evaluate_nrms_cached(
         raise ValueError("batch_size must be positive")
     row_by_item = table.row_by_item_id()
     auc_total = mrr_total = ndcg_5_total = ndcg_10_total = 0.0
-    query_count = skipped_auc = 0
+    query_count = skipped_auc = tied_score_impressions = 0
     predictions: list[tuple[str, list[float]]] = []
     model.eval()
     title_embeddings = _encode_title_table(model, table, device)
     pending: list[MindBehavior] = []
 
     def evaluate_pending() -> None:
-        nonlocal auc_total, mrr_total, ndcg_5_total, ndcg_10_total, query_count, skipped_auc
+        nonlocal auc_total, mrr_total, ndcg_5_total, ndcg_10_total
+        nonlocal query_count, skipped_auc, tied_score_impressions
         if not pending:
             return
         embedding_dim = title_embeddings.shape[1]
@@ -318,9 +322,11 @@ def evaluate_nrms_cached(
                 for item, label in zip(behavior.candidate_item_ids, behavior.labels, strict=True)
                 if label == 1
             }
+            ranks = ranks_from_scores(scores)
             ranked = [behavior.candidate_item_ids[index] for index in order_from_scores(scores)]
+            tied_score_impressions += len(set(scores)) != len(scores)
             if 0 in behavior.labels and 1 in behavior.labels:
-                auc_total += binary_auc(behavior.labels, scores)
+                auc_total += binary_auc(behavior.labels, [-float(rank) for rank in ranks])
             else:
                 skipped_auc += 1
             mrr_total += mean_reciprocal_rank_at_k(ranked, positives, len(ranked))
@@ -345,6 +351,7 @@ def evaluate_nrms_cached(
         {
             "query_count": query_count,
             "auc_query_count": query_count - skipped_auc,
+            "tied_score_impression_count": tied_score_impressions,
             "auc": auc_total / (query_count - skipped_auc),
             "mrr": mrr_total / query_count,
             "ndcg@5": ndcg_5_total / query_count,

@@ -22,7 +22,7 @@ from recforge.data.features import (
 )
 from recforge.data.mind import iter_mind_behaviors, sha256_file
 from recforge.data.protocol import TemporalCatalogIndex
-from recforge.data.submission import order_from_scores
+from recforge.data.submission import order_from_scores, ranks_from_scores
 from recforge.data.training import (
     iter_feature_batches,
     load_training_examples,
@@ -198,6 +198,7 @@ def evaluate_logged_impressions(
     ndcg_10_total = 0.0
     query_count = 0
     skipped_auc = 0
+    tied_score_impressions = 0
 
     model.eval()
     with torch.no_grad():
@@ -233,9 +234,11 @@ def evaluate_logged_impressions(
             )
             scores_tensor = user_embedding @ item_embeddings[candidate_rows].transpose(0, 1)
             scores = cast(list[float], scores_tensor.squeeze(0).cpu().tolist())
+            ranks = ranks_from_scores(scores)
             ranked = [behavior.candidate_item_ids[index] for index in order_from_scores(scores)]
+            tied_score_impressions += len(set(scores)) != len(scores)
             if 0 in behavior.labels and 1 in behavior.labels:
-                auc_total += binary_auc(behavior.labels, scores)
+                auc_total += binary_auc(behavior.labels, [-float(rank) for rank in ranks])
             else:
                 skipped_auc += 1
             mrr_total += mean_reciprocal_rank_at_k(ranked, positives, len(ranked))
@@ -248,6 +251,7 @@ def evaluate_logged_impressions(
     return {
         "query_count": query_count,
         "auc_query_count": query_count - skipped_auc,
+        "tied_score_impression_count": tied_score_impressions,
         "auc": auc_total / (query_count - skipped_auc),
         "mrr": mrr_total / query_count,
         "ndcg@5": ndcg_5_total / query_count,

@@ -35,15 +35,18 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
 
 ## Evidence gaps
 
-1. **Official-ranking strength:** the L1 NRMS-style model has only a 1,024-example
-   smoke run (AUC 0.5313). It has not beaten a fair baseline.
-2. **Fair baselines:** logged-candidate popularity, title mean pooling, and the R1
-   hash tower must be evaluated through the identical official metric path.
-3. **Ablation evidence:** title self-attention and history self-attention have not
-   been individually removed under a fixed budget.
+1. **Official-ranking strength:** title attention reaches AUC 0.6274 on full
+   MIND-small dev and beats the registered mean baseline, but remains below the
+   0.68 competitive target.
+2. **Fair baselines:** mean pooling and the R1 hash tower now use the official
+   rank-output metrics; a logged-candidate popularity baseline remains missing.
+3. **Ablation evidence:** title attention versus mean pooling has a full-data
+   seed-2027 comparison and paired bootstrap. Full-data history-attention removal
+   and training-seed replication remain incomplete.
 4. **Scale:** no complete MIND-small L1 training run or MIND-large hidden-test
    submission exists.
-5. **Uncertainty:** L1 has no three-seed result or paired per-impression bootstrap.
+5. **Uncertainty:** L1 now has a 5,000-resample paired impression bootstrap, but no
+   three-seed training result.
 6. **Efficiency beyond the validated path:** cached/batched evaluation is now
    7.97× faster on a locked 2,000-impression comparison with identical metrics;
    its evaluation stage completes all 73,152 dev impressions in 9.14 seconds.
@@ -59,6 +62,12 @@ the double-mean baseline reached 0.5330. Because this is one seed on a training
 prefix, it is model-selection evidence only. It suggests that history attention
 is not justified at low data and defines the two variants that merit full-data
 comparison; it does not establish an attention contribution.
+
+The full-data seed-2027 gate subsequently found an AUC gain of 0.02592 for title
+attention over double mean pooling, with paired-impression 95% bootstrap interval
+[0.02422, 0.02769]. The effect is real for this trained pair but costs 19.24× the
+CPU wall time. Training-seed replication is required before treating it as a
+stable model effect.
 
 ## Release gates
 

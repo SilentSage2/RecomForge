@@ -17,6 +17,28 @@ Three full-data seeds (156,965 training queries, three epochs, 73,152 developmen
 
 Uniform negatives produce the strongest relevance metrics but collapse toward head items. In-batch clicked negatives are harder: they reduce Recall while producing radically broader catalog and nonzero tail coverage. Uniform wins Recall@100 in every paired seed by 0.0432–0.0506, while all three uniform runs have zero tail recall. The evidence falsifies the initial expectation that in-batch negatives would simply improve retrieval; negative-source choice changes the objective's behavior rather than offering a universal upgrade.
 
+## Full-data official-ranking result
+
+The first full-data L1 gate fixes seed 2027, 64-dimensional representations,
+three epochs, 709,032 sampled training examples, and all 73,152 dev impressions.
+Official metrics are computed from the unique ranks written to the submission
+format, including the declared stable tie policy.
+
+| Model | AUC | MRR | nDCG@5 | nDCG@10 | Parameters | CPU time |
+|---|---:|---:|---:|---:|---:|---:|
+| Hash two-tower, in-batch | 0.5949 | 0.2805 | 0.3008 | 0.3629 | 74,048 | 50.83 s |
+| Title mean + history mean | 0.6015 | 0.2716 | 0.2958 | 0.3594 | 1,218,048 | 154.99 s |
+| **Title attention + history mean** | **0.6274** | **0.2884** | **0.3174** | **0.3796** | 1,239,040 | 2,982.72 s |
+
+Title attention improves AUC over mean pooling by 0.02592; a 5,000-resample
+paired impression bootstrap gives a 95% interval of [0.02422, 0.02769]. Its MRR,
+nDCG@5, and nDCG@10 intervals also exclude zero. The gain clears the predeclared
+0.02 AUC gate and exceeds the hash baseline by 0.03252, but costs 19.24× the mean-
+pooling wall time. This is a full-data single-seed result, not yet a variance-aware
+final claim. See the compact
+[`comparison`](experiments/mind-small/l1-full-seed2027-comparison.json) and
+[`paired bootstrap`](experiments/mind-small/l1-full-paired-bootstrap-seed2027.json).
+
 ## Research question
 
 How much does each stage of a modern recommender—candidate retrieval, negative sampling, ranking, sequential modeling, multi-task learning, and reranking—contribute under a leakage-safe temporal protocol, and what relevance is traded for freshness and diversity?
@@ -175,6 +197,9 @@ The popularity baselines win relevance on this bounded run, while the two-tower 
 - The L1 smoke AUC changes from 0.5313 on the first 200 impressions to 0.5125 on
   the first 2,000. Small prefix subsets are integration fixtures, not a basis for
   model selection or headline claims.
+- The full-data title-attention gain has paired impression uncertainty but only
+  one training seed. It requires seed replication before becoming a headline
+  model claim, and its 19.24× CPU cost is a material limitation.
 - The released logs support offline counterfactual analysis only within their
   logged candidates; no causal or production-performance claim is made.
 
