@@ -57,10 +57,11 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Add global and time-decayed popularity baselines.
 - [x] Complete MIND-small authenticated download and integrity preflight.
 - [x] Add a strict streaming MIND adapter and split-audit command.
-- [ ] Review and check in the compact MIND split report.
-- [ ] Add immutable run manifests.
+- [x] Review and check in the compact MIND split report.
+- [x] Add immutable metrics and run manifests.
 - [ ] Implement and evaluate the two-tower retriever.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).
+The run-bundle format is documented in [`docs/RUNS.md`](docs/RUNS.md).

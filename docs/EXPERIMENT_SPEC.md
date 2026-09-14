@@ -25,7 +25,7 @@ Under a strict temporal protocol, a compact two-tower retriever using recent use
 
 ## Acceptance criteria
 
-R0 is complete when schemas, fixtures, metrics, temporal validators, two popularity baselines, CI, and the synthetic smoke command are green.
+R0 is complete when schemas, fixtures, metrics, temporal validators, two popularity baselines, CI, the synthetic smoke command, and immutable run manifests are green.
 
 R1 is complete when MIND access and fingerprinting are documented, one data command and one experiment command are reproducible, the two-tower comparison and negative-sampling ablation are complete, and actual results plus failures are reported in the README.
 
