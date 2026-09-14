@@ -10,7 +10,10 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "Ziyang Xu" }]
-dependencies = []
+dependencies = [
+  "numpy>=1.26,<2.5",
+  "torch>=2.4,<3",
+]
 
 [project.optional-dependencies]
 dev = [

@@ -2,7 +2,7 @@
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
-> **Status: R0 in progress.** The repository currently contains correctness-critical schemas, synthetic fixtures, metrics, leakage validation, and popularity baselines. It does not yet claim learned-model results.
+> **Status: R0 complete; R1 retrieval in progress.** The protocol, synthetic fixtures, metrics, leakage validation, popularity baselines, run manifests, MIND adapter, and temporal-corpus audit are complete. The repository does not yet claim learned-model results.
 
 ## Research question
 
@@ -61,7 +61,8 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Add immutable metrics and run manifests.
 - [x] Version the temporal candidate-universe policy and query builder.
 - [x] Audit temporal corpus sizes and history filtering on MIND-small.
-- [ ] Implement and evaluate the two-tower retriever.
+- [x] Implement and unit-test the two-tower core and in-batch loss.
+- [ ] Build deterministic MIND feature preparation and train/evaluate the retriever.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
