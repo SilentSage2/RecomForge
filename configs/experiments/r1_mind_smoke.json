@@ -10,6 +10,7 @@
   "max_eval_queries": 1000,
   "max_train_queries": 2048,
   "output_root": "runs",
+  "popularity_half_life_hours": 72.0,
   "run_temporal_corpus_evaluation": true,
   "seed": 2027,
   "symmetric_loss": false,

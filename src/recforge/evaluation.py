@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import time
 from bisect import bisect_right
-from collections import Counter
+from collections import Counter, defaultdict
+from collections.abc import Mapping
+from datetime import datetime
+from math import exp, log
 from pathlib import Path
 
 import numpy as np
@@ -29,6 +32,24 @@ def positive_target_popularity(behavior_path: Path) -> Counter[str]:
             if label == 1
         )
     return counts
+
+
+def time_decayed_target_popularity(
+    behavior_path: Path, *, reference_time: datetime, half_life_hours: float
+) -> dict[str, float]:
+    if half_life_hours <= 0:
+        raise ValueError("half_life_hours must be positive")
+    scores: defaultdict[str, float] = defaultdict(float)
+    rate = log(2.0) / (half_life_hours * 3600)
+    for behavior in iter_mind_behaviors(behavior_path):
+        age_seconds = (reference_time - behavior.local_timestamp).total_seconds()
+        if age_seconds < 0:
+            raise ValueError("reference_time precedes a training interaction")
+        weight = exp(-rate * age_seconds)
+        for item_id, label in zip(behavior.candidate_item_ids, behavior.labels, strict=True):
+            if label == 1:
+                scores[item_id] += weight
+    return dict(scores)
 
 
 def _popularity_thresholds(popularity: Counter[str]) -> tuple[int, int]:
@@ -150,6 +171,70 @@ def evaluate_temporal_corpus(
                 bucket = _bucket(training_popularity[target], thresholds)
                 slice_targets[bucket] += 1
                 slice_hits[bucket] += target in retrieved
+
+    query_count = len(examples)
+    metrics: dict[str, float | int] = {
+        "query_count": query_count,
+        "recall@20": recall_20 / query_count,
+        "recall@100": recall_100 / query_count,
+        "mrr@20": mrr_20 / query_count,
+        "coverage@100": len(recommended) / len(catalog.item_ids),
+        "exact_search_ms_per_query": 1000 * search_seconds / query_count,
+    }
+    for bucket in ("head", "mid", "tail"):
+        denominator = slice_targets[bucket]
+        metrics[f"{bucket}_target_recall@100"] = (
+            slice_hits[bucket] / denominator if denominator else 0.0
+        )
+        metrics[f"{bucket}_target_count"] = denominator
+    return metrics
+
+
+def evaluate_popularity_temporal_corpus(
+    *,
+    catalog: TemporalCatalogIndex,
+    behavior_path: Path,
+    item_scores: Mapping[str, float],
+    training_popularity: Counter[str],
+    max_queries: int | None = None,
+) -> dict[str, float | int]:
+    """Evaluate a fixed popularity ordering under temporal eligibility and seen filtering."""
+    examples = tuple(iter_positive_retrieval_examples(behavior_path, namespace="eval"))
+    if max_queries is not None:
+        examples = examples[:max_queries]
+    if not examples:
+        raise ValueError("evaluation contains no positive queries")
+    position_by_item = {item_id: position for position, item_id in enumerate(catalog.item_ids)}
+    ordered_items = sorted(
+        catalog.item_ids, key=lambda item_id: (-item_scores.get(item_id, 0.0), item_id)
+    )
+    thresholds = _popularity_thresholds(training_popularity)
+    slice_hits = Counter[str]()
+    slice_targets = Counter[str]()
+    recommended: set[str] = set()
+    recall_20 = recall_100 = mrr_20 = search_seconds = 0.0
+
+    for example in examples:
+        eligible_size = bisect_right(catalog.observed_at, example.local_timestamp)
+        excluded = set(example.history_item_ids).difference(example.positive_item_ids)
+        started = time.perf_counter()
+        ranked: list[str] = []
+        for item_id in ordered_items:
+            if position_by_item[item_id] >= eligible_size or item_id in excluded:
+                continue
+            ranked.append(item_id)
+            if len(ranked) == 100:
+                break
+        search_seconds += time.perf_counter() - started
+        recall_20 += recall_at_k(ranked, example.positive_item_ids, 20)
+        recall_100 += recall_at_k(ranked, example.positive_item_ids, 100)
+        mrr_20 += reciprocal_rank_at_k(ranked, example.positive_item_ids, 20)
+        recommended.update(ranked)
+        retrieved = set(ranked)
+        for target in example.positive_item_ids:
+            bucket = _bucket(training_popularity[target], thresholds)
+            slice_targets[bucket] += 1
+            slice_hits[bucket] += target in retrieved
 
     query_count = len(examples)
     metrics: dict[str, float | int] = {

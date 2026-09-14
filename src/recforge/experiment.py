@@ -24,7 +24,12 @@ from recforge.data.features import (
 from recforge.data.mind import iter_mind_behaviors, sha256_file
 from recforge.data.protocol import TemporalCatalogIndex
 from recforge.data.training import iter_feature_batches, load_training_examples
-from recforge.evaluation import evaluate_temporal_corpus, positive_target_popularity
+from recforge.evaluation import (
+    evaluate_popularity_temporal_corpus,
+    evaluate_temporal_corpus,
+    positive_target_popularity,
+    time_decayed_target_popularity,
+)
 from recforge.metrics import binary_auc, ndcg_at_k, reciprocal_rank_at_k
 from recforge.models.two_tower import TwoTowerRetriever, in_batch_softmax_loss
 from recforge.tracking import JsonValue, record_run
@@ -49,6 +54,7 @@ class R1ExperimentConfig:
     max_train_queries: int | None = None
     max_eval_queries: int | None = None
     run_temporal_corpus_evaluation: bool = False
+    popularity_half_life_hours: float = 72.0
 
     def __post_init__(self) -> None:
         if self.epochs <= 0 or self.batch_size <= 1:
@@ -63,6 +69,8 @@ class R1ExperimentConfig:
             raise ValueError("max_train_queries must be at least two")
         if self.max_eval_queries is not None and self.max_eval_queries <= 0:
             raise ValueError("max_eval_queries must be positive")
+        if self.popularity_half_life_hours <= 0:
+            raise ValueError("popularity_half_life_hours must be positive")
 
 
 def _resolve_device(requested: str) -> torch.device:
@@ -243,18 +251,41 @@ def run_experiment(config: R1ExperimentConfig, repository_root: Path) -> Path:
         max_queries=config.max_eval_queries,
     )
     corpus_evaluation: dict[str, float | int] | None = None
+    popularity_baselines: dict[str, dict[str, float | int]] | None = None
     if config.run_temporal_corpus_evaluation:
         catalog = TemporalCatalogIndex.from_behavior_files([train_path, eval_path])
+        train_popularity = positive_target_popularity(train_path)
         corpus_evaluation = evaluate_temporal_corpus(
             model,
             table,
             catalog=catalog,
             behavior_path=eval_path,
-            training_popularity=positive_target_popularity(train_path),
+            training_popularity=train_popularity,
             max_history_items=feature_config.max_history_items,
             device=device,
             max_queries=config.max_eval_queries,
         )
+        decayed_popularity = time_decayed_target_popularity(
+            train_path,
+            reference_time=max(catalog.observed_at),
+            half_life_hours=config.popularity_half_life_hours,
+        )
+        popularity_baselines = {
+            "global": evaluate_popularity_temporal_corpus(
+                catalog=catalog,
+                behavior_path=eval_path,
+                item_scores=train_popularity,
+                training_popularity=train_popularity,
+                max_queries=config.max_eval_queries,
+            ),
+            "time_decayed": evaluate_popularity_temporal_corpus(
+                catalog=catalog,
+                behavior_path=eval_path,
+                item_scores=decayed_popularity,
+                training_popularity=train_popularity,
+                max_queries=config.max_eval_queries,
+            ),
+        }
     with tempfile.NamedTemporaryFile(suffix=".pt", delete=False) as handle:
         checkpoint_path = Path(handle.name)
     try:
@@ -268,6 +299,9 @@ def run_experiment(config: R1ExperimentConfig, repository_root: Path) -> Path:
             "epoch_losses": cast(list[JsonValue], epoch_losses),
             "evaluation": cast(dict[str, JsonValue], evaluation),
             "temporal_corpus_evaluation": cast(dict[str, JsonValue] | None, corpus_evaluation),
+            "temporal_corpus_popularity_baselines": cast(
+                dict[str, JsonValue] | None, popularity_baselines
+            ),
             "checkpoint_sha256": checkpoint_sha256,
         }
         serialized_config = cast(dict[str, JsonValue], asdict(config))
