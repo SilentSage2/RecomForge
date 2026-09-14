@@ -114,3 +114,10 @@ representations, batch size 128, three epochs, all generated training examples,
 and the complete dev split. The title-attention variant advances to three seeds
 only if it improves full-dev AUC over mean pooling; otherwise mean pooling remains
 the efficiency baseline and the failed attention result is reported.
+
+After seed 2027 cleared that gate, batch-local title deduplication was admitted as
+a systems-equivalent optimization. A locked 10k diagnostic reduced wall time by
+16.4% while preserving ranking metrics, and unit tests compare logits, loss, and
+gradients. The three-seed title-attention comparison uses
+`l1_mind_full_title_attention_deduplicated.json` for every seed; seed 2027 must be
+rerun through that same code path rather than mixing implementations.

@@ -1,0 +1,23 @@
+{
+  "comparison_status": "systems_optimization_diagnostic",
+  "implementation_commit": "af939e431b7f8201d34ec312df0584454fdd1425",
+  "protocol": "10000-example title-attention history-mean diagnostic, seed 2027",
+  "reference": {
+    "deduplicate_titles": false,
+    "duration_seconds": 77.383114,
+    "epoch_losses": [1.609375210571289, 1.5561588802337647],
+    "mrr": 0.23721912272623485,
+    "ndcg@5": 0.24514882942976757,
+    "ndcg@10": 0.3121796432327342
+  },
+  "optimized": {
+    "deduplicate_titles": true,
+    "duration_seconds": 64.65745,
+    "epoch_losses": [1.6093752141952515, 1.5561588920593261],
+    "mrr": 0.23721912272623485,
+    "ndcg@5": 0.24514882942976757,
+    "ndcg@10": 0.3121796432327342
+  },
+  "wall_time_reduction_fraction": 0.16444757211001944,
+  "equality_evidence": "Unit test verifies logits, loss, and parameter gradients within declared numerical tolerances; ranking metrics are identical in this diagnostic."
+}

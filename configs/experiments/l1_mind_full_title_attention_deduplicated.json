@@ -1,0 +1,25 @@
+{
+  "attention_heads": 8,
+  "attention_hidden_dim": 64,
+  "batch_size": 128,
+  "deduplicate_titles": true,
+  "device": "cpu",
+  "embedding_dim": 64,
+  "epochs": 3,
+  "eval_batch_size": 64,
+  "eval_behaviors": "data/raw/MINDsmall_dev/behaviors.tsv",
+  "history_encoder_mode": "mean",
+  "learning_rate": 0.001,
+  "max_history_items": 50,
+  "negative_count": 4,
+  "news_paths": [
+    "data/raw/MINDsmall_train/news.tsv",
+    "data/raw/MINDsmall_dev/news.tsv"
+  ],
+  "output_root": "runs",
+  "seed": 2027,
+  "title_encoder_mode": "attention",
+  "train_behaviors": "data/raw/MINDsmall_train/behaviors.tsv",
+  "vocabulary_artifact": "data/processed/mind-small-title-vocab-v1",
+  "weight_decay": 0.0001
+}

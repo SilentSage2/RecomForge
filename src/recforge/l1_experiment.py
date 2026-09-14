@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import sys
 import time
 from dataclasses import asdict, dataclass, replace
 from datetime import UTC, datetime
@@ -116,7 +117,8 @@ def train_nrms(
     behavior_path: Path,
     vocabulary_size: int,
     device: torch.device,
-) -> tuple[NRMSRanker, list[float], int]:
+    progress: bool = False,
+) -> tuple[NRMSRanker, list[float], int, list[float]]:
     _seed_everything(config.seed)
     model = NRMSRanker(
         vocabulary_size,
@@ -131,10 +133,12 @@ def train_nrms(
         model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay
     )
     epoch_losses: list[float] = []
+    epoch_seconds: list[float] = []
     trained_examples = 0
 
     model.train()
     for epoch in range(config.epochs):
+        epoch_started = time.perf_counter()
         examples = load_ranking_examples(
             behavior_path,
             negative_count=config.negative_count,
@@ -165,8 +169,25 @@ def train_nrms(
             loss_total += float(loss.detach().cpu()) * count
             epoch_examples += count
         epoch_losses.append(loss_total / epoch_examples)
+        epoch_seconds.append(time.perf_counter() - epoch_started)
         trained_examples += epoch_examples
-    return model, epoch_losses, trained_examples
+        if progress:
+            print(
+                json.dumps(
+                    {
+                        "stage": "train_epoch",
+                        "epoch": epoch + 1,
+                        "epochs": config.epochs,
+                        "examples": epoch_examples,
+                        "loss": epoch_losses[-1],
+                        "duration_seconds": epoch_seconds[-1],
+                    },
+                    sort_keys=True,
+                ),
+                file=sys.stderr,
+                flush=True,
+            )
+    return model, epoch_losses, trained_examples, epoch_seconds
 
 
 def evaluate_nrms(
@@ -375,12 +396,13 @@ def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path
     )
     train_path = repository_root / config.train_behaviors
     eval_path = repository_root / config.eval_behaviors
-    model, losses, trained_examples = train_nrms(
+    model, losses, trained_examples, epoch_seconds = train_nrms(
         config,
         table,
         behavior_path=train_path,
         vocabulary_size=len(vocabulary.tokens),
         device=device,
+        progress=True,
     )
     evaluation, predictions = evaluate_nrms_cached(
         model,
@@ -398,6 +420,7 @@ def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path
             "device": str(device),
             "trained_examples": trained_examples,
             "epoch_losses": cast(list[JsonValue], losses),
+            "epoch_seconds": cast(list[JsonValue], epoch_seconds),
             "evaluation": cast(dict[str, JsonValue], evaluation),
             "model_parameters": sum(parameter.numel() for parameter in model.parameters()),
             "checkpoint_sha256": sha256_bytes(checkpoint_bytes),
