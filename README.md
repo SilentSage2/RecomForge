@@ -28,6 +28,8 @@ reference and is not included in the paired claim.
 
 | Model | AUC | MRR | nDCG@5 | nDCG@10 | Parameters | CPU time |
 |---|---:|---:|---:|---:|---:|---:|
+| Global popularity‡ | 0.5385 | 0.2451 | 0.2501 | 0.3167 | 0 | 24.36 s |
+| Time-decayed popularity (72h)‡ | 0.5393 | 0.2442 | 0.2501 | 0.3171 | 0 | 24.36 s§ |
 | Hash two-tower, in-batch† | 0.5949 | 0.2805 | 0.3008 | 0.3629 | 74,048 | 50.83 s |
 | Title mean + history mean | 0.5972 ± 0.0063 | 0.2689 ± 0.0071 | 0.2916 ± 0.0104 | 0.3565 ± 0.0078 | 1,218,048 | 200.1 ± 66.8 s |
 | **Title attention + history mean** | **0.6283 ± 0.0040** | **0.2893 ± 0.0070** | **0.3179 ± 0.0079** | **0.3797 ± 0.0060** | 1,239,040 | 1,349.1 ± 342.6 s |
@@ -42,6 +44,11 @@ the versioned [`three-seed aggregate`](experiments/mind-small/l1-full-three-seed
 and seed-level comparison/bootstrap artifacts in `experiments/mind-small/`.
 
 † Single seed; shown only as an earlier implementation reference.
+
+‡ Deterministic training-only popularity counts; no evaluation labels or logged
+position are used. § Both popularity predictions are produced in the same run, so
+the shared runtime is shown for context rather than as per-variant latency. The
+locked result is [`l1-logged-popularity.json`](experiments/mind-small/l1-logged-popularity.json).
 
 ## Research question
 
@@ -203,8 +210,8 @@ The popularity baselines win relevance on this bounded run, while the two-tower 
   model selection or headline claims.
 - The full-data title-attention gain replicates across three training seeds, but
   its 6.74× mean CPU cost is material and peak memory remains unmeasured.
-- A logged-candidate popularity baseline and the registered full-data history-
-  attention ablation remain missing, so L1 is not yet complete.
+- The registered full-data history-attention ablation remains missing, so L1 is
+  not yet complete.
 - The released logs support offline counterfactual analysis only within their
   logged candidates; no causal or production-performance claim is made.
 
@@ -240,7 +247,8 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Add and smoke-test the masked NRMS-style official-ranking path.
 - [ ] Confirm access to MIND-large and reproduce all official metrics on its dev split.
 - [x] Freeze and implement the L1 NRMS-style experiment and three-seed title-encoder comparison.
-- [ ] Add the logged-candidate popularity baseline and full-data history-attention ablation.
+- [x] Add leakage-safe global and time-decayed logged-candidate popularity baselines.
+- [ ] Run the registered full-data history-attention ablation.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).

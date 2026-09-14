@@ -44,8 +44,9 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
 1. **Official-ranking strength:** title attention reaches AUC 0.6283 ± 0.0040 on
    full MIND-small dev and beats the registered mean baseline, but remains below the
    0.68 competitive target.
-2. **Fair baselines:** mean pooling and the R1 hash tower now use the official
-   rank-output metrics; a logged-candidate popularity baseline remains missing.
+2. **Fair baselines:** global and time-decayed popularity, mean pooling, and the R1
+   hash tower now use the official rank-output metrics. The hash result remains a
+   smaller, single-seed reference rather than a matched L1 baseline.
 3. **Ablation evidence:** title attention versus mean pooling has a full-data,
    three-seed paired comparison. The registered full-data history-attention
    ablation remains incomplete.
@@ -86,8 +87,8 @@ Do not describe RecomForge as flagship-complete or leaderboard-competitive until
   wall time;
 - popularity, mean-pooling, hash-tower, and NRMS-style baselines share candidates,
   splits, and metrics;
-- the logged-candidate popularity baseline and full-data history-attention ablation
-  are complete under the identical protocol;
+- the full-data history-attention ablation is complete under the identical
+  protocol;
 - effect sizes, uncertainty, wall time, parameter count, and peak memory are shown;
 - a contribution beyond reproduction is isolated by a controlled experiment;
 - any result figure satisfies `FIGURE_STANDARDS.md` and is regenerated from locked

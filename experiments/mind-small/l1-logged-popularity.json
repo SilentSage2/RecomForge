@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "protocol": "mind_official_impression_rank_output",
+  "run_id": "20260914T234053Z-mind-logged-popularity-b7cf56d4",
+  "git_commit": "8cee70f37211a0ba87e5aa8279fd2a6a100e05a6",
+  "git_dirty": false,
+  "train_behaviors_sha256": "a424547c8fa17c9ea4879c2110221c2b2f2709f4f7615ede0b0d8e4765158658",
+  "dev_behaviors_sha256": "b6c460e33b1a8693252ded6e626da7d3ccf78920eea2ec11889020bb7d8443ef",
+  "training_positive_count": 236344,
+  "training_clicked_item_count": 7713,
+  "dev_impressions": 73152,
+  "tie_policy": "descending training-only score, then ascending item ID; logged position is not used",
+  "duration_seconds": 24.357233,
+  "variants": {
+    "global_popularity": {
+      "metrics": {"auc": 0.5384796214549507, "mrr": 0.24511518906253987, "ndcg@5": 0.25011978546096025, "ndcg@10": 0.31668015249616416},
+      "prediction_sha256": "c9f3740e7a28a2e68fc9e65bc1a5010f8705093f6e59bda6cf5c2371f37f2a21"
+    },
+    "time_decayed_popularity_72h": {
+      "reference_time": "2019-11-14T23:59:13",
+      "metrics": {"auc": 0.5393032129330132, "mrr": 0.24419440226471573, "ndcg@5": 0.250057610003018, "ndcg@10": 0.31712274281249037},
+      "prediction_sha256": "b9b73937b7e26c9126af3a27c124a70f8db5066109aff196a76df8ea376766e6"
+    }
+  },
+  "interpretation": "Time decay slightly improves AUC and nDCG@10 but slightly reduces MRR and nDCG@5; both non-personalized baselines trail the learned mean and title-attention variants."
+}

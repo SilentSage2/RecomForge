@@ -132,6 +132,8 @@ excludes zero. The model therefore clears the registered +0.02 AUC gate, with th
 material limitation that its mean end-to-end CPU time is 6.74× higher. The locked
 aggregate is `experiments/mind-small/l1-full-three-seed-aggregate.json`.
 
-This completes the title-encoder comparison, not all L1 acceptance criteria. The
-logged-candidate popularity baseline and full-data history-attention ablation are
-still required.
+The leakage-safe logged-candidate global and 72-hour time-decayed popularity
+baselines are also complete. They use training positives only and break score ties
+by item ID rather than publisher candidate order; their AUC values are 0.53848 and
+0.53930. This completes the non-personalized baseline gate, not all L1 acceptance
+criteria. The full-data history-attention ablation is still required.
