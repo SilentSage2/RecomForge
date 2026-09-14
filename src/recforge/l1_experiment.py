@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import platform
 import random
+import resource
 import sys
 import time
 from dataclasses import asdict, dataclass, replace
@@ -98,6 +100,11 @@ def _seed_everything(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
+
+
+def _peak_resident_memory_bytes() -> int:
+    peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    return int(peak if platform.system() == "Darwin" else peak * 1024)
 
 
 def _batch_tensors(batch: RankingBatch, device: torch.device) -> tuple[torch.Tensor, ...]:
@@ -491,6 +498,7 @@ def run_l1_experiment(
             "model_parameters": sum(parameter.numel() for parameter in model.parameters()),
             "checkpoint_sha256": sha256_bytes(checkpoint_bytes),
             "resumed_from_epoch": resumed_from_epoch,
+            "peak_resident_memory_bytes": _peak_resident_memory_bytes(),
         }
         serialized_config = cast(dict[str, JsonValue], asdict(config))
         serialized_config["resolved_device"] = str(device)

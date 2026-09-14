@@ -137,3 +137,10 @@ baselines are also complete. They use training positives only and break score ti
 by item ID rather than publisher candidate order; their AUC values are 0.53848 and
 0.53930. This completes the non-personalized baseline gate, not all L1 acceptance
 criteria. The full-data history-attention ablation is still required.
+
+The remaining ablation is frozen in
+`configs/experiments/l1_mind_full_history_attention_seed2027.json`. Relative to
+the accepted title-attention/history-mean configuration, it changes only
+`history_encoder_mode` from `mean` to `attention`. Seed 2027 is the initial gate:
+advance to seed replication only if AUC exceeds history mean or the observed
+difference is small enough that training-seed uncertainty could reverse it.
