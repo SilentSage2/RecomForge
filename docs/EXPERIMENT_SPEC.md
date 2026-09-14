@@ -16,6 +16,7 @@ Under a strict temporal protocol, a compact two-tower retriever using recent use
 - Temporal corpus retrieval reports Recall@20/100, MRR@20, coverage@100, head/mid/tail recall, and exact-search latency.
 - User state contains only events strictly earlier than the query timestamp.
 - Candidate eligibility and item-availability policy are versioned before the first external run.
+- `temporal_corpus_v1` uses the first label-independent observation of an item in released candidates or histories as its availability upper bound; see ADR 0002.
 
 ## Compute envelope
 

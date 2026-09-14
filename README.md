@@ -59,9 +59,11 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Add a strict streaming MIND adapter and split-audit command.
 - [x] Review and check in the compact MIND split report.
 - [x] Add immutable metrics and run manifests.
+- [x] Version the temporal candidate-universe policy and query builder.
 - [ ] Implement and evaluate the two-tower retriever.
 - [ ] Compare uniform and in-batch negatives under a fixed budget.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).
 The run-bundle format is documented in [`docs/RUNS.md`](docs/RUNS.md).
+The full-corpus eligibility approximation is documented in [`docs/decisions/0002-temporal-candidate-policy.md`](docs/decisions/0002-temporal-candidate-policy.md).
