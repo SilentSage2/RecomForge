@@ -44,6 +44,22 @@ recforge-mind-features \
 
 The command refuses to overwrite an existing artifact. Feature semantics and leakage constraints are recorded in ADR 0004.
 
+Build the L1 title vocabulary from training news only. Do not pass the dev or
+test news files to this command:
+
+```bash
+recforge-mind-vocab \
+  --train-news data/raw/MINDsmall_train/news.tsv \
+  --max-vocab-size 30000 \
+  --min-frequency 2 \
+  --max-title-tokens 30 \
+  --output data/processed/mind-small-title-vocab-v1
+```
+
+The immutable manifest records the training-news fingerprint, configuration,
+vocabulary file fingerprint, and semantic vocabulary fingerprint. Dev/test-only
+tokens must map to `<unk>`.
+
 ## Synthetic data
 
 `recforge.synthetic.build_synthetic_dataset` generates the only data used by unit tests and the smoke command. It is deliberately small and includes:

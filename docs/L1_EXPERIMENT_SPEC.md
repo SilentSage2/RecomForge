@@ -90,9 +90,9 @@ L1 is complete only when:
 Implement in this order, merging only after each gate is green:
 
 1. make dev scoring and prediction writing share one deterministic candidate
-   ordering implementation;
+   ordering implementation; **complete**
 2. add the training-only title vocabulary/tokenizer artifact with fingerprints,
-   unknown-token handling, truncation, and leakage tests;
+   unknown-token handling, truncation, and leakage tests; **complete**
 3. add impression-local sampled examples and padded title/history batches;
 4. implement masked additive pooling, then the title encoder, user encoder, and
    dot-product scorer as independently tested modules;

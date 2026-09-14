@@ -2,7 +2,7 @@
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
-> **Status: R0 complete; R1 experimental evidence complete, release review pending.** Three full-data seeds and the controlled negative-sampling ablation are reported below.
+> **Status: R0–R1 complete; L1 official-ranking data foundation in progress.** Three full-data seeds and the controlled negative-sampling ablation are reported below.
 
 ## Full-data development result
 
@@ -103,6 +103,21 @@ The same checkpoint reaches Recall@20 = 0.0000 and Recall@100 = 0.0025 against t
 
 The popularity baselines win relevance on this bounded run, while the two-tower spreads recommendations across far more of the catalog. Full-data training is required before interpreting that relevance–coverage tradeoff.
 
+## Limitations and negative results
+
+- `temporal_corpus_v1` reconstructs item availability from first observation in
+  released logs; it is a label-independent upper bound, not the publisher's true
+  article timestamp.
+- The current signed-hash two-tower is deliberately compact and is not a strong
+  official-ranking text model. Its 2,048-query smoke result is below the
+  popularity baselines on corpus relevance.
+- Uniform negatives improve Recall@100 but collapse coverage and tail recall;
+  they are not a universal replacement for clicked or hard negatives.
+- MIND-small dev results are development evidence only. They are not official
+  leaderboard results and do not establish online user benefit.
+- The released logs support offline counterfactual analysis only within their
+  logged candidates; no causal or production-performance claim is made.
+
 ## Planned dataset
 
 MIND-small is conditionally selected for the first external benchmark because it contains timestamps, ordered histories, logged impressions, and item text metadata. The dataset is research-only and gated; it will not be committed or automatically downloaded in CI.
@@ -131,6 +146,7 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Repeat the negative-sampling comparison across three seeds and report uncertainty.
 - [x] Add an official MIND prediction writer and strict structural validator.
 - [x] Match the official multi-positive MRR definition with a hand-checked test.
+- [x] Add a deterministic training-only title vocabulary artifact and leakage tests.
 - [ ] Confirm access to MIND-large and reproduce all official metrics on its dev split.
 - [ ] Freeze and implement the L1 NRMS-style experiment.
 

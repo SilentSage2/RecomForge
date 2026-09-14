@@ -1,0 +1,11 @@
+{
+  "artifact_schema_version": 1,
+  "config": {
+    "max_title_tokens": 30,
+    "max_vocab_size": 30000,
+    "min_frequency": 2
+  },
+  "semantic_vocabulary_sha256": "d952d9db707ac4b6460ad2b9289c4608b79ec384be62df0773ff0b3e5296bec1",
+  "train_news_sha256": "cd49d7da275e9c405f627d75a0de9d4ec6ad43ff8a8db5d23a447591676e09d6",
+  "vocabulary_size": 19032
+}
