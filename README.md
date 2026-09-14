@@ -2,7 +2,7 @@
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
-> **Status: R0–R1 complete; L1 official-ranking smoke complete.** Three full-data seeds and the controlled negative-sampling ablation are reported below.
+> **Status: R0–R1 complete; L1 official-ranking smoke complete; flagship evidence incomplete.** Three full-data seeds and the controlled negative-sampling ablation are reported below. See the candid [`substantive quality audit`](docs/QUALITY_AUDIT.md) for the remaining scientific gates.
 
 ## Full-data development result
 

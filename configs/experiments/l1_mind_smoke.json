@@ -4,6 +4,7 @@
   "batch_size": 32,
   "device": "cpu",
   "embedding_dim": 32,
+  "eval_batch_size": 64,
   "epochs": 2,
   "eval_behaviors": "data/raw/MINDsmall_dev/behaviors.tsv",
   "learning_rate": 0.001,

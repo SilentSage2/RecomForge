@@ -15,7 +15,7 @@ import numpy as np
 import torch
 
 from recforge.checkpoints import serialize_state_dict
-from recforge.data.mind import iter_mind_behaviors, sha256_file
+from recforge.data.mind import MindBehavior, iter_mind_behaviors, sha256_file
 from recforge.data.ranking import (
     RankingBatch,
     RankingExample,
@@ -50,6 +50,7 @@ class L1ExperimentConfig:
     max_history_items: int = 50
     max_train_examples: int | None = None
     max_eval_impressions: int | None = None
+    eval_batch_size: int = 64
     device: str = "auto"
 
     def __post_init__(self) -> None:
@@ -69,6 +70,8 @@ class L1ExperimentConfig:
             raise ValueError("max_train_examples must be positive")
         if self.max_eval_impressions is not None and self.max_eval_impressions <= 0:
             raise ValueError("max_eval_impressions must be positive")
+        if self.eval_batch_size <= 0:
+            raise ValueError("eval_batch_size must be positive")
         if self.device not in {"auto", "cpu", "mps"}:
             raise ValueError("device must be auto, cpu, or mps")
 
@@ -223,6 +226,126 @@ def evaluate_nrms(
     )
 
 
+def _encode_title_table(
+    model: NRMSRanker, table: TitleTable, device: torch.device, *, batch_size: int = 4096
+) -> torch.Tensor:
+    chunks: list[torch.Tensor] = []
+    with torch.no_grad():
+        for start in range(0, len(table.item_ids), batch_size):
+            token_ids = torch.from_numpy(
+                np.asarray(table.token_ids[start : start + batch_size])
+            ).to(device)
+            token_mask = torch.from_numpy(
+                np.asarray(table.attention_mask[start : start + batch_size])
+            ).to(device)
+            chunks.append(model.title_encoder(token_ids, token_mask))
+    return torch.cat(chunks)
+
+
+def evaluate_nrms_cached(
+    model: NRMSRanker,
+    table: TitleTable,
+    *,
+    behavior_path: Path,
+    max_history_items: int,
+    device: torch.device,
+    max_impressions: int | None,
+    batch_size: int,
+) -> tuple[dict[str, float | int], list[tuple[str, list[float]]]]:
+    """Evaluate in batches after encoding every news title exactly once."""
+    if batch_size <= 0:
+        raise ValueError("batch_size must be positive")
+    row_by_item = table.row_by_item_id()
+    auc_total = mrr_total = ndcg_5_total = ndcg_10_total = 0.0
+    query_count = skipped_auc = 0
+    predictions: list[tuple[str, list[float]]] = []
+    model.eval()
+    title_embeddings = _encode_title_table(model, table, device)
+    pending: list[MindBehavior] = []
+
+    def evaluate_pending() -> None:
+        nonlocal auc_total, mrr_total, ndcg_5_total, ndcg_10_total, query_count, skipped_auc
+        if not pending:
+            return
+        embedding_dim = title_embeddings.shape[1]
+        max_candidates = max(len(behavior.candidate_item_ids) for behavior in pending)
+        histories = torch.zeros(
+            (len(pending), max_history_items, embedding_dim),
+            dtype=title_embeddings.dtype,
+            device=device,
+        )
+        history_mask = torch.zeros(
+            (len(pending), max_history_items), dtype=torch.bool, device=device
+        )
+        candidates = torch.zeros(
+            (len(pending), max_candidates, embedding_dim),
+            dtype=title_embeddings.dtype,
+            device=device,
+        )
+        for row, behavior in enumerate(pending):
+            history_rows = [
+                row_by_item[item] for item in behavior.history_item_ids if item in row_by_item
+            ][-max_history_items:]
+            if history_rows:
+                count = len(history_rows)
+                histories[row, :count] = title_embeddings[history_rows]
+                history_mask[row, :count] = True
+            try:
+                candidate_rows = [row_by_item[item] for item in behavior.candidate_item_ids]
+            except KeyError as error:
+                raise ValueError(
+                    f"impression {behavior.impression_id} candidate {error.args[0]!r} has no title"
+                ) from error
+            candidates[row, : len(candidate_rows)] = title_embeddings[candidate_rows]
+        with torch.no_grad():
+            users = model.user_encoder(histories, history_mask)
+            batch_scores = torch.einsum("bd,bcd->bc", users, candidates)
+        for row, behavior in enumerate(pending):
+            scores = cast(
+                list[float],
+                batch_scores[row, : len(behavior.candidate_item_ids)].cpu().tolist(),
+            )
+            positives = {
+                item
+                for item, label in zip(behavior.candidate_item_ids, behavior.labels, strict=True)
+                if label == 1
+            }
+            ranked = [behavior.candidate_item_ids[index] for index in order_from_scores(scores)]
+            if 0 in behavior.labels and 1 in behavior.labels:
+                auc_total += binary_auc(behavior.labels, scores)
+            else:
+                skipped_auc += 1
+            mrr_total += mean_reciprocal_rank_at_k(ranked, positives, len(ranked))
+            ndcg_5_total += ndcg_at_k(ranked, positives, 5)
+            ndcg_10_total += ndcg_at_k(ranked, positives, 10)
+            predictions.append((behavior.impression_id, scores))
+            query_count += 1
+        pending.clear()
+
+    for behavior in iter_mind_behaviors(behavior_path):
+        if not any(behavior.labels):
+            continue
+        if max_impressions is not None and query_count + len(pending) >= max_impressions:
+            break
+        pending.append(behavior)
+        if len(pending) == batch_size:
+            evaluate_pending()
+    evaluate_pending()
+    if query_count == 0 or query_count == skipped_auc:
+        raise ValueError("evaluation produced no valid impressions")
+    return (
+        {
+            "query_count": query_count,
+            "auc_query_count": query_count - skipped_auc,
+            "auc": auc_total / (query_count - skipped_auc),
+            "mrr": mrr_total / query_count,
+            "ndcg@5": ndcg_5_total / query_count,
+            "ndcg@10": ndcg_10_total / query_count,
+        },
+        predictions,
+    )
+
+
 def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path:
     started_at = datetime.now(UTC)
     started = time.perf_counter()
@@ -242,13 +365,14 @@ def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path
         vocabulary_size=len(vocabulary.tokens),
         device=device,
     )
-    evaluation, predictions = evaluate_nrms(
+    evaluation, predictions = evaluate_nrms_cached(
         model,
         table,
         behavior_path=eval_path,
         max_history_items=config.max_history_items,
         device=device,
         max_impressions=config.max_eval_impressions,
+        batch_size=config.eval_batch_size,
     )
     checkpoint_bytes = serialize_state_dict(model)
     try:

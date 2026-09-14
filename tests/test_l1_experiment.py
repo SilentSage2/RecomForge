@@ -7,6 +7,7 @@ from recforge.data.text import Vocabulary
 from recforge.l1_experiment import (
     L1ExperimentConfig,
     evaluate_nrms,
+    evaluate_nrms_cached,
     train_nrms,
 )
 
@@ -72,3 +73,17 @@ def test_tiny_l1_train_and_official_evaluation(tmp_path: Path) -> None:
     assert metrics["query_count"] == 3
     assert 0.0 <= metrics["auc"] <= 1.0
     assert len(predictions) == 3
+
+    cached_metrics, cached_predictions = evaluate_nrms_cached(
+        model,
+        table,
+        behavior_path=behaviors,
+        max_history_items=2,
+        device=torch.device("cpu"),
+        max_impressions=None,
+        batch_size=2,
+    )
+    assert cached_metrics == metrics
+    assert [item[0] for item in cached_predictions] == [item[0] for item in predictions]
+    for (_, cached), (_, reference) in zip(cached_predictions, predictions, strict=True):
+        assert torch.allclose(torch.tensor(cached), torch.tensor(reference), atol=1e-6)
