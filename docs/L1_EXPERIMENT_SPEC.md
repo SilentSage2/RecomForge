@@ -106,3 +106,11 @@ The `l1_diagnostic_*.json` configurations use the first 10,000 generated trainin
 examples only to catch optimization or implementation failures before expensive
 runs. Because this prefix is not a representative sample, diagnostic metrics must
 not appear as headline evidence or satisfy the final ablation gate.
+
+The first full-data gate is a paired seed-2027 comparison between
+`l1_mind_full_mean_seed2027.json` and
+`l1_mind_full_title_attention_seed2027.json`. Both use 64-dimensional
+representations, batch size 128, three epochs, all generated training examples,
+and the complete dev split. The title-attention variant advances to three seeds
+only if it improves full-dev AUC over mean pooling; otherwise mean pooling remains
+the efficiency baseline and the failed attention result is reported.
