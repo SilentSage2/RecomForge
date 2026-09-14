@@ -1,3 +1,4 @@
+from dataclasses import replace
 from pathlib import Path
 
 import torch
@@ -52,7 +53,7 @@ def test_tiny_l1_train_and_official_evaluation(tmp_path: Path) -> None:
         max_history_items=2,
         device="cpu",
     )
-    model, losses, trained, epoch_seconds = train_nrms(
+    model, losses, trained, epoch_seconds, resumed_from_epoch = train_nrms(
         config,
         table,
         behavior_path=behaviors,
@@ -72,6 +73,7 @@ def test_tiny_l1_train_and_official_evaluation(tmp_path: Path) -> None:
     assert len(losses) == 2
     assert len(epoch_seconds) == 2
     assert all(duration > 0 for duration in epoch_seconds)
+    assert resumed_from_epoch == 0
     assert metrics["query_count"] == 3
     assert 0.0 <= metrics["auc"] <= 1.0
     assert len(predictions) == 3
@@ -89,3 +91,60 @@ def test_tiny_l1_train_and_official_evaluation(tmp_path: Path) -> None:
     assert [item[0] for item in cached_predictions] == [item[0] for item in predictions]
     for (_, cached), (_, reference) in zip(cached_predictions, predictions, strict=True):
         assert torch.allclose(torch.tensor(cached), torch.tensor(reference), atol=1e-6)
+
+
+def test_epoch_checkpoint_resume_matches_uninterrupted_training(tmp_path: Path) -> None:
+    news = _write_news(tmp_path / "news.tsv")
+    behaviors = _write_behaviors(tmp_path / "behaviors.tsv")
+    vocabulary = Vocabulary(("<pad>", "<unk>", "zero", "one", "two", "common"))
+    table = build_title_table([news], vocabulary, max_title_tokens=3)
+    base = L1ExperimentConfig(
+        vocabulary_artifact="vocab",
+        news_paths=["news"],
+        train_behaviors="train",
+        eval_behaviors="eval",
+        seed=17,
+        epochs=2,
+        batch_size=2,
+        embedding_dim=8,
+        attention_heads=2,
+        attention_hidden_dim=4,
+        negative_count=2,
+        max_history_items=2,
+        device="cpu",
+    )
+    uninterrupted, full_losses, full_count, _, _ = train_nrms(
+        base,
+        table,
+        behavior_path=behaviors,
+        vocabulary_size=len(vocabulary.tokens),
+        device=torch.device("cpu"),
+    )
+    state_path = tmp_path / "training-state.pt"
+    train_nrms(
+        replace(base, epochs=1),
+        table,
+        behavior_path=behaviors,
+        vocabulary_size=len(vocabulary.tokens),
+        device=torch.device("cpu"),
+        checkpoint_path=state_path,
+        resume_metadata={"split": "fixture-v1"},
+    )
+    resumed, resumed_losses, resumed_count, _, start_epoch = train_nrms(
+        base,
+        table,
+        behavior_path=behaviors,
+        vocabulary_size=len(vocabulary.tokens),
+        device=torch.device("cpu"),
+        checkpoint_path=state_path,
+        resume_from=state_path,
+        resume_metadata={"split": "fixture-v1"},
+    )
+
+    assert start_epoch == 1
+    assert resumed_losses == full_losses
+    assert resumed_count == full_count
+    for expected, actual in zip(
+        uninterrupted.state_dict().values(), resumed.state_dict().values(), strict=True
+    ):
+        assert torch.equal(expected, actual)

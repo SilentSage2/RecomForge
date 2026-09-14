@@ -15,7 +15,7 @@ from typing import Any, cast
 import numpy as np
 import torch
 
-from recforge.checkpoints import serialize_state_dict
+from recforge.checkpoints import load_training_state, save_training_state, serialize_state_dict
 from recforge.data.mind import MindBehavior, iter_mind_behaviors, sha256_file
 from recforge.data.ranking import (
     RankingBatch,
@@ -118,7 +118,10 @@ def train_nrms(
     vocabulary_size: int,
     device: torch.device,
     progress: bool = False,
-) -> tuple[NRMSRanker, list[float], int, list[float]]:
+    checkpoint_path: Path | None = None,
+    resume_from: Path | None = None,
+    resume_metadata: dict[str, str] | None = None,
+) -> tuple[NRMSRanker, list[float], int, list[float], int]:
     _seed_everything(config.seed)
     model = NRMSRanker(
         vocabulary_size,
@@ -135,9 +138,31 @@ def train_nrms(
     epoch_losses: list[float] = []
     epoch_seconds: list[float] = []
     trained_examples = 0
+    start_epoch = 0
+    metadata = resume_metadata or {}
+
+    if resume_from is not None:
+        state = load_training_state(resume_from, device=device)
+        if state.get("schema_version") != 1:
+            raise ValueError("unsupported training checkpoint schema")
+        if state.get("metadata") != metadata:
+            raise ValueError("training checkpoint metadata does not match this run")
+        if state.get("seed") != config.seed:
+            raise ValueError("training checkpoint seed does not match this run")
+        start_epoch = int(state["completed_epochs"])
+        if not 0 < start_epoch < config.epochs:
+            raise ValueError("training checkpoint has no remaining epochs")
+        model.load_state_dict(state["model_state"])
+        optimizer.load_state_dict(state["optimizer_state"])
+        epoch_losses = [float(value) for value in state["epoch_losses"]]
+        epoch_seconds = [float(value) for value in state["epoch_seconds"]]
+        trained_examples = int(state["trained_examples"])
+        random.setstate(state["python_rng_state"])
+        np.random.set_state(state["numpy_rng_state"])
+        torch.set_rng_state(state["torch_rng_state"].cpu())
 
     model.train()
-    for epoch in range(config.epochs):
+    for epoch in range(start_epoch, config.epochs):
         epoch_started = time.perf_counter()
         examples = load_ranking_examples(
             behavior_path,
@@ -171,6 +196,24 @@ def train_nrms(
         epoch_losses.append(loss_total / epoch_examples)
         epoch_seconds.append(time.perf_counter() - epoch_started)
         trained_examples += epoch_examples
+        if checkpoint_path is not None:
+            save_training_state(
+                checkpoint_path,
+                {
+                    "schema_version": 1,
+                    "metadata": metadata,
+                    "seed": config.seed,
+                    "completed_epochs": epoch + 1,
+                    "model_state": model.state_dict(),
+                    "optimizer_state": optimizer.state_dict(),
+                    "epoch_losses": epoch_losses,
+                    "epoch_seconds": epoch_seconds,
+                    "trained_examples": trained_examples,
+                    "python_rng_state": random.getstate(),
+                    "numpy_rng_state": np.random.get_state(),
+                    "torch_rng_state": torch.get_rng_state(),
+                },
+            )
         if progress:
             print(
                 json.dumps(
@@ -187,7 +230,7 @@ def train_nrms(
                 file=sys.stderr,
                 flush=True,
             )
-    return model, epoch_losses, trained_examples, epoch_seconds
+    return model, epoch_losses, trained_examples, epoch_seconds, start_epoch
 
 
 def evaluate_nrms(
@@ -384,7 +427,13 @@ def evaluate_nrms_cached(
     )
 
 
-def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path:
+def run_l1_experiment(
+    config: L1ExperimentConfig,
+    repository_root: Path,
+    *,
+    checkpoint_path: Path | None = None,
+    resume_from: Path | None = None,
+) -> Path:
     started_at = datetime.now(UTC)
     started = time.perf_counter()
     device = _resolve_device(config.device)
@@ -396,13 +445,30 @@ def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path
     )
     train_path = repository_root / config.train_behaviors
     eval_path = repository_root / config.eval_behaviors
-    model, losses, trained_examples, epoch_seconds = train_nrms(
+    fingerprints = {
+        "train_behaviors": sha256_file(train_path),
+        "eval_behaviors": sha256_file(eval_path),
+        "vocabulary_manifest": sha256_file(vocabulary_directory / "manifest.json"),
+    }
+    fingerprints.update(
+        {f"news_{index}": sha256_file(path) for index, path in enumerate(news_paths)}
+    )
+    resume_metadata = {
+        "config": sha256_bytes(
+            json.dumps(asdict(config), sort_keys=True, separators=(",", ":")).encode()
+        ),
+        **fingerprints,
+    }
+    model, losses, trained_examples, epoch_seconds, resumed_from_epoch = train_nrms(
         config,
         table,
         behavior_path=train_path,
         vocabulary_size=len(vocabulary.tokens),
         device=device,
         progress=True,
+        checkpoint_path=checkpoint_path,
+        resume_from=resume_from,
+        resume_metadata=resume_metadata,
     )
     evaluation, predictions = evaluate_nrms_cached(
         model,
@@ -424,17 +490,10 @@ def run_l1_experiment(config: L1ExperimentConfig, repository_root: Path) -> Path
             "evaluation": cast(dict[str, JsonValue], evaluation),
             "model_parameters": sum(parameter.numel() for parameter in model.parameters()),
             "checkpoint_sha256": sha256_bytes(checkpoint_bytes),
+            "resumed_from_epoch": resumed_from_epoch,
         }
         serialized_config = cast(dict[str, JsonValue], asdict(config))
         serialized_config["resolved_device"] = str(device)
-        fingerprints = {
-            "train_behaviors": sha256_file(train_path),
-            "eval_behaviors": sha256_file(eval_path),
-            "vocabulary_manifest": sha256_file(vocabulary_directory / "manifest.json"),
-        }
-        fingerprints.update(
-            {f"news_{index}": sha256_file(path) for index, path in enumerate(news_paths)}
-        )
         finished_at = datetime.now(UTC)
         run_directory = record_run(
             output_root=repository_root / config.output_root,
@@ -467,11 +526,29 @@ def main() -> None:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--seed", type=int)
     parser.add_argument("--repository-root", type=Path, default=Path.cwd())
+    parser.add_argument("--checkpoint-path", type=Path)
+    parser.add_argument("--resume-from", type=Path)
     args = parser.parse_args()
     config = _load_config(args.config)
     if args.seed is not None:
         config = replace(config, seed=args.seed)
-    run_directory = run_l1_experiment(config, args.repository_root.resolve())
+    repository_root = args.repository_root.resolve()
+    checkpoint_path = (
+        args.checkpoint_path
+        if args.checkpoint_path is None or args.checkpoint_path.is_absolute()
+        else repository_root / args.checkpoint_path
+    )
+    resume_from = (
+        args.resume_from
+        if args.resume_from is None or args.resume_from.is_absolute()
+        else repository_root / args.resume_from
+    )
+    run_directory = run_l1_experiment(
+        config,
+        repository_root,
+        checkpoint_path=checkpoint_path,
+        resume_from=resume_from,
+    )
     print(json.dumps({"run_directory": str(run_directory)}, indent=2))
 
 
