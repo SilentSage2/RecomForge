@@ -11,7 +11,7 @@ masked-mean history aggregation, temperature-scaled dot product, and
 impression-local softmax.
 
 The adapter is `x + scale * up(GELU(down(LayerNorm(x))))`, with rank 16, zero-
-initialized `up`, and one learned scalar initialized to zero. The frozen MiniLM
+initialized `up`, and one learned scalar initialized to one. The frozen MiniLM
 artifact, split, candidates, negative samples, optimizer, batch size, epochs,
 seed, loss, metrics, and evaluation code remain unchanged. This is a low-rank
 feature adapter, not LoRA inside the transformer, and must be described as such.
@@ -37,3 +37,12 @@ the frozen semantic representation under this protocol. A null or negative resul
 would support the narrower quality–efficiency conclusion for fully frozen
 features and blocks further adapter complexity. Neither outcome supports a
 MIND-large leaderboard claim.
+
+## Pre-training amendment
+
+The original text initialized both `up` and `scale` to zero. Before any adapter
+training, implementation review identified that this is a mathematical dead point:
+the residual branch and every branch gradient are zero. Initializing `scale` to
+one while retaining a zero `up` matrix preserves the exact identity function at
+step zero and permits gradients into `up`. No data, result, or adapter run was
+examined before this correction.
