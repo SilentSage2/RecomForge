@@ -1,0 +1,17 @@
+{
+  "batch_size": 128,
+  "device": "cpu",
+  "embedding_dim": 64,
+  "epochs": 3,
+  "eval_batch_size": 128,
+  "eval_behaviors": "data/raw/MINDsmall_dev/behaviors.tsv",
+  "feature_artifact": "data/processed/mind-small-minilm-l6-v2-v1",
+  "learning_rate": 0.001,
+  "max_history_items": 50,
+  "negative_count": 4,
+  "output_root": "runs",
+  "seed": 2027,
+  "temperature": 0.07,
+  "train_behaviors": "data/raw/MINDsmall_train/behaviors.tsv",
+  "weight_decay": 0.0001
+}
