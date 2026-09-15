@@ -1,0 +1,38 @@
+{
+  "acceptance_gate": {
+    "auc_improvement_required": 0.015,
+    "decision": "advance_to_seeds_2028_and_2029",
+    "matched_l1_auc": 0.6274408353302316,
+    "observed_auc_improvement": 0.024315763843839117,
+    "passed": true
+  },
+  "artifact": {
+    "feature_sha256": "b1e1c619479479c214fed4652aadac35883bf571617afac66a3f5921839d67e4",
+    "item_count": 65238,
+    "model_revision": "826711e54e001c83835913827a843d8dd0a1def9"
+  },
+  "code_commit": "265eff0106ddcd39bff7858d5c73370b4204849f",
+  "cost": {
+    "duration_seconds": 61.550339,
+    "epoch_seconds": [
+      18.082704917003866,
+      18.14416541598621,
+      18.374729750008555
+    ],
+    "model_parameters": 25408,
+    "peak_resident_memory_bytes": 1289502720,
+    "pretrained_encoding_seconds": 62.40842104100739,
+    "pretrained_feature_artifact_bytes": 100205696
+  },
+  "evaluation": {
+    "auc": 0.651756599174085,
+    "mrr": 0.3024028122412636,
+    "ndcg@10": 0.3958678689563786,
+    "ndcg@5": 0.33252501487913977,
+    "query_count": 73152
+  },
+  "run_id": "20260915T002228Z-mind-frozen-title-l2-279a3464",
+  "seed": 2027,
+  "status": "completed",
+  "trained_examples": 709032
+}
