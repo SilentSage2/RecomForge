@@ -47,6 +47,9 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
   6–24-hour exposure-age, and degenerate-publisher limitations.
 - The only permitted residual adaptation is retained as a three-seed negative
   result: mean AUC effect −0.00275 ± 0.00519 at 1.55× runtime.
+- An auxiliary temporally held-out calibration run uses no dev fitting, preserves
+  all ranks, and improves dev NLL/Brier over both raw sigmoid scores and a
+  training-prevalence constant. Logged-click bias remains explicit.
 
 ## Evidence gaps
 
@@ -73,8 +76,8 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
 7. **Research contribution:** the current defensible result is a quality–efficiency
    frontier for frozen semantic representations, with strong cold/dev-only gains
    and a failed supervised adapter. This is stronger than NRMS reproduction but
-   still needs calibrated scoring, an empty-history remedy, or a controlled
-   reranking contribution before flagship completion.
+   still needs an empty-history remedy or a controlled reranking contribution
+   before flagship completion.
 
 The 10k-example diagnostic found that title attention plus history mean pooling
 had the best AUC (0.5425), while full title/history attention reached 0.5335 and

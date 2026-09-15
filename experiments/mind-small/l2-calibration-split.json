@@ -1,0 +1,21 @@
+{
+  "calibration": {
+    "impression_count": 30270,
+    "sha256": "79c5b87305dcd0ee070c680eaaaf49190204213c521dd0c12801a595bf1b3a58"
+  },
+  "cutoff_local_exclusive_for_fit": "2019-11-14T00:00:00",
+  "fit": {
+    "impression_count": 126695,
+    "sha256": "0bba8aaef7209049885ccb5cf66c41a20093d011dbf3b87ea7718fbc4a110440"
+  },
+  "git": {
+    "commit": "a5ec61a99629407e6ea566b1c50182a5c03ea247",
+    "dirty": false
+  },
+  "protocol": "training_only_temporal_calibration_split",
+  "schema_version": 1,
+  "source": {
+    "sha256": "a424547c8fa17c9ea4879c2110221c2b2f2709f4f7615ede0b0d8e4765158658"
+  },
+  "source_timestamp_inversion_count": 78294
+}

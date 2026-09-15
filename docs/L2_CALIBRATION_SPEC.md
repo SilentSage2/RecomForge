@@ -3,6 +3,16 @@
 Status: frozen before calibration split creation or calibration fitting on
 2026-09-14.
 
+## Registered result
+
+The split contains 126,695 fit-model and 30,270 calibration impressions. On all
+2,740,998 dev candidate exposures, the fitted scale is 0.232693 and bias is
+−5.713429. Calibration reduces NLL from 9.93818 to 0.16830 and Brier score from
+0.93785 to 0.03874, while preserving every impression's rank permutation. It also
+slightly improves on the calibration-prevalence constant (NLL 0.17003, Brier
+0.03899). Its ECE is 0.00280 versus 0.00233 for the constant baseline, so no ECE
+superiority is claimed. The registered NLL/Brier gate passes.
+
 ## Question
 
 Can the accepted frozen MiniLM ranker's logged-candidate scores be converted into

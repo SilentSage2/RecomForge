@@ -1,0 +1,93 @@
+{
+  "calibration_partition": {
+    "impression_count": 30270,
+    "probability": {
+      "calibrated": {
+        "brier": 0.036630856813370236,
+        "ece_15_equal_width": 0.00011379611717291215,
+        "nll": 0.16097838173015008
+      },
+      "calibration_prevalence_constant": {
+        "brier": 0.036837619073713926,
+        "ece_15_equal_width": 1.3877787807814457e-17,
+        "nll": 0.1625190432620981
+      },
+      "candidate_count": 1222429,
+      "positive_prevalence": 0.03830488314658766,
+      "raw_sigmoid": {
+        "brier": 0.9438363567781657,
+        "ece_15_equal_width": 0.949148743672926,
+        "nll": 10.043781081686461
+      }
+    },
+    "ranking": {
+      "auc": 0.6376830963466856,
+      "auc_query_count": 30270,
+      "mrr": 0.28314366714330835,
+      "ndcg@10": 0.3642146147406265,
+      "ndcg@5": 0.3040723858447475,
+      "query_count": 30270,
+      "tied_score_impression_count": 817
+    }
+  },
+  "calibrator": {
+    "bias": -5.713428757884135,
+    "positive_scale": 0.23269308305053182
+  },
+  "dev": {
+    "impression_count": 73152,
+    "probability": {
+      "calibrated": {
+        "brier": 0.03874163002758481,
+        "ece_15_equal_width": 0.002804740245475545,
+        "nll": 0.1682999469779967
+      },
+      "calibration_prevalence_constant": {
+        "brier": 0.03899008400961476,
+        "ece_15_equal_width": 0.002331045810675357,
+        "nll": 0.17003228384222802
+      },
+      "candidate_count": 2740998,
+      "positive_prevalence": 0.040635928957263014,
+      "raw_sigmoid": {
+        "brier": 0.9378462828649421,
+        "ece_15_equal_width": 0.9442004277363468,
+        "nll": 9.938179766442929
+      }
+    },
+    "ranking": {
+      "auc": 0.6435261410979713,
+      "auc_query_count": 73152,
+      "mrr": 0.29812691941154656,
+      "ndcg@10": 0.38815987163906246,
+      "ndcg@5": 0.32324250367304613,
+      "query_count": 73152,
+      "tied_score_impression_count": 2307
+    }
+  },
+  "duration_seconds": 12.68814187499811,
+  "input_sha256": {
+    "calibration_behaviors": "79c5b87305dcd0ee070c680eaaaf49190204213c521dd0c12801a595bf1b3a58",
+    "checkpoint": "43a8d632be88f05a738fdd96254602593afc312ddd91f3de355de4f6ba268308",
+    "config": "be6825dae9c381af6049af6443f3b184d73b92188a20b80b20cd4974265faf05",
+    "dev_behaviors": "b6c460e33b1a8693252ded6e626da7d3ccf78920eea2ec11889020bb7d8443ef",
+    "feature_manifest": "2e69053a9260e6bc911bd8c1b0df61a097150d46b06e547a2eecb6d4bd01ac14",
+    "features": "b1e1c619479479c214fed4652aadac35883bf571617afac66a3f5921839d67e4"
+  },
+  "limitations": [
+    "Logged click labels inherit exposure and position bias.",
+    "This auxiliary ranker excludes the calibration day and is not the headline L2 run."
+  ],
+  "model_parameters": 25408,
+  "peak_resident_memory_bytes": 960348160,
+  "protocol": "training_only_monotonic_platt_calibration",
+  "provenance": {
+    "git": {
+      "commit": "a5ec61a99629407e6ea566b1c50182a5c03ea247",
+      "dirty": false
+    },
+    "specification_sha256": "d7e240f4981bec9187cf7d0b4a63a884129f78789eb4a2ad63997eada54c793b"
+  },
+  "rank_identity_on_dev": true,
+  "schema_version": 1
+}

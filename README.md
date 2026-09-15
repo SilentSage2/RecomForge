@@ -90,6 +90,25 @@ The complete counts, metrics, ordinary intervals, adjusted intervals, thresholds
 and input hashes are in the registered
 [`failure-slice artifact`](experiments/mind-small/l2-frozen-seed2027-failure-slices.json).
 
+## Training-only calibration
+
+Calibration uses a separate auxiliary seed-2027 ranker: 126,695 MIND-train
+impressions before 2019-11-14 fit the model, and the remaining 30,270 train
+impressions fit a monotonic two-parameter Platt transform. Dev labels never select
+its parameters.
+
+| Dev candidate probability | NLL ↓ | Brier ↓ | ECE-15 ↓ |
+|---|---:|---:|---:|
+| Raw `sigmoid(score)` | 9.93818 | 0.93785 | 0.94420 |
+| Calibration-prevalence constant | 0.17003 | 0.03899 | **0.00233** |
+| **Training-only Platt calibration** | **0.16830** | **0.03874** | 0.00280 |
+
+The calibrated transform preserves every dev rank exactly. It passes the frozen
+NLL/Brier gate and modestly outperforms the prevalence reference, while its ECE is
+slightly worse than that constant reference. Scores estimate logged click labels,
+not causal CTR. See the [calibration result](experiments/mind-small/l2-training-only-calibration.json)
+and [temporal split record](experiments/mind-small/l2-calibration-split.json).
+
 The registered full-data history-encoder ablation is a clear negative result.
 Replacing history mean pooling with self-attention lowers AUC from 0.62744 to
 0.62341 at seed 2027 (difference −0.00403; paired 95% interval [−0.00551,
@@ -295,6 +314,8 @@ The popularity baselines win relevance on this bounded run, while the two-tower 
   are intentionally stopped.
 - Publisher-popularity slicing is unsupported by the released URL metadata, which
   resolves to a single publisher domain in this experiment.
+- Calibrated probabilities describe biased logged clicks. Their excellent numeric
+  calibration does not establish online or counterfactual CTR calibration.
 - History self-attention is evaluated only at the registered gate seed because
   every paired metric is significantly worse; this supports a stopping decision,
   not a general claim that sequential models cannot help.
@@ -339,7 +360,7 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Implement the minimal frozen-feature projection ranker and exact resume path.
 - [x] Run the L2 seed gate, three-seed replication, and paired impression bootstraps.
 - [x] Add registered L2 failure slices and one controlled representation adaptation test.
-- [ ] Freeze a training-only calibration split and report calibration without dev tuning.
+- [x] Freeze a training-only calibration split and report calibration without dev tuning.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).

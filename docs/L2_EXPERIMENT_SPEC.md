@@ -46,6 +46,14 @@ proxy is negative, and empty histories remain unsolved. Full results and
 multiplicity rules are in `docs/L2_FAILURE_SLICE_SPEC.md` and
 `experiments/mind-small/l2-frozen-seed2027-failure-slices.json`.
 
+A separate temporal holdout experiment completes probability calibration without
+touching dev labels. A positive-scale Platt transform reduces auxiliary-model dev
+NLL from 9.93818 to 0.16830 and Brier score from 0.93785 to 0.03874 while
+preserving every rank. It slightly beats the calibration-prevalence constant on
+NLL and Brier, although its 15-bin ECE is slightly worse (0.00280 versus 0.00233).
+This is logged-click calibration only. The split and acceptance rules are in
+`docs/L2_CALIBRATION_SPEC.md`.
+
 The design follows prior MIND evidence that pretrained language representations
 can improve news encoders while making repeated news encoding a central systems
 cost:
