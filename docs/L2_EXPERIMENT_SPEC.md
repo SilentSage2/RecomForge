@@ -28,8 +28,10 @@ cost:
 
 ## Smallest meaningful MVP
 
-1. Select one public English sentence encoder with a compatible license, pin its
-   exact model revision, tokenizer revision, pooling rule, and dependency versions.
+1. Use `sentence-transformers/all-MiniLM-L6-v2` at revision
+   `826711e54e001c83835913827a843d8dd0a1def9` under Apache-2.0, with at most 32
+   wordpiece tokens, explicit masked-mean pooling, and L2 normalization. The full
+   rationale is in `docs/decisions/0006-l2-pretrained-encoder.md`.
 2. Encode every unique MIND-small train/dev title exactly once. Store a
    fingerprinted float32 artifact containing item IDs, embeddings, source-title
    hashes, model revision, tokenizer settings, device, precision, and duration.

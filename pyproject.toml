@@ -21,6 +21,10 @@ dev = [
   "pytest>=8.3,<9",
   "ruff>=0.6,<1",
 ]
+pretrained = [
+  "safetensors==0.8.0",
+  "transformers==5.17.0",
+]
 
 [project.scripts]
 recforge-mind-audit = "recforge.data.mind:main"
@@ -32,6 +36,7 @@ recforge-l1 = "recforge.l1_experiment:main"
 recforge-paired-bootstrap = "recforge.statistics:main"
 recforge-l1-aggregate = "recforge.reporting:main"
 recforge-logged-popularity = "recforge.logged_baselines:main"
+recforge-pretrained-features = "recforge.data.pretrained:main"
 recforge-r1 = "recforge.experiment:main"
 recforge-smoke = "recforge.cli:main"
 
