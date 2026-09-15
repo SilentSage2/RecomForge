@@ -2,7 +2,7 @@
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
-> **Status: R0–R1 complete; L1 three-seed title-encoder comparison complete; flagship evidence incomplete.** Full-data seed uncertainty and the controlled negative-sampling ablation are reported below. See the candid [`substantive quality audit`](docs/QUALITY_AUDIT.md) for the remaining scientific gates.
+> **Status: R0–R1 complete; L1 and frozen-representation L2 comparisons complete; flagship evidence incomplete.** Full-data seed uncertainty and controlled ablations are reported below. See the candid [`substantive quality audit`](docs/QUALITY_AUDIT.md) for the remaining scientific gates.
 
 ## Full-data development result
 
@@ -32,7 +32,8 @@ reference and is not included in the paired claim.
 | Time-decayed popularity (72h)‡ | 0.5393 | 0.2442 | 0.2501 | 0.3171 | 0 | 24.36 s§ |
 | Hash two-tower, in-batch† | 0.5949 | 0.2805 | 0.3008 | 0.3629 | 74,048 | 50.83 s |
 | Title mean + history mean | 0.5972 ± 0.0063 | 0.2689 ± 0.0071 | 0.2916 ± 0.0104 | 0.3565 ± 0.0078 | 1,218,048 | 200.1 ± 66.8 s |
-| **Title attention + history mean** | **0.6283 ± 0.0040** | **0.2893 ± 0.0070** | **0.3179 ± 0.0079** | **0.3797 ± 0.0060** | 1,239,040 | 1,349.1 ± 342.6 s |
+| Title attention + history mean | 0.6283 ± 0.0040 | 0.2893 ± 0.0070 | 0.3179 ± 0.0079 | 0.3797 ± 0.0060 | 1,239,040 | 1,349.1 ± 342.6 s |
+| **Frozen MiniLM + learned projection + history mean** | **0.6552 ± 0.0030** | **0.3075 ± 0.0048** | **0.3372 ± 0.0045** | **0.4005 ± 0.0044** | **25,408** | **63.5 ± 2.4 s**¶ |
 
 Title attention improves AUC over mean pooling by 0.03115 ± 0.00468 across seeds;
 every seed clears the predeclared +0.02 gate. The per-seed 5,000-resample paired
@@ -43,12 +44,23 @@ means, so this is a quality–compute tradeoff rather than a free improvement. S
 the versioned [`three-seed aggregate`](experiments/mind-small/l1-full-three-seed-aggregate.json)
 and seed-level comparison/bootstrap artifacts in `experiments/mind-small/`.
 
+The frozen MiniLM representation then improves AUC over the matched L1 model by
+0.02686 ± 0.00424 across seeds. Each seed's 5,000-resample paired impression
+interval is strictly positive: [0.02221, 0.02647], [0.02961, 0.03394], and
+[0.02229, 0.02679]. All secondary metrics improve in all three seeds. This row
+isolates representation quality: titles are encoded once with an immutable model
+revision, and only a shared 384→64 projection is trained. See the locked
+[`L2 aggregate`](experiments/mind-small/l2-frozen-three-seed-aggregate.json).
+
 † Single seed; shown only as an earlier implementation reference.
 
 ‡ Deterministic training-only popularity counts; no evaluation labels or logged
 position are used. § Both popularity predictions are produced in the same run, so
 the shared runtime is shown for context rather than as per-variant latency. The
 locked result is [`l1-logged-popularity.json`](experiments/mind-small/l1-logged-popularity.json).
+
+¶ L2 ranker training plus full-dev evaluation; the one-time local CPU title
+encoding takes another 62.4 seconds and creates a 100.2 MB ignored artifact.
 
 The registered full-data history-encoder ablation is a clear negative result.
 Replacing history mean pooling with self-attention lowers AUC from 0.62744 to
@@ -114,6 +126,21 @@ flowchart LR
 The implementation uses explicit PyTorch modules and boolean masks; it does not
 wrap an external recommendation framework.
 
+### Implemented L2 ranking path
+
+```mermaid
+flowchart LR
+    T[MIND train/dev titles] --> P[Frozen MiniLM at fixed revision]
+    P --> A[Fingerprint 384d feature artifact]
+    A --> J[Shared learned 384→64 projection]
+    H[Prior clicked news] --> J
+    J --> M[Masked history mean]
+    M --> D[Temperature-scaled candidate dot products]
+    J --> D
+    D --> L[Impression-local softmax]
+    D --> O[Official AUC / MRR / nDCG]
+```
+
 Validate a generated official-format prediction file before packaging it:
 
 ```bash
@@ -158,6 +185,16 @@ recforge-l1 --config configs/experiments/l1_mind_smoke.json
 This path trains on 1,024 impression-local examples per epoch and evaluates 200
 dev impressions. It writes an ignored checkpoint, immutable run manifest, metrics,
 and candidate-aligned dev prediction file.
+
+After generating the frozen feature artifact, run the bounded L2 path with:
+
+```bash
+recforge-l2 --config configs/experiments/l2_mind_smoke.json
+```
+
+The full registered seed-2027 configuration is
+`configs/experiments/l2_mind_full_seed2027.json`; `--seed 2028` and `--seed 2029`
+produce the two preregistered replications.
 
 ### L1 smoke result
 
@@ -221,7 +258,10 @@ The popularity baselines win relevance on this bounded run, while the two-tower 
   the first 2,000. Small prefix subsets are integration fixtures, not a basis for
   model selection or headline claims.
 - The full-data title-attention gain replicates across three training seeds, but
-  its 6.74× mean CPU cost is material and peak memory remains unmeasured.
+  its 6.74× mean CPU cost is material.
+- Frozen MiniLM features improve every official ranking metric across three seeds,
+  but AUC 0.6552 remains below the aspirational 0.68 target and is MIND-small dev
+  evidence rather than a MIND-large hidden-test result.
 - History self-attention is evaluated only at the registered gate seed because
   every paired metric is significantly worse; this supports a stopping decision,
   not a general claim that sequential models cannot help.
@@ -262,6 +302,10 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Freeze and implement the L1 NRMS-style experiment and three-seed title-encoder comparison.
 - [x] Add leakage-safe global and time-decayed logged-candidate popularity baselines.
 - [x] Run the registered full-data history-attention ablation and report its negative result.
+- [x] Freeze and generate a fingerprinted pretrained title-feature artifact.
+- [x] Implement the minimal frozen-feature projection ranker and exact resume path.
+- [x] Run the L2 seed gate, three-seed replication, and paired impression bootstraps.
+- [ ] Add registered L2 failure slices and one controlled representation adaptation test.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).

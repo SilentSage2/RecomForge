@@ -18,6 +18,21 @@ MIND-small dev AUC by at least 0.015 over the L1 three-seed mean of 0.62834. AUC
 claim. A failed gate is reported and blocks parameter-efficient tuning until data,
 pooling, and projection errors are excluded.
 
+## Registered result
+
+The frozen MVP passes its gate. Across seeds 2027–2029 it reaches AUC 0.65521 ±
+0.00300, MRR 0.30752 ± 0.00485, nDCG@5 0.33716 ± 0.00453, and nDCG@10 0.40049 ±
+0.00438. The paired AUC gain over the matched accepted L1 seeds is 0.02686 ±
+0.00424; every per-seed 5,000-resample paired interval excludes zero. The model
+has 25,408 trainable parameters and takes 63.5 ± 2.4 local CPU seconds for three
+training epochs plus full-dev evaluation. One-time title encoding takes 62.4
+seconds and stores 100.2 MB.
+
+This supports the frozen representation hypothesis and permits one controlled
+adaptation experiment. It does not meet the aspirational 0.68 target or establish
+MIND-large leaderboard performance. The locked result is in
+`experiments/mind-small/l2-frozen-three-seed-aggregate.json`.
+
 The design follows prior MIND evidence that pretrained language representations
 can improve news encoders while making repeated news encoding a central systems
 cost:
@@ -106,9 +121,9 @@ Before accelerator work, record without exposing credentials:
 - a synthetic forward/backward smoke test and a 256-title encoding benchmark;
 - atomic checkpoint/resume behavior on the remote filesystem.
 
-The current Codex project list contains only the local host. Remote execution is
-blocked until a remote host is registered or a non-secret SSH alias and project
-root are provided for a read-only preflight.
+The first L2 artifact and all registered runs intentionally execute locally. A
+remote preflight is deferred until a later experiment actually requires more
+compute; remote access is not a dependency of the frozen MVP.
 
 ## Acceptance and stopping rules
 

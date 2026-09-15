@@ -1,0 +1,97 @@
+{
+  "comparison": {
+    "baseline": "l1_title_attention_history_mean",
+    "candidate": "frozen_minilm_projection_history_mean",
+    "paired_effect_mean": {
+      "auc": 0.02686378503629061,
+      "mrr": 0.018196740364741466,
+      "ndcg@10": 0.02074816601401273,
+      "ndcg@5": 0.019227019779267995
+    },
+    "paired_effect_sample_standard_deviation": {
+      "auc": 0.0042400878923442836,
+      "mrr": 0.00966606055596719,
+      "ndcg@10": 0.008656032303056697,
+      "ndcg@5": 0.01060783943663783
+    },
+    "per_seed_bootstrap_artifacts": [
+      "l2-frozen-vs-l1-seed2027-bootstrap.json",
+      "l2-frozen-vs-l1-seed2028-bootstrap.json",
+      "l2-frozen-vs-l1-seed2029-bootstrap.json"
+    ],
+    "positive_effect_seeds": {
+      "auc": 3,
+      "mrr": 3,
+      "ndcg@10": 3,
+      "ndcg@5": 3
+    }
+  },
+  "cost": {
+    "duration_seconds_mean": 63.4986,
+    "duration_seconds_sample_standard_deviation": 2.4199483445604786,
+    "feature_encoding_seconds_once": 62.40842104100739,
+    "model_parameters": 25408,
+    "pretrained_feature_artifact_bytes": 100205696
+  },
+  "metric_order": [
+    "auc",
+    "mrr",
+    "ndcg@5",
+    "ndcg@10"
+  ],
+  "metrics_mean": {
+    "auc": 0.6552083492369375,
+    "mrr": 0.3075217059133555,
+    "ndcg@10": 0.40048508034939695,
+    "ndcg@5": 0.3371566309166764
+  },
+  "metrics_sample_standard_deviation": {
+    "auc": 0.0030009191876597912,
+    "mrr": 0.004848158934252977,
+    "ndcg@10": 0.004375796391943815,
+    "ndcg@5": 0.00453242629238422
+  },
+  "protocol": {
+    "dev_impressions_per_seed": 73152,
+    "epochs": 3,
+    "name": "mind_official_impression",
+    "sample_standard_deviation_ddof": 1,
+    "seeds": [
+      2027,
+      2028,
+      2029
+    ],
+    "training_examples_per_seed": 709032
+  },
+  "runs": [
+    {
+      "auc": 0.651756599174085,
+      "duration_seconds": 61.550339,
+      "mrr": 0.3024028122412636,
+      "ndcg@10": 0.3958678689563786,
+      "ndcg@5": 0.33252501487913977,
+      "run_id": "20260915T002228Z-mind-frozen-title-l2-279a3464",
+      "seed": 2027
+    },
+    {
+      "auc": 0.6566704400789908,
+      "duration_seconds": 62.73798,
+      "mrr": 0.312043890819583,
+      "ndcg@10": 0.4045709348404998,
+      "ndcg@5": 0.341582886223704,
+      "run_id": "20260915T002424Z-mind-frozen-title-l2-80eab10b",
+      "seed": 2028
+    },
+    {
+      "auc": 0.6571980084577367,
+      "duration_seconds": 66.207481,
+      "mrr": 0.3081184146792199,
+      "ndcg@10": 0.40101643725131264,
+      "ndcg@5": 0.33736199164718556,
+      "run_id": "20260915T002536Z-mind-frozen-title-l2-a7269ae8",
+      "seed": 2029
+    }
+  ],
+  "schema_version": 1,
+  "status": "completed"
+}

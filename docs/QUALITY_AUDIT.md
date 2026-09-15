@@ -38,12 +38,16 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
   configuration, and split hashes; interrupted/resumed training has an exact-
   parameter equivalence test.
 - Negative and unfavorable results are visible in the README.
+- A fixed-revision frozen MiniLM artifact is fully fingerprinted and locally
+  reproducible. Its 25,408-parameter ranker improves AUC over matched L1 seeds by
+  0.02686 ± 0.00424, with positive paired bootstrap intervals for every seed and
+  metric, while reducing mean ranker/evaluation time from 1,349.1 to 63.5 seconds.
 
 ## Evidence gaps
 
-1. **Official-ranking strength:** title attention reaches AUC 0.6283 ± 0.0040 on
-   full MIND-small dev and beats the registered mean baseline, but remains below the
-   0.68 competitive target.
+1. **Official-ranking strength:** frozen MiniLM plus a learned projection reaches
+   AUC 0.6552 ± 0.0030 on full MIND-small dev and beats matched L1 seeds, but
+   remains below the 0.68 aspirational target.
 2. **Fair baselines:** global and time-decayed popularity, mean pooling, and the R1
    hash tower now use the official rank-output metrics. The hash result remains a
    smaller, single-seed reference rather than a matched L1 baseline.
@@ -59,7 +63,8 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
 6. **Efficiency beyond the validated path:** cached/batched evaluation is now
    7.97× faster on a locked 2,000-impression comparison with identical metrics;
    its evaluation stage completes all 73,152 dev impressions in 9.14 seconds.
-   Peak memory remains unmeasured.
+   The L2 path records 1.29–1.32 GB peak resident memory, a 100.2 MB frozen
+   feature artifact, and 62.4 seconds of one-time local CPU title encoding.
 7. **Research contribution:** NRMS reproduction alone is baseline engineering, not
    novelty. A flagship contribution still needs a defensible result about negative
    objectives, recency/sequence modeling, pretrained representation efficiency,
@@ -80,12 +85,17 @@ but costs 6.74× the mean end-to-end CPU time. This supports a stable title-
 representation effect under the frozen MIND-small protocol, not a leaderboard or
 online-benefit claim.
 
+The next registered experiment isolates pretrained representation quality. Frozen
+MiniLM title features plus a shared learned projection reach AUC 0.65521 ±
+0.00300, an average paired gain of 0.02686 ± 0.00424 over matched L1 seeds. All
+three paired AUC intervals exclude zero, as do MRR and both nDCG intervals. The
+result passes the registered L2 gate and supports the representation hypothesis,
+but it remains below 0.68 and does not justify a leaderboard claim.
+
 ## Release gates
 
 Do not describe RecomForge as flagship-complete or leaderboard-competitive until:
 
-- the cached evaluator's peak memory is recorded alongside its existing full-dev
-  wall time;
 - popularity, mean-pooling, hash-tower, and NRMS-style baselines share candidates,
   splits, and metrics;
 - future sequential models are compared against the accepted history-mean result
