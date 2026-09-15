@@ -89,6 +89,9 @@ Results from one protocol will never be presented as results from the other.
 The project may also pursue the official MIND leaderboard as a distinct `mind_official_impression` track. It requires MIND-large hidden-test predictions and optimizes AUC/MRR/nDCG, not full-corpus coverage. The staged plan and anti-overfitting rules are in [`docs/LEADERBOARD_PLAN.md`](docs/LEADERBOARD_PLAN.md).
 The frozen NRMS-style baseline question, model boundary, compute envelope, and
 acceptance gates are in [`docs/L1_EXPERIMENT_SPEC.md`](docs/L1_EXPERIMENT_SPEC.md).
+The next pretrained-representation question, smallest MVP, remote-compute
+preflight, and stopping rules are frozen in
+[`docs/L2_EXPERIMENT_SPEC.md`](docs/L2_EXPERIMENT_SPEC.md).
 
 ### Implemented L1 ranking path
 
