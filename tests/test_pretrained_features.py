@@ -70,10 +70,12 @@ def test_pretrained_artifact_detects_feature_tampering(tmp_path: Path) -> None:
         encoding_seconds=1.0,
         device="cpu",
         dependencies={"transformers": "test"},
+        provenance={"git_commit": "fixture", "git_dirty": False},
     )
     restored, manifest = load_pretrained_artifact(output)
     assert restored.item_ids == ("N1",)
     assert manifest["model"]["revision"] == config.revision
+    assert manifest["provenance"]["git_dirty"] is False
     np.save(output / "features.npy", np.zeros((1, 4), dtype=np.float32), allow_pickle=False)
     with pytest.raises(ValueError, match="fingerprint"):
         load_pretrained_artifact(output)

@@ -20,6 +20,7 @@ from numpy.typing import NDArray
 
 from recforge.data.features import ItemFeatureTable
 from recforge.data.mind import MindNews, iter_mind_news, sha256_file
+from recforge.tracking import JsonValue, collect_git_state
 
 
 @dataclass(frozen=True, slots=True)
@@ -126,10 +127,13 @@ def write_pretrained_artifact(
     encoding_seconds: float,
     device: str,
     dependencies: dict[str, str],
+    provenance: dict[str, JsonValue] | None = None,
 ) -> None:
     """Write an immutable artifact, publishing its manifest last."""
     if len(titles) != len(table.item_ids):
         raise ValueError("titles and item feature rows must have equal length")
+    if encoding_seconds <= 0:
+        raise ValueError("encoding_seconds must be positive")
     output_directory.mkdir(parents=True, exist_ok=False)
     item_ids_path = output_directory / "item_ids.json"
     features_path = output_directory / "features.npy"
@@ -161,6 +165,7 @@ def write_pretrained_artifact(
             "artifact_bytes": features_path.stat().st_size,
         },
         "dependencies": dependencies,
+        "provenance": provenance or {"git": "not_recorded_by_library_call"},
     }
     (output_directory / "manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -236,6 +241,7 @@ def main() -> None:
     started = time.perf_counter()
     features = encode_titles(titles, tokenizer=tokenizer, model=model, config=config, device=device)
     encoding_seconds = time.perf_counter() - started
+    git_state = collect_git_state(Path.cwd())
     write_pretrained_artifact(
         args.output,
         ItemFeatureTable(item_ids, features),
@@ -249,6 +255,10 @@ def main() -> None:
             "safetensors": version("safetensors"),
             "torch": version("torch"),
             "transformers": version("transformers"),
+        },
+        provenance={
+            "git_commit": git_state.commit,
+            "git_dirty": git_state.dirty,
         },
     )
     print(json.dumps({"output": str(args.output), "items": len(item_ids)}, indent=2))
