@@ -1,0 +1,18 @@
+{
+  "base_prediction": "runs/20260915T002424Z-mind-frozen-title-l2-80eab10b/dev-prediction.txt",
+  "batch_size": 8192,
+  "bootstrap_resamples": 5000,
+  "calibration_behaviors": "data/processed/mind-small-calibration-v1/calibration.tsv",
+  "dev_behaviors": "data/raw/MINDsmall_dev/behaviors.tsv",
+  "dev_news": "data/raw/MINDsmall_dev/news.tsv",
+  "device": "cpu",
+  "epochs": 3,
+  "feature_artifact": "data/processed/mind-small-minilm-l6-v2-v1",
+  "fit_behaviors": "data/processed/mind-small-calibration-v1/fit.tsv",
+  "half_life_hours": 72.0,
+  "learning_rate": 0.01,
+  "output_root": "runs",
+  "seed": 2028,
+  "train_news": "data/raw/MINDsmall_train/news.tsv",
+  "weight_decay": 0.0001
+}
