@@ -1,0 +1,1895 @@
+{
+  "comparison": "frozen_minilm_projection_minus_l1_title_attention",
+  "families": {
+    "candidate_set_popularity": {
+      "familywise_method": "within_family_bonferroni_percentile_bootstrap",
+      "slice_count": 3,
+      "slices": {
+        "high": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6562194570625559,
+              "bootstrap_probability_improvement": 0.9848,
+              "candidate_mean": 0.6600097996610405,
+              "confidence_95": [
+                0.00039247761615705037,
+                0.007165438635631874
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.0004516482823380553,
+                0.007932110491677209
+              ],
+              "mean_difference": 0.0037903425984845704
+            },
+            "mrr": {
+              "baseline_mean": 0.31073281871121416,
+              "bootstrap_probability_improvement": 0.115,
+              "candidate_mean": 0.3088903793847115,
+              "confidence_95": [
+                -0.004789375371343468,
+                0.001123876412923426
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.0054332610716291245,
+                0.0018142854785772697
+              ],
+              "mean_difference": -0.0018424393265027374
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.39899701920864494,
+              "bootstrap_probability_improvement": 0.2462,
+              "candidate_mean": 0.39793060929546664,
+              "confidence_95": [
+                -0.004055884159169625,
+                0.0019987174143396153
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.004726752129002002,
+                0.0025649832573762655
+              ],
+              "mean_difference": -0.0010664099131782975
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.3435569651913093,
+              "bootstrap_probability_improvement": 0.1238,
+              "candidate_mean": 0.3415698325030626,
+              "confidence_95": [
+                -0.005396833153811402,
+                0.0013668796985649347
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.006213811651176115,
+                0.0021265449487106254
+              ],
+              "mean_difference": -0.001987132688246703
+            }
+          },
+          "sample_count": 24258
+        },
+        "low": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.5769730369183539,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6292774373923151,
+              "confidence_95": [
+                0.04819062087308583,
+                0.05654633915468411
+              ],
+              "confidence_familywise_bonferroni": [
+                0.047129702238941945,
+                0.05764404643629132
+              ],
+              "mean_difference": 0.05230440047396117
+            },
+            "mrr": {
+              "baseline_mean": 0.3215404675703424,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3566825741952224,
+              "confidence_95": [
+                0.03140948093795539,
+                0.03893000724627751
+              ],
+              "confidence_familywise_bonferroni": [
+                0.030606278907647624,
+                0.03985563535449257
+              ],
+              "mean_difference": 0.03514210662487998
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.42547167689060295,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.46151283882669714,
+              "confidence_95": [
+                0.03258697961025734,
+                0.039650994256582014
+              ],
+              "confidence_familywise_bonferroni": [
+                0.03178013406231077,
+                0.0404636058153213
+              ],
+              "mean_difference": 0.03604116193609414
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.3569365331240794,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.393381857179317,
+              "confidence_95": [
+                0.032167009369799555,
+                0.04075811347896875
+              ],
+              "confidence_familywise_bonferroni": [
+                0.031269130473497504,
+                0.041744014281122545
+              ],
+              "mean_difference": 0.03644532405523763
+            }
+          },
+          "sample_count": 24385
+        },
+        "middle": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6491694027255115,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6659533523110898,
+              "confidence_95": [
+                0.013643784931099932,
+                0.01999801855923626
+              ],
+              "confidence_familywise_bonferroni": [
+                0.012968898301532058,
+                0.020833767728520042
+              ],
+              "mean_difference": 0.016783949585578238
+            },
+            "mrr": {
+              "baseline_mean": 0.2333446919086675,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.24197654437993518,
+              "confidence_95": [
+                0.005533592451183977,
+                0.011667178985861225
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0048770288939505935,
+                0.012476945772906735
+              ],
+              "mean_difference": 0.008631852471267661
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3147667429677552,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.328513405476635,
+              "confidence_95": [
+                0.010490463547446654,
+                0.017137043476904566
+              ],
+              "confidence_familywise_bonferroni": [
+                0.00984526610293595,
+                0.01780157900513956
+              ],
+              "mean_difference": 0.01374666250887978
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.2521110009449048,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.2630238811973505,
+              "confidence_95": [
+                0.007074121520930646,
+                0.014633335568046486
+              ],
+              "confidence_familywise_bonferroni": [
+                0.006321348041975124,
+                0.015279671524031348
+              ],
+              "mean_difference": 0.010912880252445675
+            }
+          },
+          "sample_count": 24509
+        }
+      }
+    },
+    "candidate_set_size": {
+      "familywise_method": "within_family_bonferroni_percentile_bootstrap",
+      "slice_count": 4,
+      "slices": {
+        "10-19": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6211957604223711,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6477890277784777,
+              "confidence_95": [
+                0.02229596213065643,
+                0.031084112806648606
+              ],
+              "confidence_familywise_bonferroni": [
+                0.021326770709317214,
+                0.03258683069046367
+              ],
+              "mean_difference": 0.026593267356106492
+            },
+            "mrr": {
+              "baseline_mean": 0.32025203484286835,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.33851892984565357,
+              "confidence_95": [
+                0.013877589875795635,
+                0.02257030074589038
+              ],
+              "confidence_familywise_bonferroni": [
+                0.012680116968390085,
+                0.02369586999161381
+              ],
+              "mean_difference": 0.018266895002785187
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.45591442252768904,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.4786954706266446,
+              "confidence_95": [
+                0.018737962007262167,
+                0.026885681657839347
+              ],
+              "confidence_familywise_bonferroni": [
+                0.01756151591170293,
+                0.028007211819239906
+              ],
+              "mean_difference": 0.02278104809895551
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.35553503126994523,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.37559721090178305,
+              "confidence_95": [
+                0.014830221541801046,
+                0.02546862804219889
+              ],
+              "confidence_familywise_bonferroni": [
+                0.013379515900527762,
+                0.02716915606993664
+              ],
+              "mean_difference": 0.020062179631837804
+            }
+          },
+          "sample_count": 16441
+        },
+        "2-9": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.567952212493471,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6041541319282465,
+              "confidence_95": [
+                0.02984090725589405,
+                0.04267790793471369
+              ],
+              "confidence_familywise_bonferroni": [
+                0.02820685754232406,
+                0.044529606840328924
+              ],
+              "mean_difference": 0.036201919434775506
+            },
+            "mrr": {
+              "baseline_mean": 0.5507494843230211,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.5804145501316438,
+              "confidence_95": [
+                0.024531192580265555,
+                0.034903823398410964
+              ],
+              "confidence_familywise_bonferroni": [
+                0.02316486380641224,
+                0.03640692732962568
+              ],
+              "mean_difference": 0.029665065808622704
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.6675068081728511,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6898195213065754,
+              "confidence_95": [
+                0.01839281802684584,
+                0.026272268340085905
+              ],
+              "confidence_familywise_bonferroni": [
+                0.017312096556681457,
+                0.02739894061420352
+              ],
+              "mean_difference": 0.02231271313372438
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.6387063707228293,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6646505830362771,
+              "confidence_95": [
+                0.02142442901038492,
+                0.030642720013880746
+              ],
+              "confidence_familywise_bonferroni": [
+                0.020173636147472154,
+                0.032116756597364154
+              ],
+              "mean_difference": 0.025944212313447793
+            }
+          },
+          "sample_count": 15924
+        },
+        "20-49": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6436723731848076,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6595359429552857,
+              "confidence_95": [
+                0.012439423129254699,
+                0.019329240370636016
+              ],
+              "confidence_familywise_bonferroni": [
+                0.011615612156477165,
+                0.020503951209358516
+              ],
+              "mean_difference": 0.01586356977047817
+            },
+            "mrr": {
+              "baseline_mean": 0.2157707954152906,
+              "bootstrap_probability_improvement": 0.9926,
+              "candidate_mean": 0.22009536311553363,
+              "confidence_95": [
+                0.0008847565011073858,
+                0.007706570832901956
+              ],
+              "confidence_familywise_bonferroni": [
+                -7.278126070098922e-05,
+                0.008710339712433809
+              ],
+              "mean_difference": 0.004324567700242977
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.29397324395034014,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.30447785089663354,
+              "confidence_95": [
+                0.0066260472057836275,
+                0.014379223430803861
+              ],
+              "confidence_familywise_bonferroni": [
+                0.005487065766397452,
+                0.015454262519438312
+              ],
+              "mean_difference": 0.010504606946293491
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.2197177188667221,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.22779942344541126,
+              "confidence_95": [
+                0.003650614383740489,
+                0.012367631392106549
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0025711492402909503,
+                0.01346697589188084
+              ],
+              "mean_difference": 0.008081704578689166
+            }
+          },
+          "sample_count": 21820
+        },
+        "50+": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.664125601008824,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6862115603398501,
+              "confidence_95": [
+                0.018943957062492005,
+                0.02531992316928633
+              ],
+              "confidence_familywise_bonferroni": [
+                0.017911050442240152,
+                0.02615851230526804
+              ],
+              "mean_difference": 0.022085959331026177
+            },
+            "mrr": {
+              "baseline_mean": 0.12411287092402266,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.13237616259835666,
+              "confidence_95": [
+                0.005544947306720308,
+                0.010981124279543246
+              ],
+              "confidence_familywise_bonferroni": [
+                0.004760859927881832,
+                0.011810721600725027
+              ],
+              "mean_difference": 0.008263291674334
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.17024574361885048,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.18241690058955923,
+              "confidence_95": [
+                0.008650491143186258,
+                0.015679528958611393
+              ],
+              "confidence_familywise_bonferroni": [
+                0.00771524823449452,
+                0.016669117730347276
+              ],
+              "mean_difference": 0.01217115697070873
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.12688028796482054,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.13682695419191424,
+              "confidence_95": [
+                0.006378703750695204,
+                0.013477163222955038
+              ],
+              "confidence_familywise_bonferroni": [
+                0.005435742469233002,
+                0.014527334745737001
+              ],
+              "mean_difference": 0.00994666622709371
+            }
+          },
+          "sample_count": 18967
+        }
+      }
+    },
+    "first_positive_logged_position": {
+      "familywise_method": "within_family_bonferroni_percentile_bootstrap",
+      "slice_count": 4,
+      "slices": {
+        "1-4": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.5994623416141773,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6311709430650709,
+              "confidence_95": [
+                0.02735034991948242,
+                0.03603136096975414
+              ],
+              "confidence_familywise_bonferroni": [
+                0.026277919420096066,
+                0.037147356849107055
+              ],
+              "mean_difference": 0.03170860145089369
+            },
+            "mrr": {
+              "baseline_mean": 0.42336501167477064,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.44720369203749943,
+              "confidence_95": [
+                0.02023400685110592,
+                0.027193980827901882
+              ],
+              "confidence_familywise_bonferroni": [
+                0.019260521225449148,
+                0.028156385651351947
+              ],
+              "mean_difference": 0.023838680362728765
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.5405827012071531,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.5626051786628868,
+              "confidence_95": [
+                0.01885009845107297,
+                0.02504794320444394
+              ],
+              "confidence_familywise_bonferroni": [
+                0.017979377787958398,
+                0.025817223725155932
+              ],
+              "mean_difference": 0.022022477455733647
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.48899117280764964,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.5114755575398746,
+              "confidence_95": [
+                0.018704744604641416,
+                0.026067807483630755
+              ],
+              "confidence_familywise_bonferroni": [
+                0.01782698188007165,
+                0.026998222906715882
+              ],
+              "mean_difference": 0.022484384732225013
+            }
+          },
+          "sample_count": 24414
+        },
+        "10-19": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6377154380239265,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6596653046337981,
+              "confidence_95": [
+                0.01774256085271229,
+                0.02623216856339674
+              ],
+              "confidence_familywise_bonferroni": [
+                0.01659948158855543,
+                0.027302591120898008
+              ],
+              "mean_difference": 0.021949866609871582
+            },
+            "mrr": {
+              "baseline_mean": 0.222787281982425,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.2328105158507706,
+              "confidence_95": [
+                0.0059582807562013,
+                0.014246916790053538
+              ],
+              "confidence_familywise_bonferroni": [
+                0.004858775705023272,
+                0.015634515488047413
+              ],
+              "mean_difference": 0.010023233868345584
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.30204346108846597,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3177911567602007,
+              "confidence_95": [
+                0.011232323136634739,
+                0.02032171304476421
+              ],
+              "confidence_familywise_bonferroni": [
+                0.010179616161107269,
+                0.021606976403243865
+              ],
+              "mean_difference": 0.015747695671734712
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.22870218027141678,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.24189423917719807,
+              "confidence_95": [
+                0.008055917324471269,
+                0.018511654390902223
+              ],
+              "confidence_familywise_bonferroni": [
+                0.006767357266149853,
+                0.020201016016878334
+              ],
+              "mean_difference": 0.0131920589057813
+            }
+          },
+          "sample_count": 14916
+        },
+        "20+": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6554075223217671,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6731538848045182,
+              "confidence_95": [
+                0.014203293745104734,
+                0.02142098438678405
+              ],
+              "confidence_familywise_bonferroni": [
+                0.013237566381358347,
+                0.022400280605046043
+              ],
+              "mean_difference": 0.017746362482751108
+            },
+            "mrr": {
+              "baseline_mean": 0.14943440594520335,
+              "bootstrap_probability_improvement": 0.9976,
+              "candidate_mean": 0.15429888056930297,
+              "confidence_95": [
+                0.0016509976406736254,
+                0.008263333180297983
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0007496854137177831,
+                0.009103425792563295
+              ],
+              "mean_difference": 0.004864474624099587
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.19043684734833843,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.19885977577930608,
+              "confidence_95": [
+                0.004522825981988082,
+                0.01240638238338611
+              ],
+              "confidence_familywise_bonferroni": [
+                0.003352363994016151,
+                0.013311126163992342
+              ],
+              "mean_difference": 0.008422928430967652
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.14204333506795871,
+              "bootstrap_probability_improvement": 0.9996,
+              "candidate_mean": 0.1490848213371855,
+              "confidence_95": [
+                0.0029628870490245266,
+                0.011188309740345381
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0017599014365665307,
+                0.01243783219084333
+              ],
+              "mean_difference": 0.007041486269226774
+            }
+          },
+          "sample_count": 17517
+        },
+        "5-9": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6298890730348539,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6523573783963506,
+              "confidence_95": [
+                0.017979308215039826,
+                0.0267733623255188
+              ],
+              "confidence_familywise_bonferroni": [
+                0.017061709390493267,
+                0.028059925102913094
+              ],
+              "mean_difference": 0.022468305361496757
+            },
+            "mrr": {
+              "baseline_mean": 0.29566360564054806,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.30836457763303116,
+              "confidence_95": [
+                0.008396219059566093,
+                0.01704941171379818
+              ],
+              "confidence_familywise_bonferroni": [
+                0.00720385043941634,
+                0.018165595100383996
+              ],
+              "mean_difference": 0.012700971992483219
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.41273634151913724,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.42928450974966625,
+              "confidence_95": [
+                0.012369690078012,
+                0.020673788300338097
+              ],
+              "confidence_familywise_bonferroni": [
+                0.011265179011927856,
+                0.02170606482085136
+              ],
+              "mean_difference": 0.01654816823052894
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.32990895000063086,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.34456254766842914,
+              "confidence_95": [
+                0.00941947180520083,
+                0.01965590692509443
+              ],
+              "confidence_familywise_bonferroni": [
+                0.008175848725620426,
+                0.021427580110258925
+              ],
+              "mean_difference": 0.014653597667798305
+            }
+          },
+          "sample_count": 16305
+        }
+      }
+    },
+    "history_length": {
+      "familywise_method": "within_family_bonferroni_percentile_bootstrap",
+      "slice_count": 5,
+      "slices": {
+        "0": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.5124769090930156,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.5124769090930156,
+              "confidence_95": [
+                0.0,
+                0.0
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0,
+                0.0
+              ],
+              "mean_difference": 0.0
+            },
+            "mrr": {
+              "baseline_mean": 0.22990633227037427,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.22990633227037427,
+              "confidence_95": [
+                0.0,
+                0.0
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0,
+                0.0
+              ],
+              "mean_difference": 0.0
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.30043199020548145,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.30043199020548145,
+              "confidence_95": [
+                0.0,
+                0.0
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0,
+                0.0
+              ],
+              "mean_difference": 0.0
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.23843332414185114,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.23843332414185114,
+              "confidence_95": [
+                0.0,
+                0.0
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0,
+                0.0
+              ],
+              "mean_difference": 0.0
+            }
+          },
+          "sample_count": 2214
+        },
+        "1-9": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6093521460164845,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6308932553155889,
+              "confidence_95": [
+                0.01698880977393487,
+                0.026079568786292966
+              ],
+              "confidence_familywise_bonferroni": [
+                0.015688396221935956,
+                0.0276738935433991
+              ],
+              "mean_difference": 0.021541109299104456
+            },
+            "mrr": {
+              "baseline_mean": 0.3130960083814079,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.32756895455085394,
+              "confidence_95": [
+                0.010569472767570656,
+                0.018341339711629746
+              ],
+              "confidence_familywise_bonferroni": [
+                0.009356557605074955,
+                0.01958366784978611
+              ],
+              "mean_difference": 0.014472946169446018
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3998893192122397,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.41568354904394594,
+              "confidence_95": [
+                0.011935979902391296,
+                0.01973626152811439
+              ],
+              "confidence_familywise_bonferroni": [
+                0.010731289236955434,
+                0.02083803407904077
+              ],
+              "mean_difference": 0.015794229831706245
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.34056858768590514,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.35468127559937,
+              "confidence_95": [
+                0.009819631264991998,
+                0.018540388712580826
+              ],
+              "confidence_familywise_bonferroni": [
+                0.008353594931599206,
+                0.020034978561688448
+              ],
+              "mean_difference": 0.014112687913464888
+            }
+          },
+          "sample_count": 20094
+        },
+        "10-24": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6373867694624128,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6609014295555298,
+              "confidence_95": [
+                0.019534393730964657,
+                0.027633334933417894
+              ],
+              "confidence_familywise_bonferroni": [
+                0.01818311742497402,
+                0.028943761325280218
+              ],
+              "mean_difference": 0.02351466009311703
+            },
+            "mrr": {
+              "baseline_mean": 0.29576137916289014,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3103727711832713,
+              "confidence_95": [
+                0.010926889092817405,
+                0.01837129087824382
+              ],
+              "confidence_familywise_bonferroni": [
+                0.00986140098098353,
+                0.019408473708431635
+              ],
+              "mean_difference": 0.014611392020381125
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3863626272976094,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.4028289888293935,
+              "confidence_95": [
+                0.01280556229950768,
+                0.02007537905022458
+              ],
+              "confidence_familywise_bonferroni": [
+                0.011673625805047907,
+                0.021374562046045827
+              ],
+              "mean_difference": 0.01646636153178413
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.32506954418439615,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3399264933869144,
+              "confidence_95": [
+                0.01052536998870032,
+                0.019060205290720292
+              ],
+              "confidence_familywise_bonferroni": [
+                0.009384681632106413,
+                0.020365698685080626
+              ],
+              "mean_difference": 0.014856949202518248
+            }
+          },
+          "sample_count": 20338
+        },
+        "25-49": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6452833382422329,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6727012084427544,
+              "confidence_95": [
+                0.023058941479041323,
+                0.031994938574015024
+              ],
+              "confidence_familywise_bonferroni": [
+                0.02162474784076273,
+                0.033354049695287026
+              ],
+              "mean_difference": 0.0274178702005215
+            },
+            "mrr": {
+              "baseline_mean": 0.2818152672766824,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.29708853074469077,
+              "confidence_95": [
+                0.011154565869644476,
+                0.0193334326353851
+              ],
+              "confidence_familywise_bonferroni": [
+                0.009872417090609055,
+                0.020657779123099542
+              ],
+              "mean_difference": 0.015273263468008322
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3757305876448806,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.393972664782788,
+              "confidence_95": [
+                0.01399344319601493,
+                0.02241786466171664
+              ],
+              "confidence_familywise_bonferroni": [
+                0.012882586732611922,
+                0.023519808347143758
+              ],
+              "mean_difference": 0.018242077137907396
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.31142063432994516,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.32889709422241226,
+              "confidence_95": [
+                0.012747125700817019,
+                0.022383511361784247
+              ],
+              "confidence_familywise_bonferroni": [
+                0.011170748836107294,
+                0.023665720775461647
+              ],
+              "mean_difference": 0.01747645989246716
+            }
+          },
+          "sample_count": 15690
+        },
+        "50+": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6366049131305846,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6661319221767724,
+              "confidence_95": [
+                0.025257092451920364,
+                0.03388058379493659
+              ],
+              "confidence_familywise_bonferroni": [
+                0.023977765057177393,
+                0.03526978198764029
+              ],
+              "mean_difference": 0.02952700904618774
+            },
+            "mrr": {
+              "baseline_mean": 0.26055114652675077,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.2737923097308061,
+              "confidence_95": [
+                0.009282578984673492,
+                0.017345366683169796
+              ],
+              "confidence_familywise_bonferroni": [
+                0.008073714037208097,
+                0.018547395077556872
+              ],
+              "mean_difference": 0.013241163204055335
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.35873556936047096,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.37570583179313927,
+              "confidence_95": [
+                0.012893654788564746,
+                0.021268243252143933
+              ],
+              "confidence_familywise_bonferroni": [
+                0.011507971590800383,
+                0.02275085260207341
+              ],
+              "mean_difference": 0.016970262432668266
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.29347732324044323,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3102181780538802,
+              "confidence_95": [
+                0.011953257436769555,
+                0.021640834393533724
+              ],
+              "confidence_familywise_bonferroni": [
+                0.010596251383432823,
+                0.023321995508237457
+              ],
+              "mean_difference": 0.016740854813437015
+            }
+          },
+          "sample_count": 14816
+        }
+      }
+    },
+    "positive_exposure_age": {
+      "familywise_method": "within_family_bonferroni_percentile_bootstrap",
+      "slice_count": 5,
+      "slices": {
+        "0-6h": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.5685912756404327,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6480746104036365,
+              "confidence_95": [
+                0.0740648249379395,
+                0.08490588708415173
+              ],
+              "confidence_familywise_bonferroni": [
+                0.07195828124706502,
+                0.08684754051882394
+              ],
+              "mean_difference": 0.0794833347632039
+            },
+            "mrr": {
+              "baseline_mean": 0.248314808011589,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3136551866136689,
+              "confidence_95": [
+                0.06076438579446723,
+                0.0699594249533924
+              ],
+              "confidence_familywise_bonferroni": [
+                0.059072674797460555,
+                0.0712077951822742
+              ],
+              "mean_difference": 0.06534037860207995
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3382254318730727,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.4064493189252601,
+              "confidence_95": [
+                0.06354982014646535,
+                0.07298375078257172
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0619348310509229,
+                0.07427748544005892
+              ],
+              "mean_difference": 0.06822388705218743
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.2778920449478384,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.34921707699009985,
+              "confidence_95": [
+                0.06602441589248928,
+                0.07664826769725953
+              ],
+              "confidence_familywise_bonferroni": [
+                0.06418865807377472,
+                0.07816259995174335
+              ],
+              "mean_difference": 0.0713250320422614
+            }
+          },
+          "sample_count": 11602
+        },
+        "1-3d": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6378229604002973,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6763251296030356,
+              "confidence_95": [
+                0.03148096711349714,
+                0.04547323699021905
+              ],
+              "confidence_familywise_bonferroni": [
+                0.028830940486031527,
+                0.04755462935348124
+              ],
+              "mean_difference": 0.03850216920273816
+            },
+            "mrr": {
+              "baseline_mean": 0.3708603601904987,
+              "bootstrap_probability_improvement": 0.9998,
+              "candidate_mean": 0.38449616326554603,
+              "confidence_95": [
+                0.0077023540304937774,
+                0.019280426664952447
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0056750368827525426,
+                0.021057090394071262
+              ],
+              "mean_difference": 0.01363580307504735
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.43889801529040706,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.45204547676217305,
+              "confidence_95": [
+                0.0075827906175317365,
+                0.018549034770568146
+              ],
+              "confidence_familywise_bonferroni": [
+                0.005924635038394726,
+                0.02047109258993082
+              ],
+              "mean_difference": 0.01314746147176603
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.39412802039714845,
+              "bootstrap_probability_improvement": 0.9996,
+              "candidate_mean": 0.4040324696096693,
+              "confidence_95": [
+                0.003559113157174489,
+                0.016069681472461
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0016794658904509881,
+                0.017789526965229164
+              ],
+              "mean_difference": 0.009904449212520927
+            }
+          },
+          "sample_count": 7510
+        },
+        "3d+": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.5445947963163136,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6089368091969575,
+              "confidence_95": [
+                0.053873668907113474,
+                0.07484617843182433
+              ],
+              "confidence_familywise_bonferroni": [
+                0.05125699911655336,
+                0.07814410922469754
+              ],
+              "mean_difference": 0.06434201288064387
+            },
+            "mrr": {
+              "baseline_mean": 0.14592053607976435,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.16678679252694362,
+              "confidence_95": [
+                0.013929852264427337,
+                0.027959910030689747
+              ],
+              "confidence_familywise_bonferroni": [
+                0.01154421758964332,
+                0.030289460379572673
+              ],
+              "mean_difference": 0.020866256447179245
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.18535689306163822,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.21447988648566105,
+              "confidence_95": [
+                0.0206054240174245,
+                0.037474992181265335
+              ],
+              "confidence_familywise_bonferroni": [
+                0.018023127314489015,
+                0.040216169296814146
+              ],
+              "mean_difference": 0.029122993424022806
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.11823945947693412,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.15155600823209525,
+              "confidence_95": [
+                0.024004565117668464,
+                0.04293692329717311
+              ],
+              "confidence_familywise_bonferroni": [
+                0.021246776089137383,
+                0.04587031792306058
+              ],
+              "mean_difference": 0.03331654875516116
+            }
+          },
+          "sample_count": 1985
+        },
+        "6-24h": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6600154808446468,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.6530140953528668,
+              "confidence_95": [
+                -0.009528473053239533,
+                -0.004426546628870471
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.010237430403236089,
+                -0.0035964670660452503
+              ],
+              "mean_difference": -0.007001385491780055
+            },
+            "mrr": {
+              "baseline_mean": 0.28332990032222,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.2772999149276948,
+              "confidence_95": [
+                -0.008440459151622873,
+                -0.0035723985452635544
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.009149671254762298,
+                -0.002912746362961234
+              ],
+              "mean_difference": -0.006029985394525171
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3825151360888369,
+              "bootstrap_probability_improvement": 0.0008,
+              "candidate_mean": 0.3786654649189187,
+              "confidence_95": [
+                -0.006317568510372391,
+                -0.0013412765143385303
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.006971832999504949,
+                -0.000695276239962748
+              ],
+              "mean_difference": -0.003849671169918271
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.3172939964044304,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.3089760609000191,
+              "confidence_95": [
+                -0.011196552051977268,
+                -0.0055436999212439995
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.01209181882166565,
+                -0.004616516651334143
+              ],
+              "mean_difference": -0.008317935504411277
+            }
+          },
+          "sample_count": 44365
+        },
+        "cold": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.539544615751616,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6371164477209278,
+              "confidence_95": [
+                0.08958351428460175,
+                0.10543790072753621
+              ],
+              "confidence_familywise_bonferroni": [
+                0.08735027093833744,
+                0.10824352999794454
+              ],
+              "mean_difference": 0.09757183196931181
+            },
+            "mrr": {
+              "baseline_mean": 0.3344438325740239,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3850837907572769,
+              "confidence_95": [
+                0.0437900314714476,
+                0.05735905204936353
+              ],
+              "confidence_familywise_bonferroni": [
+                0.041355661233606414,
+                0.05986048556122879
+              ],
+              "mean_difference": 0.05063995818325297
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.4174488472830203,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.4711058381597704,
+              "confidence_95": [
+                0.047322382399224074,
+                0.060053292310540955
+              ],
+              "confidence_familywise_bonferroni": [
+                0.045259611716836345,
+                0.06188948213855985
+              ],
+              "mean_difference": 0.05365699087675009
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.35389237032359633,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.4200790502295176,
+              "confidence_95": [
+                0.058881627728498837,
+                0.07357153624671088
+              ],
+              "confidence_familywise_bonferroni": [
+                0.05694340314835037,
+                0.0760832550436969
+              ],
+              "mean_difference": 0.0661866799059213
+            }
+          },
+          "sample_count": 7690
+        }
+      }
+    },
+    "positive_item_popularity": {
+      "familywise_method": "within_family_bonferroni_percentile_bootstrap",
+      "slice_count": 4,
+      "slices": {
+        "cold": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.5374186252553248,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6375750660382117,
+              "confidence_95": [
+                0.09481415463638387,
+                0.1056336168697668
+              ],
+              "confidence_familywise_bonferroni": [
+                0.09332483375078336,
+                0.1071819786746656
+              ],
+              "mean_difference": 0.10015644078288692
+            },
+            "mrr": {
+              "baseline_mean": 0.31533326128197003,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3843847664120142,
+              "confidence_95": [
+                0.06435202180259218,
+                0.07375705807368696
+              ],
+              "confidence_familywise_bonferroni": [
+                0.06286129765777199,
+                0.07517334332415614
+              ],
+              "mean_difference": 0.06905150513004422
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3973712950997672,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.46675518229920027,
+              "confidence_95": [
+                0.06497878828925015,
+                0.07382441342012341
+              ],
+              "confidence_familywise_bonferroni": [
+                0.06393842955474173,
+                0.07517144384968774
+              ],
+              "mean_difference": 0.06938388719943307
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.33703121245278617,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.41631764522564524,
+              "confidence_95": [
+                0.07430063605768997,
+                0.08440855268809833
+              ],
+              "confidence_familywise_bonferroni": [
+                0.07277319077685712,
+                0.08561329328003775
+              ],
+              "mean_difference": 0.07928643277285899
+            }
+          },
+          "sample_count": 15517
+        },
+        "head": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6679978559184762,
+              "bootstrap_probability_improvement": 0.987,
+              "candidate_mean": 0.6712627912872621,
+              "confidence_95": [
+                0.0004995609810414638,
+                0.005939103614452413
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.0003412333722564407,
+                0.006756065187476468
+              ],
+              "mean_difference": 0.0032649353687859133
+            },
+            "mrr": {
+              "baseline_mean": 0.3168248021604947,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.3064908569327107,
+              "confidence_95": [
+                -0.012902263462275767,
+                -0.007851706290444306
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.013765641302235189,
+                -0.007193156706682522
+              ],
+              "mean_difference": -0.010333945227783947
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.40960637176356796,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.4023360020930767,
+              "confidence_95": [
+                -0.00988119069750367,
+                -0.004761384367598926
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.010689576826055026,
+                -0.0040948775119831705
+              ],
+              "mean_difference": -0.007270369670491229
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.35255988545775013,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.34254106634842013,
+              "confidence_95": [
+                -0.013046372430200268,
+                -0.007077972785012961
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.01384595172342046,
+                -0.0062712236591465215
+              ],
+              "mean_difference": -0.010018819109329991
+            }
+          },
+          "sample_count": 34005
+        },
+        "middle": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6435970723316746,
+              "bootstrap_probability_improvement": 0.8756,
+              "candidate_mean": 0.6485630368632845,
+              "confidence_95": [
+                -0.0035942389431345644,
+                0.013546658474049253
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.005760908706203666,
+                0.016168925169621345
+              ],
+              "mean_difference": 0.004965964531610071
+            },
+            "mrr": {
+              "baseline_mean": 0.19068322862631412,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.2193881340968355,
+              "confidence_95": [
+                0.020687560817356284,
+                0.03700553460793592
+              ],
+              "confidence_familywise_bonferroni": [
+                0.018270377443577523,
+                0.03904614304697738
+              ],
+              "mean_difference": 0.028704905470521392
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.2714844878075169,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.2988239651782031,
+              "confidence_95": [
+                0.018157937675571764,
+                0.03649071145335055
+              ],
+              "confidence_familywise_bonferroni": [
+                0.015622965348681765,
+                0.03923203764520909
+              ],
+              "mean_difference": 0.02733947737068627
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.18820203184800954,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.22924707448280746,
+              "confidence_95": [
+                0.030714024780579448,
+                0.05146750871135052
+              ],
+              "confidence_familywise_bonferroni": [
+                0.028497381055174797,
+                0.054013490929490225
+              ],
+              "mean_difference": 0.04104504263479796
+            }
+          },
+          "sample_count": 3651
+        },
+        "tail": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6253760036237799,
+              "bootstrap_probability_improvement": 0.986,
+              "candidate_mean": 0.6301542408406571,
+              "confidence_95": [
+                0.0006131057328824308,
+                0.00902469032003328
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.0007551928294476977,
+                0.0102289508075248
+              ],
+              "mean_difference": 0.004778237216877197
+            },
+            "mrr": {
+              "baseline_mean": 0.2369852340704911,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.246942511290508,
+              "confidence_95": [
+                0.006234640561298251,
+                0.013625417519690467
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0052477610105316165,
+                0.014771526878189948
+              ],
+              "mean_difference": 0.009957277220016882
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3344886988071933,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.34753712088332256,
+              "confidence_95": [
+                0.009188798376133267,
+                0.016800226816736718
+              ],
+              "confidence_familywise_bonferroni": [
+                0.008025542894244304,
+                0.018034353291061758
+              ],
+              "mean_difference": 0.013048422076129265
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.2658417787227775,
+              "bootstrap_probability_improvement": 0.9262,
+              "candidate_mean": 0.2692716831353776,
+              "confidence_95": [
+                -0.0011802771361359384,
+                0.007895877716475817
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.002529042532140563,
+                0.00925212637655837
+              ],
+              "mean_difference": 0.003429904412600139
+            }
+          },
+          "sample_count": 19979
+        }
+      }
+    },
+    "positive_publisher_popularity": {
+      "familywise_method": "within_family_bonferroni_percentile_bootstrap",
+      "slice_count": 1,
+      "slices": {
+        "tail": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6274408353302316,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6517565991740706,
+              "confidence_95": [
+                0.02211264113624447,
+                0.026481869102974797
+              ],
+              "confidence_familywise_bonferroni": [
+                0.02211264113624447,
+                0.026481869102974797
+              ],
+              "mean_difference": 0.024315763843839117
+            },
+            "mrr": {
+              "baseline_mean": 0.2884072352360696,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3024028122412601,
+              "confidence_95": [
+                0.012008001953287743,
+                0.015925057014448237
+              ],
+              "confidence_familywise_bonferroni": [
+                0.012008001953287743,
+                0.015925057014448237
+              ],
+              "mean_difference": 0.01399557700519048
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3796015780339208,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.3958678689564918,
+              "confidence_95": [
+                0.01422913460708502,
+                0.018216657136383273
+              ],
+              "confidence_familywise_bonferroni": [
+                0.01422913460708502,
+                0.018216657136383273
+              ],
+              "mean_difference": 0.01626629092257096
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.31737875579615227,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.332525014879194,
+              "confidence_95": [
+                0.012828528067448126,
+                0.017387268501681902
+              ],
+              "confidence_familywise_bonferroni": [
+                0.012828528067448126,
+                0.017387268501681902
+              ],
+              "mean_difference": 0.01514625908304178
+            }
+          },
+          "sample_count": 73152
+        }
+      }
+    },
+    "positive_title_rarity": {
+      "familywise_method": "within_family_bonferroni_percentile_bootstrap",
+      "slice_count": 3,
+      "slices": {
+        "dev_only": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.5956471450975004,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.6767564349355717,
+              "confidence_95": [
+                0.07718926747356852,
+                0.08519766248031847
+              ],
+              "confidence_familywise_bonferroni": [
+                0.07626295309612902,
+                0.08603097256018981
+              ],
+              "mean_difference": 0.08110928983807135
+            },
+            "mrr": {
+              "baseline_mean": 0.25422643380918986,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.307789057546134,
+              "confidence_95": [
+                0.04998990104129765,
+                0.05705402447032808
+              ],
+              "confidence_familywise_bonferroni": [
+                0.049085431361170086,
+                0.05781378105725325
+              ],
+              "mean_difference": 0.05356262373694415
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3446036108850647,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.4039583513813334,
+              "confidence_95": [
+                0.055806679680660866,
+                0.06299629395251574
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0549429457977541,
+                0.06384324512731186
+              ],
+              "mean_difference": 0.05935474049626871
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.2790434188631275,
+              "bootstrap_probability_improvement": 1.0,
+              "candidate_mean": 0.34314800156449504,
+              "confidence_95": [
+                0.060009580600041475,
+                0.06815333939869413
+              ],
+              "confidence_familywise_bonferroni": [
+                0.0590082026708404,
+                0.06908167765197788
+              ],
+              "mean_difference": 0.06410458270136751
+            }
+          },
+          "sample_count": 21676
+        },
+        "seen_high_rare": {
+          "exploratory_below_200": true,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.23416212904048478,
+              "bootstrap_probability_improvement": 0.834,
+              "candidate_mean": 0.28601527268947163,
+              "confidence_95": [
+                -0.055734187109187115,
+                0.14982099136630692
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.08129638345094883,
+                0.17376086573777733
+              ],
+              "mean_difference": 0.051853143648986896
+            },
+            "mrr": {
+              "baseline_mean": 0.0540061053931314,
+              "bootstrap_probability_improvement": 0.5278,
+              "candidate_mean": 0.05401406323712438,
+              "confidence_95": [
+                -0.015585041921164035,
+                0.012972423497230934
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.01942431476033881,
+                0.015737434438460977
+              ],
+              "mean_difference": 7.957843992970406e-06
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.0988813333818035,
+              "bootstrap_probability_improvement": 0.186,
+              "candidate_mean": 0.09307827279032457,
+              "confidence_95": [
+                -0.01941963914231907,
+                0.004853616384904644
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.02268900050655944,
+                0.0067250071425629
+              ],
+              "mean_difference": -0.00580306059147892
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.08632492269937528,
+              "bootstrap_probability_improvement": 0.1294,
+              "candidate_mean": 0.04703652827859579,
+              "confidence_95": [
+                -0.12917634992159668,
+                0.02503478810781771
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.15474112289381664,
+                0.03755218216172656
+              ],
+              "mean_difference": -0.039288394420779485
+            }
+          },
+          "sample_count": 10
+        },
+        "seen_low_rare": {
+          "exploratory_below_200": false,
+          "metrics": {
+            "auc": {
+              "baseline_mean": 0.6409078391103502,
+              "bootstrap_probability_improvement": 0.6084,
+              "candidate_mean": 0.6412984515289952,
+              "confidence_95": [
+                -0.002169780404735892,
+                0.0029279710267855054
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.0026871229875029537,
+                0.003530181251235966
+              ],
+              "mean_difference": 0.0003906124186452153
+            },
+            "mrr": {
+              "baseline_mean": 0.30284875124717353,
+              "bootstrap_probability_improvement": 0.0126,
+              "candidate_mean": 0.30018254321436066,
+              "confidence_95": [
+                -0.0049389043774522015,
+                -0.0003470607989652381
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.0055261532417041495,
+                0.00014430410833875574
+              ],
+              "mean_difference": -0.002666208032812876
+            },
+            "ndcg@10": {
+              "baseline_mean": 0.3943962607052985,
+              "bootstrap_probability_improvement": 0.0528,
+              "candidate_mean": 0.39251922322767646,
+              "confidence_95": [
+                -0.004211078390068506,
+                0.00041957363926506
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.004696589805884924,
+                0.0009589170078750153
+              ],
+              "mean_difference": -0.0018770374776220181
+            },
+            "ndcg@5": {
+              "baseline_mean": 0.3335693923657557,
+              "bootstrap_probability_improvement": 0.0,
+              "candidate_mean": 0.3281063894852528,
+              "confidence_95": [
+                -0.00812041965914512,
+                -0.0027833800987530576
+              ],
+              "confidence_familywise_bonferroni": [
+                -0.008603953103897923,
+                -0.0022199035221823903
+              ],
+              "mean_difference": -0.005463002880502905
+            }
+          },
+          "sample_count": 51466
+        }
+      }
+    }
+  },
+  "input_sha256": {
+    "baseline_prediction": "0e4430cb6d76600e438b2a90d27a7bae4263c6e0b5569a83702dc62845724191",
+    "candidate_prediction": "2bb4cacab1d7b67faaa4a251c895976e5d7b2facff2d0b165799813db44c4bdd",
+    "dev_behaviors": "b6c460e33b1a8693252ded6e626da7d3ccf78920eea2ec11889020bb7d8443ef",
+    "dev_news": "e5d144667558c449d16084fe6bfa01940c2f5d5785ea9f9110292bc3b94eb822",
+    "train_behaviors": "a424547c8fa17c9ea4879c2110221c2b2f2709f4f7615ede0b0d8e4765158658",
+    "train_news": "cd49d7da275e9c405f627d75a0de9d4ec6ad43ff8a8db5d23a447591676e09d6"
+  },
+  "metrics": [
+    "auc",
+    "mrr",
+    "ndcg@5",
+    "ndcg@10"
+  ],
+  "multiplicity_note": "Interpret direction only when retained by the within-family Bonferroni interval; slice attributes are correlated and observational.",
+  "protocol": "registered_l2_failure_slices",
+  "provenance": {
+    "git": {
+      "commit": "3a1160e1c8d18278c7b1293a2093ae408618f2ba",
+      "dirty": false
+    },
+    "specification_sha256": "de8b04cdd7d24d150eb48e9c270e6df394c79fb90e0d687bf35e237508980835"
+  },
+  "resamples": 5000,
+  "sample_count": 73152,
+  "schema_version": 1,
+  "seed": 2027,
+  "thresholds": {
+    "candidate_set_mean_log1p_exposure_tertile_cutoffs": [
+      1.8678780721218053,
+      3.5121089411385675
+    ],
+    "high_rare_fraction_min": 0.5,
+    "item_exposure_tertile_cutoffs": [
+      3.0,
+      16.0
+    ],
+    "publisher_exposure_tertile_cutoffs": [
+      5843444.0,
+      5843444.0
+    ],
+    "rare_token_training_frequency_max": 5,
+    "recency_interpretation": "logged_candidate_exposure_age_proxy"
+  }
+}

@@ -44,6 +44,7 @@ class L2ExperimentConfig:
     weight_decay: float = 0.0001
     embedding_dim: int = 64
     temperature: float = 0.07
+    adapter_rank: int | None = None
     negative_count: int = 4
     max_history_items: int = 50
     max_train_examples: int | None = None
@@ -58,6 +59,8 @@ class L2ExperimentConfig:
             raise ValueError("optimizer rates are invalid")
         if self.embedding_dim <= 0 or self.temperature <= 0:
             raise ValueError("embedding_dim and temperature must be positive")
+        if self.adapter_rank is not None and self.adapter_rank <= 0:
+            raise ValueError("adapter_rank must be positive when provided")
         if self.negative_count <= 0 or self.max_history_items <= 0:
             raise ValueError("negative_count and max_history_items must be positive")
         if self.max_train_examples is not None and self.max_train_examples <= 0:
@@ -113,6 +116,7 @@ def train_frozen_ranker(
         input_dim=table.dimension,
         embedding_dim=config.embedding_dim,
         temperature=config.temperature,
+        adapter_rank=config.adapter_rank,
     ).to(device)
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay
@@ -400,7 +404,11 @@ def run_l2_experiment(
         run_directory = record_run(
             output_root=repository_root / config.output_root,
             repository_root=repository_root,
-            experiment="mind-frozen-title-l2",
+            experiment=(
+                "mind-residual-adapter-l2"
+                if config.adapter_rank is not None
+                else "mind-frozen-title-l2"
+            ),
             metrics=metrics,
             config=serialized_config,
             dataset_fingerprints=fingerprints,

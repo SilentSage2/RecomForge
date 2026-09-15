@@ -64,3 +64,19 @@ def test_frozen_feature_ranker_handles_empty_history_and_backpropagates() -> Non
     loss.backward()  # type: ignore[no-untyped-call]
     assert all(parameter.grad is not None for parameter in model.parameters())
     assert sum(parameter.numel() for parameter in model.parameters()) == 18
+
+
+def test_residual_adapter_is_identity_initialized_and_receives_gradient() -> None:
+    torch.manual_seed(3)
+    baseline = FrozenFeatureRanker(input_dim=4, embedding_dim=2)
+    adapted = FrozenFeatureRanker(input_dim=4, embedding_dim=2, adapter_rank=2)
+    adapted.normalization.load_state_dict(baseline.normalization.state_dict())
+    adapted.projection.load_state_dict(baseline.projection.state_dict())
+    features = torch.randn(3, 4)
+    assert torch.equal(baseline.encode_items(features), adapted.encode_items(features))
+    loss = adapted.encode_items(features)[:, 0].sum()
+    loss.backward()  # type: ignore[no-untyped-call]
+    assert adapted.adapter is not None
+    assert adapted.adapter.up.weight.grad is not None
+    assert torch.count_nonzero(adapted.adapter.up.weight.grad) > 0
+    assert sum(parameter.numel() for parameter in adapted.parameters()) == 49

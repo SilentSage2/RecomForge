@@ -2,31 +2,63 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import torch
 from torch import Tensor, nn
 from torch.nn import functional as F
+
+
+class ResidualFeatureAdapter(nn.Module):
+    """Identity-initialized low-rank correction for frozen input features."""
+
+    def __init__(self, input_dim: int, rank: int) -> None:
+        super().__init__()
+        if input_dim <= 0 or rank <= 0:
+            raise ValueError("adapter dimensions must be positive")
+        self.normalization = nn.LayerNorm(input_dim)
+        self.down = nn.Linear(input_dim, rank)
+        self.up = nn.Linear(rank, input_dim)
+        self.scale = nn.Parameter(torch.ones(()))
+        nn.init.zeros_(self.up.weight)
+        nn.init.zeros_(self.up.bias)
+
+    def forward(self, features: Tensor) -> Tensor:
+        correction = cast(Tensor, self.up(F.gelu(self.down(self.normalization(features)))))
+        return features + self.scale * correction
 
 
 class FrozenFeatureRanker(nn.Module):
     """Share one learned projection across clicked and candidate news."""
 
     def __init__(
-        self, input_dim: int = 384, embedding_dim: int = 64, temperature: float = 0.07
+        self,
+        input_dim: int = 384,
+        embedding_dim: int = 64,
+        temperature: float = 0.07,
+        adapter_rank: int | None = None,
     ) -> None:
         super().__init__()
         if input_dim <= 0 or embedding_dim <= 0:
             raise ValueError("feature dimensions must be positive")
         if temperature <= 0:
             raise ValueError("temperature must be positive")
+        if adapter_rank is not None and adapter_rank <= 0:
+            raise ValueError("adapter_rank must be positive when provided")
         self.input_dim = input_dim
         self.embedding_dim = embedding_dim
         self.temperature = temperature
+        self.adapter = (
+            ResidualFeatureAdapter(input_dim, adapter_rank) if adapter_rank is not None else None
+        )
         self.normalization = nn.LayerNorm(input_dim)
         self.projection = nn.Linear(input_dim, embedding_dim)
 
     def encode_items(self, features: Tensor) -> Tensor:
         if features.shape[-1] != self.input_dim:
             raise ValueError("item feature dimension does not match the ranker")
+        if self.adapter is not None:
+            features = self.adapter(features)
         return F.normalize(self.projection(self.normalization(features)), dim=-1)
 
     def forward(
