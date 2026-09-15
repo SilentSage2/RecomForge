@@ -1,0 +1,46 @@
+{
+  "artifact": "data/processed/mind-small-minilm-l6-v2-v1",
+  "artifact_committed": false,
+  "artifact_schema_version": 1,
+  "code": {
+    "git_commit": "a422f8a03dc9afa17bce4576a124e288022301f3",
+    "git_dirty": false
+  },
+  "encoder": {
+    "dimension": 384,
+    "id": "sentence-transformers/all-MiniLM-L6-v2",
+    "max_tokens": 32,
+    "normalized": true,
+    "pooling": "attention_masked_mean",
+    "revision": "826711e54e001c83835913827a843d8dd0a1def9",
+    "trust_remote_code": false
+  },
+  "generation": {
+    "artifact_bytes": 100205696,
+    "batch_size": 64,
+    "device": "cpu",
+    "items_per_second": 1045.3396979412978,
+    "peak_resident_memory_bytes": 899743744,
+    "seconds": 62.40842104100739
+  },
+  "input_fingerprints": {
+    "dev_news_sha256": "e5d144667558c449d16084fe6bfa01940c2f5d5785ea9f9110292bc3b94eb822",
+    "train_news_sha256": "cd49d7da275e9c405f627d75a0de9d4ec6ad43ff8a8db5d23a447591676e09d6"
+  },
+  "output": {
+    "dtype": "float32",
+    "feature_sha256": "b1e1c619479479c214fed4652aadac35883bf571617afac66a3f5921839d67e4",
+    "finite": true,
+    "item_count": 65238,
+    "item_ids_sha256": "a090b643c053cfd5e5cdc88aaed583f0e5331159cd54b1b49b828b11a3a20ff5",
+    "l2_norm_max": 1.000000238418579,
+    "l2_norm_min": 0.9999998211860657,
+    "shape": [
+      65238,
+      384
+    ],
+    "title_hashes_sha256": "938faeaa519121c432271d70dc10fc558e5423d96a4956da7713b6755adf917e"
+  },
+  "protocol": "frozen_pretrained_title_feature_generation",
+  "status": "validated"
+}

@@ -11,3 +11,6 @@ __all__ = [
     "in_batch_softmax_loss",
     "uniform_shared_softmax_loss",
 ]
+from recforge.models.pretrained_ranker import FrozenFeatureRanker
+
+__all__ = ["FrozenFeatureRanker"]
