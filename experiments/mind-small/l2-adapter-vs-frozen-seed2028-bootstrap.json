@@ -1,0 +1,51 @@
+{
+  "confidence": 0.95,
+  "input_sha256": {
+    "baseline_prediction": "cd44acd42bdac53ad4372c431ac9468987ddacaf25aefaefe125ce157bdad2d5",
+    "behaviors": "b6c460e33b1a8693252ded6e626da7d3ccf78920eea2ec11889020bb7d8443ef",
+    "candidate_prediction": "30d833ec4980c7e18ac7be67dec028d1640e5c75b66f6a46883847efbce5ee68"
+  },
+  "method": "paired_nonparametric_impression_bootstrap",
+  "metrics": {
+    "auc": {
+      "baseline_mean": 0.656670440078978,
+      "bootstrap_probability_improvement": 0.0,
+      "bootstrap_standard_error": 0.0005183770371515128,
+      "candidate_mean": 0.6540090905647014,
+      "confidence_lower": -0.0036679236718821294,
+      "confidence_upper": -0.0016387396339475155,
+      "mean_difference": -0.0026613495142766143
+    },
+    "mrr": {
+      "baseline_mean": 0.31204389081958567,
+      "bootstrap_probability_improvement": 0.0,
+      "bootstrap_standard_error": 0.0005670523701465669,
+      "candidate_mean": 0.30642153065322664,
+      "confidence_lower": -0.006725873959254956,
+      "confidence_upper": -0.0045097893630307705,
+      "mean_difference": -0.005622360166359022
+    },
+    "ndcg@10": {
+      "baseline_mean": 0.4045709348406146,
+      "bootstrap_probability_improvement": 0.0,
+      "bootstrap_standard_error": 0.0005423172021184727,
+      "candidate_mean": 0.3996679398759094,
+      "confidence_lower": -0.005975140904526221,
+      "confidence_upper": -0.0038337424561454025,
+      "mean_difference": -0.004902994964705241
+    },
+    "ndcg@5": {
+      "baseline_mean": 0.34158288622376054,
+      "bootstrap_probability_improvement": 0.0,
+      "bootstrap_standard_error": 0.0006438289356016036,
+      "candidate_mean": 0.33582503877656045,
+      "confidence_lower": -0.007003215761578954,
+      "confidence_upper": -0.004483682881943143,
+      "mean_difference": -0.0057578474472000304
+    }
+  },
+  "resamples": 5000,
+  "sample_count": 73152,
+  "schema_version": 1,
+  "seed": 2028
+}

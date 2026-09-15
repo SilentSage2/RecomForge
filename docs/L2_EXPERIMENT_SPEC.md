@@ -33,6 +33,19 @@ adaptation experiment. It does not meet the aspirational 0.68 target or establis
 MIND-large leaderboard performance. The locked result is in
 `experiments/mind-small/l2-frozen-three-seed-aggregate.json`.
 
+The permitted rank-16 residual feature adapter does not replicate. Its AUC effect
+relative to the matched frozen model is +0.00240, −0.00266, and −0.00798 across
+seeds, for a mean of −0.00275 ± 0.00519. It adds 13,457 parameters and increases
+mean ranker/evaluation time by 1.55×. The registered stopping rule therefore
+rejects the adapter and blocks further representation-adaptation searches.
+
+The registered seed-2027 failure slices localize the frozen model's improvement
+to cold-exposure and dev-only positive titles. Training-seen low-rarity titles do
+not retain a gain under the within-family interval, the 6–24-hour exposure-age
+proxy is negative, and empty histories remain unsolved. Full results and
+multiplicity rules are in `docs/L2_FAILURE_SLICE_SPEC.md` and
+`experiments/mind-small/l2-frozen-seed2027-failure-slices.json`.
+
 The design follows prior MIND evidence that pretrained language representations
 can improve news encoders while making repeated news encoding a central systems
 cost:

@@ -42,6 +42,11 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
   reproducible. Its 25,408-parameter ranker improves AUC over matched L1 seeds by
   0.02686 ± 0.00424, with positive paired bootstrap intervals for every seed and
   metric, while reducing mean ranker/evaluation time from 1,349.1 to 63.5 seconds.
+- Registered failure slices include counts and within-family multiplicity-adjusted
+  intervals. They expose both the cold/dev-only strength and the empty-history,
+  6–24-hour exposure-age, and degenerate-publisher limitations.
+- The only permitted residual adaptation is retained as a three-seed negative
+  result: mean AUC effect −0.00275 ± 0.00519 at 1.55× runtime.
 
 ## Evidence gaps
 
@@ -65,10 +70,11 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
    its evaluation stage completes all 73,152 dev impressions in 9.14 seconds.
    The L2 path records 1.29–1.32 GB peak resident memory, a 100.2 MB frozen
    feature artifact, and 62.4 seconds of one-time local CPU title encoding.
-7. **Research contribution:** NRMS reproduction alone is baseline engineering, not
-   novelty. A flagship contribution still needs a defensible result about negative
-   objectives, recency/sequence modeling, pretrained representation efficiency,
-   or relevance–coverage-aware reranking.
+7. **Research contribution:** the current defensible result is a quality–efficiency
+   frontier for frozen semantic representations, with strong cold/dev-only gains
+   and a failed supervised adapter. This is stronger than NRMS reproduction but
+   still needs calibrated scoring, an empty-history remedy, or a controlled
+   reranking contribution before flagship completion.
 
 The 10k-example diagnostic found that title attention plus history mean pooling
 had the best AUC (0.5425), while full title/history attention reached 0.5335 and
@@ -91,6 +97,13 @@ MiniLM title features plus a shared learned projection reach AUC 0.65521 ±
 three paired AUC intervals exclude zero, as do MRR and both nDCG intervals. The
 result passes the registered L2 gate and supports the representation hypothesis,
 but it remains below 0.68 and does not justify a leaderboard claim.
+
+The slice result narrows that conclusion: frozen semantics chiefly help unseen
+items and dev-only titles, not all item strata uniformly. A low-rank residual
+feature adapter produces one positive seed followed by two significantly negative
+seeds, reducing mean AUC while increasing runtime. This blocks adapter escalation
+and makes the frozen quality–efficiency result—not parameter-efficient tuning—the
+current contribution.
 
 ## Release gates
 

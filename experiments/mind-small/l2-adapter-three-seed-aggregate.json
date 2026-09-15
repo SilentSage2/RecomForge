@@ -1,0 +1,91 @@
+{
+  "acceptance": {
+    "accepted": false,
+    "reason": "AUC direction is inconsistent across seeds and the three-seed mean effect is negative.",
+    "stopping_decision": "stop_adapter_expansion"
+  },
+  "comparison": {
+    "baseline": "frozen_minilm_projection_history_mean",
+    "candidate": "rank16_residual_feature_adapter",
+    "paired_effect_mean": {
+      "auc": -0.0027465500846824975,
+      "mrr": -0.001495302424060078,
+      "ndcg@10": -0.0017801280104596067,
+      "ndcg@5": -0.0023885943147432718
+    },
+    "paired_effect_sample_standard_deviation": {
+      "auc": 0.005193214645720685,
+      "mrr": 0.005483019376659831,
+      "ndcg@10": 0.00521798173220592,
+      "ndcg@5": 0.006182330224465014
+    },
+    "per_seed_bootstrap_artifacts": [
+      "l2-adapter-vs-frozen-seed2027-bootstrap.json",
+      "l2-adapter-vs-frozen-seed2028-bootstrap.json",
+      "l2-adapter-vs-frozen-seed2029-bootstrap.json"
+    ],
+    "positive_effect_seeds": {
+      "auc": 1,
+      "mrr": 1,
+      "ndcg@10": 1,
+      "ndcg@5": 1
+    }
+  },
+  "cost": {
+    "added_parameters": 13457,
+    "duration_seconds_mean": 98.52188966666667,
+    "duration_seconds_sample_standard_deviation": 2.800226842047687,
+    "frozen_ranker_duration_ratio": 1.5515600291449994,
+    "model_parameters": 38865,
+    "peak_resident_memory_bytes_range": [
+      1302822912,
+      1366245376
+    ]
+  },
+  "metrics_mean": {
+    "auc": 0.652461799152255,
+    "mrr": 0.30602640348929544,
+    "ndcg@10": 0.39870495233893744,
+    "ndcg@5": 0.33476803660193316
+  },
+  "metrics_sample_standard_deviation": {
+    "auc": 0.0028118137957028823,
+    "mrr": 0.0013444839225792414,
+    "ndcg@10": 0.0020641053451445164,
+    "ndcg@5": 0.0031671243757629966
+  },
+  "protocol": {
+    "adapter_rank": 16,
+    "dev_impressions_per_seed": 73152,
+    "epochs": 3,
+    "name": "mind_official_impression",
+    "seeds": [
+      2027,
+      2028,
+      2029
+    ],
+    "training_examples_per_seed": 709032
+  },
+  "runs": [
+    {
+      "auc": 0.6541601392440038,
+      "duration_seconds": 98.384952,
+      "run_id": "20260915T004426Z-mind-residual-adapter-l2-12a7bf14",
+      "seed": 2027
+    },
+    {
+      "auc": 0.6540090905647132,
+      "duration_seconds": 101.388073,
+      "run_id": "20260915T004647Z-mind-residual-adapter-l2-8a43d6c8",
+      "seed": 2028
+    },
+    {
+      "auc": 0.6492161676480479,
+      "duration_seconds": 95.792644,
+      "run_id": "20260915T004836Z-mind-residual-adapter-l2-78854e73",
+      "seed": 2029
+    }
+  ],
+  "schema_version": 1,
+  "status": "completed_negative"
+}

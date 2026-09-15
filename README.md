@@ -34,6 +34,7 @@ reference and is not included in the paired claim.
 | Title mean + history mean | 0.5972 ± 0.0063 | 0.2689 ± 0.0071 | 0.2916 ± 0.0104 | 0.3565 ± 0.0078 | 1,218,048 | 200.1 ± 66.8 s |
 | Title attention + history mean | 0.6283 ± 0.0040 | 0.2893 ± 0.0070 | 0.3179 ± 0.0079 | 0.3797 ± 0.0060 | 1,239,040 | 1,349.1 ± 342.6 s |
 | **Frozen MiniLM + learned projection + history mean** | **0.6552 ± 0.0030** | **0.3075 ± 0.0048** | **0.3372 ± 0.0045** | **0.4005 ± 0.0044** | **25,408** | **63.5 ± 2.4 s**¶ |
+| Frozen MiniLM + rank-16 residual adapter | 0.6525 ± 0.0028 | 0.3060 ± 0.0013 | 0.3348 ± 0.0032 | 0.3987 ± 0.0021 | 38,865 | 98.5 ± 2.8 s |
 
 Title attention improves AUC over mean pooling by 0.03115 ± 0.00468 across seeds;
 every seed clears the predeclared +0.02 gate. The per-seed 5,000-resample paired
@@ -52,6 +53,12 @@ isolates representation quality: titles are encoded once with an immutable model
 revision, and only a shared 384→64 projection is trained. See the locked
 [`L2 aggregate`](experiments/mind-small/l2-frozen-three-seed-aggregate.json).
 
+The preregistered rank-16 residual feature adapter is a negative result. It gains
+0.00240 AUC at seed 2027 but reverses at seeds 2028 and 2029; its three-seed
+effect is −0.00275 ± 0.00519 while runtime rises 1.55× and parameter count grows
+by 13,457. The stopping rule therefore blocks further adapter tuning. See the
+[`adapter aggregate`](experiments/mind-small/l2-adapter-three-seed-aggregate.json).
+
 † Single seed; shown only as an earlier implementation reference.
 
 ‡ Deterministic training-only popularity counts; no evaluation labels or logged
@@ -61,6 +68,27 @@ locked result is [`l1-logged-popularity.json`](experiments/mind-small/l1-logged-
 
 ¶ L2 ranker training plus full-dev evaluation; the one-time local CPU title
 encoding takes another 62.4 seconds and creates a 100.2 MB ignored artifact.
+
+## Registered L2 failure analysis
+
+Matched seed-2027 failure slices use 5,000 paired impression bootstraps and
+within-family Bonferroni intervals. They are observational diagnostics, not
+independent causal findings.
+
+- L2's largest robust gains occur for positive items never exposed in training
+  (AUC effect +0.1002) and dev-only positive titles (+0.0811).
+- For training-seen, low-rarity titles the family-wise interval crosses zero, as
+  it also does for head, middle, and tail positive-item popularity bands.
+- The 6–24-hour logged-exposure-age proxy is a robust negative slice (−0.0070),
+  while cold and 0–6-hour items improve. This proxy is not publication recency.
+- Empty-history impressions force both mean-history rankers to tied scores and
+  have exactly zero paired effect; this is a concrete next user-model limitation.
+- Publisher popularity cannot be evaluated from MIND-small because candidate URLs
+  collapse to one hostname; the degenerate slice is retained rather than hidden.
+
+The complete counts, metrics, ordinary intervals, adjusted intervals, thresholds,
+and input hashes are in the registered
+[`failure-slice artifact`](experiments/mind-small/l2-frozen-seed2027-failure-slices.json).
 
 The registered full-data history-encoder ablation is a clear negative result.
 Replacing history mean pooling with self-attention lowers AUC from 0.62744 to
@@ -262,6 +290,11 @@ The popularity baselines win relevance on this bounded run, while the two-tower 
 - Frozen MiniLM features improve every official ranking metric across three seeds,
   but AUC 0.6552 remains below the aspirational 0.68 target and is MIND-small dev
   evidence rather than a MIND-large hidden-test result.
+- The supervised residual feature adapter is unstable across seeds and slower;
+  its favorable seed-2027 result does not replicate, so further adapter searches
+  are intentionally stopped.
+- Publisher-popularity slicing is unsupported by the released URL metadata, which
+  resolves to a single publisher domain in this experiment.
 - History self-attention is evaluated only at the registered gate seed because
   every paired metric is significantly worse; this supports a stopping decision,
   not a general claim that sequential models cannot help.
@@ -305,7 +338,8 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Freeze and generate a fingerprinted pretrained title-feature artifact.
 - [x] Implement the minimal frozen-feature projection ranker and exact resume path.
 - [x] Run the L2 seed gate, three-seed replication, and paired impression bootstraps.
-- [ ] Add registered L2 failure slices and one controlled representation adaptation test.
+- [x] Add registered L2 failure slices and one controlled representation adaptation test.
+- [ ] Freeze a training-only calibration split and report calibration without dev tuning.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).

@@ -24,8 +24,10 @@ interactions it already used for fitting.
   epochs, and feature artifact. The calibration labels are never used to update
   ranker weights.
 
-The split command preserves source rows exactly, rejects a nonmonotonic source,
-and fingerprints the source and both generated files. Split files remain ignored.
+The source file is not chronological, so the split command parses every row's
+timestamp independently and preserves relative source order within each output.
+It records timestamp inversions and fingerprints the source and both generated
+files. Split files remain ignored.
 
 ## Calibrator and metrics
 
