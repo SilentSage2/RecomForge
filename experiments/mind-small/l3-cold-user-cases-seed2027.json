@@ -1,0 +1,98 @@
+{
+  "base_prediction_sha256": "2bb4cacab1d7b67faaa4a251c895976e5d7b2facff2d0b165799813db44c4bdd",
+  "checkpoint_sha256": "29f5993aa4600fef892a056d7b7eaa10a326e288e0602d22ce5841ff97234f2c",
+  "hybrid_prediction_sha256": "a25660849c5826c93fe72fe2c8f341f5537a16241d372bdce19d377cf71b137b",
+  "largest_gain": [
+    {
+      "candidate_count": 55,
+      "head_positive_ranks": [1],
+      "impression_id": "7303",
+      "mrr_difference": 0.96875,
+      "popularity_positive_ranks": [32],
+      "positive_categories": ["tv"]
+    },
+    {
+      "candidate_count": 55,
+      "head_positive_ranks": [1],
+      "impression_id": "13912",
+      "mrr_difference": 0.9666666666666667,
+      "popularity_positive_ranks": [30],
+      "positive_categories": ["tv"]
+    },
+    {
+      "candidate_count": 129,
+      "head_positive_ranks": [1],
+      "impression_id": "51797",
+      "mrr_difference": 0.9642857142857143,
+      "popularity_positive_ranks": [28],
+      "positive_categories": ["news"]
+    },
+    {
+      "candidate_count": 36,
+      "head_positive_ranks": [1],
+      "impression_id": "71664",
+      "mrr_difference": 0.962962962962963,
+      "popularity_positive_ranks": [27],
+      "positive_categories": ["tv"]
+    },
+    {
+      "candidate_count": 22,
+      "head_positive_ranks": [1],
+      "impression_id": "27420",
+      "mrr_difference": 0.95,
+      "popularity_positive_ranks": [20],
+      "positive_categories": ["sports"]
+    }
+  ],
+  "largest_regret": [
+    {
+      "candidate_count": 38,
+      "head_positive_ranks": [28],
+      "impression_id": "1010",
+      "mrr_difference": -0.9642857142857143,
+      "popularity_positive_ranks": [1],
+      "positive_categories": ["autos"]
+    },
+    {
+      "candidate_count": 33,
+      "head_positive_ranks": [26],
+      "impression_id": "62545",
+      "mrr_difference": -0.9615384615384616,
+      "popularity_positive_ranks": [1],
+      "positive_categories": ["autos"]
+    },
+    {
+      "candidate_count": 25,
+      "head_positive_ranks": [21],
+      "impression_id": "10566",
+      "mrr_difference": -0.9523809523809523,
+      "popularity_positive_ranks": [1],
+      "positive_categories": ["entertainment"]
+    },
+    {
+      "candidate_count": 23,
+      "head_positive_ranks": [20],
+      "impression_id": "24958",
+      "mrr_difference": -0.95,
+      "popularity_positive_ranks": [1],
+      "positive_categories": ["entertainment"]
+    },
+    {
+      "candidate_count": 22,
+      "head_positive_ranks": [19],
+      "impression_id": "34431",
+      "mrr_difference": -0.9473684210526316,
+      "popularity_positive_ranks": [1],
+      "positive_categories": ["entertainment"]
+    }
+  ],
+  "protocol": "registered_largest_mrr_difference_vs_time_decayed_popularity",
+  "run_id": "20260915T010527Z-mind-cold-user-propensity-3ee8cc53",
+  "schema_version": 1,
+  "seed": 2027,
+  "selection": {
+    "gain_count": 5,
+    "regret_count": 5,
+    "tie_break": "ascending impression_id"
+  }
+}

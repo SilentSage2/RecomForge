@@ -50,6 +50,10 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
 - An auxiliary temporally held-out calibration run uses no dev fitting, preserves
   all ranks, and improves dev NLL/Brier over both raw sigmoid scores and a
   training-prevalence constant. Logged-click bias remains explicit.
+- A preregistered 385-parameter cold-user fallback removes the empty-history tie,
+  replicates over three seeds, preserves every nonempty rank, and reports the
+  accompanying coverage loss, calibration, latency, memory, and fixed failure
+  cases rather than presenting AUC alone.
 
 ## Evidence gaps
 
@@ -74,10 +78,10 @@ support state-of-the-art relevance, production benefit, or leaderboard quality.
    The L2 path records 1.29–1.32 GB peak resident memory, a 100.2 MB frozen
    feature artifact, and 62.4 seconds of one-time local CPU title encoding.
 7. **Research contribution:** the current defensible result is a quality–efficiency
-   frontier for frozen semantic representations, with strong cold/dev-only gains
-   and a failed supervised adapter. This is stronger than NRMS reproduction but
-   still needs an empty-history remedy or a controlled reranking contribution
-   before flagship completion.
+   frontier for frozen semantic representations, with strong cold/dev-only gains,
+   a failed supervised adapter, and a minimal cold-user remedy. This is a strong
+   research-engineering case study. It is not yet a leaderboard or online-validated
+   flagship contribution.
 
 The 10k-example diagnostic found that title attention plus history mean pooling
 had the best AUC (0.5425), while full title/history attention reached 0.5335 and
@@ -108,6 +112,13 @@ seeds, reducing mean AUC while increasing runtime. This blocks adapter escalatio
 and makes the frozen quality–efficiency result—not parameter-efficient tuning—the
 current contribution.
 
+The cold-user experiment then closes the most concrete implementation failure.
+The candidate-only head improves empty-history AUC by 0.05384 ± 0.00289 and
+full-dev AUC by 0.001252 ± 0.000087, with every nonempty rank unchanged. However,
+coverage@1 falls from 18.57% under logged-order tie resolution to 4.18%, and the
+labels remain exposure/position biased. The result supports a targeted fallback
+and an honest relevance–coverage tradeoff, not general cold-start personalization.
+
 ## Release gates
 
 Do not describe RecomForge as flagship-complete or leaderboard-competitive until:
@@ -121,6 +132,11 @@ Do not describe RecomForge as flagship-complete or leaderboard-competitive until
 - any result figure satisfies `FIGURE_STANDARDS.md` and is regenerated from locked
   run summaries;
 - MIND-large claims are made only after a frozen, accepted hidden-test submission.
+
+Further MIND-small architecture variants are not a substitute for the remaining
+external gates: MIND-large hidden-test validation, publisher-time metadata or a
+better recency dataset, and online or defensible counterfactual validation of the
+cold-user policy.
 
 The smallest acceptable pivot, if NRMS does not learn under the frozen budget, is
 to make the negative-source relevance–coverage tradeoff the primary contribution,

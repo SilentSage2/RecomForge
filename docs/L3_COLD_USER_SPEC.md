@@ -2,6 +2,21 @@
 
 Status: frozen before candidate-only model training on 2026-09-14.
 
+## Registered result
+
+The fallback passes every gate. Empty-history AUC is 0.55384 ± 0.00289 across
+seeds, an effect of +0.05384 ± 0.00289 over the original tie. Each seed-level
+paired interval excludes zero, and the head also exceeds both fit-only popularity
+baselines. Full-dev AUC improves by 0.001252 ± 0.000087, while all 70,938
+nonempty-history ranks remain identical in every seed.
+
+The head has 385 parameters, takes 26.48 ± 0.31 CPU seconds including registered
+analysis, and precomputes all item scores in 4.8 ms at seed 2027. It reduces
+underlying tie rate from 100% to 0.09%, but mean coverage@1 falls from 18.57% under
+logged-order tie resolution to 4.18%, exposing a relevance–coverage tradeoff.
+The locked aggregate is
+`experiments/mind-small/l3-cold-user-three-seed-aggregate.json`.
+
 ## Research question
 
 Can a minimal candidate-only propensity model remove the deterministic all-tie

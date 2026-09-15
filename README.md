@@ -2,7 +2,7 @@
 
 Research infrastructure for studying modern multi-stage recommendation under strict temporal evaluation.
 
-> **Status: R0–R1 complete; L1 and frozen-representation L2 comparisons complete; flagship evidence incomplete.** Full-data seed uncertainty and controlled ablations are reported below. See the candid [`substantive quality audit`](docs/QUALITY_AUDIT.md) for the remaining scientific gates.
+> **Status: R0–R1, L1–L2, and the registered cold-user fallback are complete; this is a strong research-engineering case study, not a leaderboard-complete flagship.** Full-data uncertainty, controlled negative results, calibration, and failure slices are reported below. See the candid [`substantive quality audit`](docs/QUALITY_AUDIT.md) for the remaining external gates.
 
 ## Full-data development result
 
@@ -108,6 +108,41 @@ NLL/Brier gate and modestly outperforms the prevalence reference, while its ECE 
 slightly worse than that constant reference. Scores estimate logged click labels,
 not causal CTR. See the [calibration result](experiments/mind-small/l2-training-only-calibration.json)
 and [temporal split record](experiments/mind-small/l2-calibration-split.json).
+
+## Cold-user fallback result
+
+The failure analysis found 2,214 empty-history impressions where the L2 user
+vector is zero and every candidate score ties. A preregistered 385-parameter
+affine head over frozen title features replaces scores only for those impressions.
+It trains on the early MIND-train partition, calibrates on the held-out train tail,
+and never changes a nonempty-history rank.
+
+| Empty-history method | AUC | MRR | nDCG@5 | nDCG@10 | Coverage@1 | Tie rate |
+|---|---:|---:|---:|---:|---:|---:|
+| Original all-tie | 0.5000 | 0.2299 | 0.2384 | 0.3004 | 18.57% | 100% |
+| Global popularity† | 0.4952 | 0.2234 | 0.2277 | 0.2912 | 5.63% | 97.83% |
+| Time-decayed popularity† | 0.4952 | 0.2235 | 0.2278 | 0.2915 | 5.46% | 97.83% |
+| **Candidate-only head** | **0.5538 ± 0.0029** | **0.2355 ± 0.0020** | **0.2512 ± 0.0019** | **0.3146 ± 0.0014** | 4.18% ± 0.27% | 0.09% |
+
+The candidate head improves empty-history AUC over the tie by 0.05384 ± 0.00289
+across seeds. Each seed's paired 95% interval excludes zero. Because only 3.0% of
+dev impressions are affected, full-dev AUC improves by a smaller 0.001252 ±
+0.000087; every seed is positive, and all 70,938 nonempty-history rank vectors are
+identical. The relevance gain reduces top-item catalog coverage relative to
+logged-order tie resolution, so it is not a free diversity improvement.
+
+Training plus registered analysis takes 26.48 ± 0.31 CPU seconds, while scoring
+all 65,238 items takes 4.8 ms at seed 2027. Training-only Platt calibration reaches
+dev NLL 0.16784 ± 0.00013 and ECE 0.00118 ± 0.00011 without changing ranks.
+Candidate labels remain exposure- and position-biased. See the locked
+[`three-seed aggregate`](experiments/mind-small/l3-cold-user-three-seed-aggregate.json),
+the [figure-ready data](figures/data/l3-cold-user.csv), and the
+[`registered protocol`](docs/L3_COLD_USER_SPEC.md). The fixed largest-gain and
+largest-regret examples are retained in the
+[`case artifact`](experiments/mind-small/l3-cold-user-cases-seed2027.json); they
+illustrate variance rather than establish category-level effects.
+
+† Deterministic fit-partition reference; values do not vary by model seed.
 
 The registered full-data history-encoder ablation is a clear negative result.
 Replacing history mean pooling with self-attention lowers AUC from 0.62744 to
@@ -316,6 +351,12 @@ The popularity baselines win relevance on this bounded run, while the two-tower 
   resolves to a single publisher domain in this experiment.
 - Calibrated probabilities describe biased logged clicks. Their excellent numeric
   calibration does not establish online or counterfactual CTR calibration.
+- The cold-user head removes ties and improves offline AUC, but its candidate-only
+  signal cannot personalize and its lower catalog coverage exposes a relevance–
+  diversity tradeoff.
+- MIND-large hidden-test validation and online or counterfactual cold-start
+  validation are genuine external gates; additional MIND-small model variants
+  cannot substitute for them.
 - History self-attention is evaluated only at the registered gate seed because
   every paired metric is significantly worse; this supports a stopping decision,
   not a general claim that sequential models cannot help.
@@ -361,6 +402,8 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [x] Run the L2 seed gate, three-seed replication, and paired impression bootstraps.
 - [x] Add registered L2 failure slices and one controlled representation adaptation test.
 - [x] Freeze a training-only calibration split and report calibration without dev tuning.
+- [x] Diagnose and repair the empty-history all-tie failure with a registered fallback.
+- [x] Replicate the cold-user result across three seeds and publish figure-ready data.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).
