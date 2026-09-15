@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "full_data_registered_ablation_negative_result",
+  "protocol": "mind_official_impression_rank_output",
+  "seed": 2027,
+  "run_id": "20260914T234348Z-mind-nrms-l1-2241cac2",
+  "git_commit": "9db4ffd11cab3dc9a241c2a1571802fade50c992",
+  "git_dirty": false,
+  "train_examples": 709032,
+  "dev_impressions": 73152,
+  "variant": {
+    "title_encoder": "attention",
+    "history_encoder": "attention",
+    "parameters": 1260032,
+    "duration_seconds": 1427.590237,
+    "peak_resident_memory_bytes": 1957789696,
+    "checkpoint_sha256": "d019c670bf2c063263220b3d33296e75924fab04a6eba9076dca2f6025f75329",
+    "epoch_losses": [1.5045390163912364, 1.375615427849381, 1.3318965533646194],
+    "metrics": {"auc": 0.6234116932621429, "mrr": 0.2823933735506845, "ndcg@5": 0.30953673059822484, "ndcg@10": 0.37306474801013895}
+  },
+  "baseline": {
+    "title_encoder": "attention",
+    "history_encoder": "mean",
+    "metrics": {"auc": 0.6274408353302435, "mrr": 0.28840723523607104, "ndcg@5": 0.31737875579610386, "ndcg@10": 0.3796015780338057}
+  },
+  "paired_bootstrap": "experiments/mind-small/l1-history-attention-bootstrap-seed2027.json",
+  "stopping_decision": "Do not replicate additional seeds because every paired metric is worse, every 95% interval excludes zero in the negative direction, and bootstrap probability of improvement is zero."
+}

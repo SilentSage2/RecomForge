@@ -144,3 +144,12 @@ the accepted title-attention/history-mean configuration, it changes only
 `history_encoder_mode` from `mean` to `attention`. Seed 2027 is the initial gate:
 advance to seed replication only if AUC exceeds history mean or the observed
 difference is small enough that training-seed uncertainty could reverse it.
+
+The seed-2027 gate is complete and stops the ablation. History attention reaches
+AUC 0.62341 versus 0.62744 for history mean, a paired difference of −0.00403 with
+95% impression-bootstrap interval [−0.00551, −0.00258]. MRR and both nDCG metrics
+also decline with intervals excluding zero. It adds parameters and compute without
+improving quality, so the frozen rule rejects additional seeds. This closes the
+MIND-small L1 baseline/ablation acceptance criteria while preserving the narrower
+interpretation that this particular history encoder and training budget failed;
+it does not rule out stronger sequential models.

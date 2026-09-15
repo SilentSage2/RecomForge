@@ -50,6 +50,15 @@ position are used. § Both popularity predictions are produced in the same run, 
 the shared runtime is shown for context rather than as per-variant latency. The
 locked result is [`l1-logged-popularity.json`](experiments/mind-small/l1-logged-popularity.json).
 
+The registered full-data history-encoder ablation is a clear negative result.
+Replacing history mean pooling with self-attention lowers AUC from 0.62744 to
+0.62341 at seed 2027 (difference −0.00403; paired 95% interval [−0.00551,
+−0.00258]). MRR and both nDCG metrics also decline with intervals excluding zero.
+The model grows to 1,260,032 parameters, takes 1,427.6 CPU seconds, and peaks at
+1.96 GB resident memory. Per the frozen stopping rule, it was not replicated over
+additional seeds. See the locked [`ablation result`](experiments/mind-small/l1-history-attention-seed2027.json)
+and [`paired bootstrap`](experiments/mind-small/l1-history-attention-bootstrap-seed2027.json).
+
 ## Research question
 
 How much does each stage of a modern recommender—candidate retrieval, negative sampling, ranking, sequential modeling, multi-task learning, and reranking—contribute under a leakage-safe temporal protocol, and what relevance is traded for freshness and diversity?
@@ -210,8 +219,9 @@ The popularity baselines win relevance on this bounded run, while the two-tower 
   model selection or headline claims.
 - The full-data title-attention gain replicates across three training seeds, but
   its 6.74× mean CPU cost is material and peak memory remains unmeasured.
-- The registered full-data history-attention ablation remains missing, so L1 is
-  not yet complete.
+- History self-attention is evaluated only at the registered gate seed because
+  every paired metric is significantly worse; this supports a stopping decision,
+  not a general claim that sequential models cannot help.
 - The released logs support offline counterfactual analysis only within their
   logged candidates; no causal or production-performance claim is made.
 
@@ -248,7 +258,7 @@ MIND-small is conditionally selected for the first external benchmark because it
 - [ ] Confirm access to MIND-large and reproduce all official metrics on its dev split.
 - [x] Freeze and implement the L1 NRMS-style experiment and three-seed title-encoder comparison.
 - [x] Add leakage-safe global and time-decayed logged-candidate popularity baselines.
-- [ ] Run the registered full-data history-attention ablation.
+- [x] Run the registered full-data history-attention ablation and report its negative result.
 
 See [`docs/EXPERIMENT_SPEC.md`](docs/EXPERIMENT_SPEC.md) for acceptance criteria and non-goals.
 Dataset access and artifact-handling details are in [`docs/DATA.md`](docs/DATA.md).
