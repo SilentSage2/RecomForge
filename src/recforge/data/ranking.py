@@ -277,13 +277,9 @@ def iter_feature_ranking_batches(
     for start in range(0, len(order), batch_size):
         selected = [examples[index] for index in order[start : start + batch_size]]
         current_size = len(selected)
-        history = np.zeros(
-            (current_size, max_history_items, table.dimension), dtype=np.float32
-        )
+        history = np.zeros((current_size, max_history_items, table.dimension), dtype=np.float32)
         history_mask = np.zeros((current_size, max_history_items), dtype=np.bool_)
-        candidates = np.empty(
-            (current_size, candidate_count, table.dimension), dtype=np.float32
-        )
+        candidates = np.empty((current_size, candidate_count, table.dimension), dtype=np.float32)
 
         for batch_row, example in enumerate(selected):
             history_rows = [

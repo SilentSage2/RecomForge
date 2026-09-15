@@ -89,9 +89,7 @@ def _peak_resident_memory_bytes() -> int:
     return int(peak if platform.system() == "Darwin" else peak * 1024)
 
 
-def _batch_tensors(
-    batch: FeatureRankingBatch, device: torch.device
-) -> tuple[torch.Tensor, ...]:
+def _batch_tensors(batch: FeatureRankingBatch, device: torch.device) -> tuple[torch.Tensor, ...]:
     return (
         torch.from_numpy(batch.history_features).to(device),
         torch.from_numpy(batch.history_item_mask).to(device),
@@ -395,9 +393,7 @@ def run_l2_experiment(
             "pretrained_feature_artifact_bytes": cast(
                 int, artifact_manifest["encoding"]["artifact_bytes"]
             ),
-            "pretrained_encoding_seconds": cast(
-                float, artifact_manifest["encoding"]["seconds"]
-            ),
+            "pretrained_encoding_seconds": cast(float, artifact_manifest["encoding"]["seconds"]),
         }
         serialized_config = cast(dict[str, JsonValue], asdict(config))
         serialized_config["resolved_device"] = str(device)
